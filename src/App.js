@@ -533,7 +533,7 @@ const App = () => {
               <Recycle size={30} className="text-teal-300" />
               <h1 className="text-xl md:text-2xl font-bold">Cambrian Innovation</h1>
             </div>
-            <div className="text-xs md:text-sm text-teal-200 hidden sm:block">Wastewater Valorization Proposal Tool</div>
+            <div className="text-xs md:text-sm text-teal-200 hidden sm:block">Wastewater Proposal Tool</div>
           </div>
         </div>
       </header>
