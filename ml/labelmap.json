@@ -1,0 +1,18 @@
+{
+  "_comment": "Canonical class list for the GlowUp litter detector. Indices are the model's output classes; `category` strings match LitterLabelMap in the iOS app (GlowUp/Core/Detection/LitterDetecting.swift). Keep these in sync.",
+  "classes": [
+    { "index": 0, "name": "plastic_bottle", "category": "plasticBottle", "gremlin": "Bottlebrute" },
+    { "index": 1, "name": "can",            "category": "aluminumCan",  "gremlin": "Canclank" },
+    { "index": 2, "name": "glass_bottle",   "category": "glassBottle",  "gremlin": "Shardimp" },
+    { "index": 3, "name": "cup",            "category": "cup",          "gremlin": "Cupgoblin" },
+    { "index": 4, "name": "wrapper",        "category": "foodWrapper",  "gremlin": "Wrapwraith" },
+    { "index": 5, "name": "cigarette",      "category": "cigarette",    "gremlin": "Buttgrub" },
+    { "index": 6, "name": "paper",          "category": "paper",        "gremlin": "Papermite" },
+    { "index": 7, "name": "plastic_bag",    "category": "plasticBag",   "gremlin": "Baghag" },
+    { "index": 8, "name": "food_container", "category": "foodContainer","gremlin": "Cartoncreep" }
+  ],
+  "negatives_comment": "Hard-negative classes are NOT predicted; they are mined as background-only images (leaves, rocks, shadows, gum, manhole covers, drains) to suppress false gremlins.",
+  "input_size": 640,
+  "confidence_threshold": 0.40,
+  "nms_iou_threshold": 0.45
+}

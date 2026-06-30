@@ -1,0 +1,13 @@
+# GlowUp litter-detector training & export pipeline.
+# Pinned loosely; lock exact versions in CI before a training run.
+ultralytics>=8.2.0          # YOLOv8/v11 training + val (mAP, PR curves)
+torch>=2.2.0
+torchvision>=0.17.0
+coremltools>=7.2            # Core ML export for on-device (Neural Engine) inference
+onnx>=1.16.0
+opencv-python>=4.9.0
+pycocotools>=2.0.7          # COCO-format eval parity
+numpy>=1.26.0
+pyyaml>=6.0
+pandas>=2.2.0
+matplotlib>=3.8.0           # confusion matrix / PR curve plots

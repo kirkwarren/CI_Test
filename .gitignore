@@ -1,25 +1,46 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ---- Xcode / Swift -------------------------------------------------------
+xcuserdata/
+DerivedData/
+build/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
 
-# dependencies
-/node_modules
-/cambrian-innovation-app
-/.pnp
-.pnp.js
+# XcodeGen generates the project from project.yml; we commit the spec, not the
+# generated project.
+GlowUp.xcodeproj/
 
-# testing
-/coverage
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+Package.resolved
 
-# production
-/build
+# CocoaPods / Carthage (not used, ignored for safety)
+Pods/
+Carthage/Build/
 
-# misc
+# ---- macOS ---------------------------------------------------------------
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env
+*.swp
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# ---- ML pipeline (Python) ------------------------------------------------
+ml/.venv/
+**/__pycache__/
+*.pyc
+ml/datasets/
+ml/runs/
+ml/artifacts/
+
+# Trained model artifacts are large; track via Git LFS or releases, not git.
+*.mlmodel
+*.mlpackage
+*.pt
+*.onnx
+*.weights
+
+# ---- Secrets / env -------------------------------------------------------
+*.env
+secrets.xcconfig

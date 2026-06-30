@@ -1,0 +1,19 @@
+# Reference Ultralytics dataset config for the GlowUp litter detector.
+# `prepare_dataset.py` writes a concrete copy (with absolute paths) into
+# datasets/glowup/data.yaml. Class order MUST match labelmap.json.
+
+path: datasets/glowup
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: plastic_bottle
+  1: can
+  2: glass_bottle
+  3: cup
+  4: wrapper
+  5: cigarette
+  6: paper
+  7: plastic_bag
+  8: food_container

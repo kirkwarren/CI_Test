@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>GlowUp</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string></string>
+	</dict>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+	</dict>
+
+	<!-- Camera is required for the AR gremlin encounter + on-device litter detection. -->
+	<key>NSCameraUsageDescription</key>
+	<string>GlowUp uses your camera to reveal litter gremlins in augmented reality and to detect litter on the ground so you can clear it for points.</string>
+
+	<!-- Real-time location powers the live map, gremlin spawning, and neighborhood/city/state leaderboards. -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>GlowUp uses your location to show nearby gremlins on the map and to rank your cleanups on neighborhood, city, and state leaderboards. Your precise location is never shown publicly.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allowing location while the app refreshes lets GlowUp keep nearby gremlins and your live position up to date during a cleanup walk.</string>
+
+	<!-- Motion improves AR world tracking and movement-plausibility anti-cheat checks. -->
+	<key>NSMotionUsageDescription</key>
+	<string>GlowUp uses motion data to stabilize the AR view and to confirm real movement during a cleanup.</string>
+
+	<!-- Photo add-only: let players save before/after impact cards. -->
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>GlowUp can save your before/after cleanup cards to your photo library so you can share your impact.</string>
+
+	<!-- ARKit-capable device required. -->
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+		<string>arkit</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+</dict>
+</plist>

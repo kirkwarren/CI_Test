@@ -1,0 +1,66 @@
+# GlowUp — XcodeGen project specification.
+#
+# This repo commits the *spec* (project.yml) rather than a generated .xcodeproj,
+# which keeps the project diffable and merge-friendly. To produce the Xcode
+# project on a Mac:
+#
+#     brew install xcodegen
+#     xcodegen generate
+#     open GlowUp.xcodeproj
+#
+# (Or import the GlowUp/ sources into a fresh SwiftUI iOS app target by hand.)
+
+name: GlowUp
+options:
+  bundleIdPrefix: app.glowup
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1" # iPhone only
+    ENABLE_USER_SCRIPT_SANDBOXING: "YES"
+    SWIFT_STRICT_CONCURRENCY: "targeted"
+    CODE_SIGN_STYLE: "Automatic"
+
+targets:
+  GlowUp:
+    type: application
+    platform: iOS
+    sources:
+      - path: GlowUp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.glowup.GlowUp
+        INFOPLIST_FILE: GlowUp/Resources/Info.plist
+        GENERATE_INFOPLIST_FILE: "NO"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: "YES"
+
+  GlowUpTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: GlowUpTests
+    dependencies:
+      - target: GlowUp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.glowup.GlowUpTests
+        GENERATE_INFOPLIST_FILE: "YES"
+
+schemes:
+  GlowUp:
+    build:
+      targets:
+        GlowUp: all
+        GlowUpTests: [test]
+    test:
+      targets:
+        - GlowUpTests
+      gatherCoverageData: true
