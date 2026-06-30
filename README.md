@@ -1,70 +1,72 @@
-# Getting Started with Create React App
+# CleanQuest 🌱
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Clean the world. Level up.** A location-based augmented-reality game that turns
+picking up litter into something people want to play every day. Players explore an
+AR map of their city, run **live AR cleanup sessions**, earn verified Impact Score,
+level up, collect Eco Spirits, join crews, and push a city-wide environmental dashboard.
 
-## Available Scripts
+This repo is an interactive **prototype** (Create React App + Tailwind) built around a
+single pilot city, *Riverton*.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## The core loop: a live AR cleanup session
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The heart of the game is one **continuous, camera-on session** that witnesses the entire
+journey of every piece of litter — so points reflect real, verified cleanup, not photos.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **Arm the session.** Layered integrity checks must pass first (geofence, device
+   attestation, continuous-stream, motion plausibility, per-item de-dupe).
+2. **Detect & collect.** On-device vision boxes each item, classifies it
+   (PET bottle, aluminum can, wrapper…) and assigns **per-item points**. You must be
+   seen moving each item **ground → hand → bag** in one unbroken sequence.
+3. **Dispose to earn.** Every item stays **pending** until the full bag is deposited at
+   an approved disposal QR / staffed station. No station scan, no credit.
+4. **Transform.** The zone flips from grey/polluted to green/restored, and you earn
+   Impact Score, XP, badges, and rare Eco Spirits.
 
-### `npm test`
+### Why it's hard to cheat (and skew leaderboards)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+No single signal decides a cleanup — layers stack (see the in-app **Fair Play** sheet):
 
-### `npm run build`
+- **One unbroken session** — continuous signed camera stream; break it and pending items void.
+- **See the full pickup** — motion/optical-flow check; still photos & screen-of-a-screen fail.
+- **Points only after disposal** — approved station scan required.
+- **Per-item perceptual hashing** — reusing the same bottle across items/sessions/accounts is rejected.
+- **Location can't be faked** — GPS + geofence + IMU fused with attestation & mock-location detection.
+- **Not household dumping** — CV distinguishes weathered field litter; items/minute capped.
+- **Trust gates the board** — low-trust accounts earn provisional points; async server re-scoring can revoke; suspicious accounts are quarantined off public leaderboards.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+> The prototype uses the real device camera as a dim live backdrop where available, with a
+> simulated detection layer on top. The architecture is structured so a real on-device model
+> (e.g. an object detector) slots into the same per-item pipeline.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Impact Score (balanced, not raw weight)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+40% verified activity · 20% area priority & density · 15% disposal/recycling · 15% consistency &
+streaks · 10% crew & event contribution. Weight is tracked as an environmental metric but capped
+in competitive scoring.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## App structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- `src/App.js` — phone-frame shell, top bar, tab navigation, overlays
+- `src/context/GameContext.js` — game state & actions (mission completion, rewards, toasts)
+- `src/data/gameData.js` — pilot-city content: zones, litter types, crews, events, dashboard, anti-cheat copy
+- `src/components/ARCleanupSession.js` — the live AR capture flow (arming → live detection → disposal)
+- `src/components/RewardOverlay.js` — celebration + Impact Score breakdown
+- `src/components/Charts.js` — lightweight dependency-free SVG charts
+- `src/screens/` — Map, Quests, Crew, Events, Dashboard, Profile
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Run it
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm install
+npm start      # dev server at http://localhost:3000
+npm test       # test suite
+npm run build  # production build
+```
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Allow camera access to see the live feed behind the AR detection layer (optional — the
+session works fully without it).
