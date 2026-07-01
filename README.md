@@ -37,9 +37,20 @@ No single signal decides a cleanup — layers stack (see the in-app **Fair Play*
 - **Not household dumping** — CV distinguishes weathered field litter; items/minute capped.
 - **Trust gates the board** — low-trust accounts earn provisional points; async server re-scoring can revoke; suspicious accounts are quarantined off public leaderboards.
 
-> The prototype uses the real device camera as a dim live backdrop where available, with a
-> simulated detection layer on top. The architecture is structured so a real on-device model
-> (e.g. an object detector) slots into the same per-item pipeline.
+### Real augmented reality
+
+The AR session is **live camera + real on-device object detection**:
+
+- The device camera fills the screen (`getUserMedia`, `object-cover`).
+- A **TensorFlow.js COCO-SSD** detector runs continuously on the video and returns
+  bounding boxes for litter-relevant classes (bottle, cup, glass, container, paper…),
+  mapped to CleanQuest litter types & points in `LITTER_CLASS_MAP`.
+- Boxes are composited over the live feed; tap one to run the ground → hand → bag transfer.
+- The model is **self-hosted** in `public/models/coco-ssd/` (no runtime CDN dependency),
+  and detection runs entirely on-device.
+
+> Point the camera at real litter and it gets boxed and classified live. Detection is fast
+> on a phone (WebGL/WebGPU); it also runs on CPU as a fallback.
 
 ### Impact Score (balanced, not raw weight)
 

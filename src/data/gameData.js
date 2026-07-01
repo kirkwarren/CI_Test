@@ -384,6 +384,23 @@ export const LITTER_TYPES = [
 export const densityToCount = (density) =>
   density === 'Heavy' ? 8 : density === 'Moderate' ? 5 : 3;
 
+// Map real COCO-SSD detection classes -> CleanQuest litter types & points.
+// These are the litter-relevant objects an on-device detector reliably finds.
+export const LITTER_CLASS_MAP = {
+  bottle: { type: 'Plastic bottle', klass: 'PET #1 plastic', emoji: '🍾', points: 12, recyclable: true },
+  cup: { type: 'Cup', klass: 'Mixed / lined', emoji: '🥤', points: 8, recyclable: false },
+  'wine glass': { type: 'Glass bottle', klass: 'Glass', emoji: '🍶', points: 13, recyclable: true },
+  bowl: { type: 'Container', klass: 'Rigid plastic', emoji: '🥡', points: 7, recyclable: true },
+  book: { type: 'Paper / carton', klass: 'Paper', emoji: '🗞️', points: 7, recyclable: true },
+  'sports ball': { type: 'Debris', klass: 'Mixed', emoji: '🥫', points: 6, recyclable: false },
+  banana: { type: 'Food waste', klass: 'Organic', emoji: '🍌', points: 5, recyclable: false },
+  apple: { type: 'Food waste', klass: 'Organic', emoji: '🍎', points: 5, recyclable: false },
+  donut: { type: 'Food waste', klass: 'Organic', emoji: '🍩', points: 5, recyclable: false },
+};
+
+// Classes we surface as litter (everything else the detector sees is ignored).
+export const LITTER_CLASSES = Object.keys(LITTER_CLASS_MAP);
+
 // Build a deterministic-ish spread of litter items across the "ground" plane
 // (lower portion of the viewport) for a given zone.
 export const generateLitter = (zone) => {
