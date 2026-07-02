@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useGame } from '../game/GameState';
-import { LITTER_CLASS_MAP, NON_LITTER_CLASSES, SIZE_TIERS, TOO_CLOSE_FRAC } from '../game/data';
+import { LITTER_CLASS_MAP, NON_LITTER_CLASSES, SIZE_TIERS, TOO_CLOSE_FRAC, GOLDEN_MULT, RUSH_MULT } from '../game/data';
 import { play, buzz } from '../game/sound';
 import { cx, Pill, BigBtn } from '../ui/bits';
 import {
@@ -18,7 +18,9 @@ const fmtClock = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String
 // The AR "catch screen": live camera full-screen, real on-device detection
 // boxing litter, tap to grab (ground → hand → bag), then bank at a bin QR.
 const Encounter = ({ spawn, onClose, onFairPlay }) => {
-  const { bankEncounter, player } = useGame();
+  const { bankEncounter, player, goldenId, rushEndsAt } = useGame();
+  const golden = spawn.id === goldenId;
+  const rushActive = Date.now() < rushEndsAt;
 
   // Optional QA flag: ?debugClasses=person,frisbee adds extra detector classes
   // so the pipeline can be exercised on a desktop without real litter.
@@ -54,6 +56,7 @@ const Encounter = ({ spawn, onClose, onFairPlay }) => {
   const [mode, setMode] = useState('hunt'); // hunt | dispose | banking
   const [creditPct, setCreditPct] = useState(0);
   const lastGrabRef = useRef(0);
+  const comboMaxRef = useRef(1);
 
   const pending = bag.reduce((s, b) => s + b.pts, 0);
   const comboBonusPct = Math.min(50, Math.max(0, (combo - 1) * 10));
@@ -181,6 +184,7 @@ const Encounter = ({ spawn, onClose, onFairPlay }) => {
       play('bag'); buzz(25);
       setCombo((c) => {
         const next = now - lastGrabRef.current < COMBO_WINDOW_MS ? c + 1 : 1;
+        comboMaxRef.current = Math.max(comboMaxRef.current, next);
         if (next > 1) setTimeout(() => play('combo', next), 140);
         return next;
       });
@@ -208,14 +212,18 @@ const Encounter = ({ spawn, onClose, onFairPlay }) => {
     const zonePts = Math.round(base * 0.25 * spawn.density);
     const streakPts = Math.round(base * Math.min(0.15, player.streak * 0.03));
     const xl = bag.filter((b) => b.size && b.size.mult >= 2).length;
+    const goldenPts = golden ? base * (GOLDEN_MULT - 1) : 0;
+    const rushPts = rushActive ? base * (RUSH_MULT - 1) : 0;
     const breakdown = [
       { label: `${bag.length} items, size-weighted${xl ? ` (${xl} large!)` : ''}`, pts: base },
+      ...(golden ? [{ label: `🌟 Golden spawn ×${GOLDEN_MULT}`, pts: goldenPts }] : []),
+      ...(rushActive ? [{ label: `⚡ Litter Rush ×${RUSH_MULT}`, pts: rushPts }] : []),
       { label: `Combo ×${Math.max(combo, 1)} bonus`, pts: comboPts },
       { label: `${spawn.name} density bonus`, pts: zonePts },
       { label: `${player.streak}-day streak`, pts: streakPts },
     ];
-    return { breakdown, total: base + comboPts + zonePts + streakPts };
-  }, [bag, comboBonusPct, combo, spawn, player.streak]);
+    return { breakdown, total: base + goldenPts + rushPts + comboPts + zonePts + streakPts };
+  }, [bag, comboBonusPct, combo, spawn, player.streak, golden, rushActive]);
 
   const scanBin = () => {
     play('bank'); buzz([30, 40, 30, 40, 60]);
@@ -228,7 +236,7 @@ const Encounter = ({ spawn, onClose, onFairPlay }) => {
         clearInterval(t);
         setTimeout(() => {
           if (streamRef.current) streamRef.current.getTracks().forEach((tr) => tr.stop());
-          bankEncounter(spawn, { items: bag, breakdown: totals.breakdown, total: totals.total });
+          bankEncounter(spawn, { items: bag, breakdown: totals.breakdown, total: totals.total, comboMax: comboMaxRef.current });
           onClose();
         }, 500);
       }
@@ -359,13 +367,17 @@ const Encounter = ({ spawn, onClose, onFairPlay }) => {
         <button onClick={onClose} className="grid place-items-center h-9 w-9 rounded-full bg-black/55 backdrop-blur"><X className="h-4.5 w-4.5 text-white/85" /></button>
       </div>
 
-      {/* AI discrimination readout */}
-      {hunting && (detections.length > 0 || nonLitter.length > 0) && (
-        <div className="absolute top-[3.6rem] inset-x-0 flex justify-center z-20 pointer-events-none">
-          <span className="rounded-full bg-black/60 backdrop-blur text-[11px] font-black px-3 py-1">
-            <span className="text-quest-300">🤖 {detections.length} litter</span>
-            {nonLitter.length > 0 && <span className="text-white/55"> · {nonLitter.length} not litter</span>}
-          </span>
+      {/* AI discrimination readout + live multipliers */}
+      {hunting && (detections.length > 0 || nonLitter.length > 0 || golden || rushActive) && (
+        <div className="absolute top-[3.6rem] inset-x-0 flex justify-center gap-1.5 z-20 pointer-events-none flex-wrap px-4">
+          {(detections.length > 0 || nonLitter.length > 0) && (
+            <span className="rounded-full bg-black/60 backdrop-blur text-[11px] font-black px-3 py-1">
+              <span className="text-quest-300">🤖 {detections.length} litter</span>
+              {nonLitter.length > 0 && <span className="text-white/55"> · {nonLitter.length} not litter</span>}
+            </span>
+          )}
+          {golden && <span className="rounded-full bg-gradient-to-r from-yellow-200 to-sun-400 text-grime-900 text-[11px] font-black px-3 py-1 shadow-card">🌟 GOLDEN ×{GOLDEN_MULT}</span>}
+          {rushActive && <span className="rounded-full bg-fuchsia-500/80 text-white text-[11px] font-black px-3 py-1">⚡ RUSH ×{RUSH_MULT}</span>}
         </div>
       )}
 

@@ -4,6 +4,8 @@ import MapHome from './screens/MapHome';
 import Encounter from './screens/Encounter';
 import Leaderboard from './screens/Leaderboard';
 import Profile from './screens/Profile';
+import Today from './screens/Today';
+import Trashdex from './screens/Trashdex';
 import BankedOverlay from './ui/BankedOverlay';
 import FairPlay from './ui/FairPlay';
 
@@ -23,6 +25,8 @@ const App = () => {
             onLeaderboard={() => setSheet('leaderboard')}
             onProfile={() => setSheet('profile')}
             onFairPlay={() => setSheet('fairplay')}
+            onToday={() => setSheet('today')}
+            onDex={() => setSheet('dex')}
           />
 
           {encounter && (
@@ -32,6 +36,8 @@ const App = () => {
           {sheet === 'leaderboard' && <Leaderboard onClose={() => setSheet(null)} />}
           {sheet === 'profile' && <Profile onClose={() => setSheet(null)} />}
           {sheet === 'fairplay' && <FairPlay onClose={() => setSheet(null)} />}
+          {sheet === 'today' && <Today onClose={() => setSheet(null)} />}
+          {sheet === 'dex' && <Trashdex onClose={() => setSheet(null)} />}
 
           <BankedOverlay />
         </div>

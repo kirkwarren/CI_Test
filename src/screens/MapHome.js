@@ -1,17 +1,26 @@
 import React from 'react';
 import { useGame } from '../game/GameState';
-import { REACH } from '../game/data';
+import { REACH, GOLDEN_MULT, RUSH_MULT, buddyStage } from '../game/data';
 import { play, isSoundOn, setSoundOn } from '../game/sound';
 import { cx, Pill, BigBtn } from '../ui/bits';
-import { Trophy, Flame, Zap, Footprints, ShieldCheck, X, Leaf, Volume2, VolumeX } from 'lucide-react';
+import { Trophy, Flame, Zap, Footprints, ShieldCheck, X, Leaf, Volume2, VolumeX, ClipboardList, BookOpen } from 'lucide-react';
 
 // The Pokémon-Go-style overworld: a bright park map, litter spawns bobbing on
 // it, your avatar with a reach ring, and chunky HUD corners.
-const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
-  const { player, spawns, pos, myRank, walkTo, toast } = useGame();
+const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay, onToday, onDex }) => {
+  const { player, spawns, pos, myRank, walkTo, toast, goldenId, cleanliness, rushEndsAt, claimable, buddyXp } = useGame();
   const [selected, setSelected] = React.useState(null);
   const [walking, setWalking] = React.useState(false);
   const [soundOn, setSound] = React.useState(isSoundOn());
+  const [now, setNow] = React.useState(Date.now());
+
+  // tick the rush countdown
+  React.useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const rushLeft = rushEndsAt - now;
+  const buddy = buddyStage(buddyXp);
 
   const toggleSound = () => {
     const v = !soundOn;
@@ -90,6 +99,7 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
           const d = Math.hypot(s.x - pos.x, s.y - pos.y);
           const near = d <= REACH;
           const cleaned = s.status === 'cleaned';
+          const golden = s.id === goldenId;
           return (
             <button
               key={s.id}
@@ -101,14 +111,20 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
                 <span className="block text-2xl animate-pop drop-shadow">✨</span>
               ) : (
                 <span className="relative block animate-floaty" style={{ animationDelay: `${(s.x + s.y) % 4 * 0.35}s` }}>
-                  {near && <span className="absolute inset-0 -m-2 rounded-full bg-quest-300/40 animate-ripple" />}
+                  {(near || golden) && <span className={cx('absolute inset-0 -m-2 rounded-full animate-ripple', golden ? 'bg-sun-400/50' : 'bg-quest-300/40')} />}
                   <span className={cx(
                     'relative grid place-items-center h-11 w-11 rounded-full text-xl ring-[3px] shadow-card transition',
-                    near ? 'bg-white ring-quest-400' : 'bg-white/70 ring-white/50 grayscale-[45%]',
+                    golden ? 'bg-gradient-to-b from-yellow-100 to-sun-400 ring-sun-500 shadow-glow'
+                      : near ? 'bg-white ring-quest-400' : 'bg-white/70 ring-white/50 grayscale-[45%]',
                     selected === s.id && 'scale-110 ring-sun-400'
                   )}>
                     {s.emoji}
                   </span>
+                  {golden && (
+                    <span className="absolute -top-2 -right-2 rounded-full bg-sun-400 text-grime-900 text-[9px] font-black px-1.5 py-0.5 ring-2 ring-white shadow-card">
+                      ×{GOLDEN_MULT}
+                    </span>
+                  )}
                   {/* density pips */}
                   <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5">
                     {Array.from({ length: s.density }).map((_, i) => (
@@ -123,11 +139,15 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
           );
         })}
 
-        {/* ---- player avatar ---- */}
+        {/* ---- player avatar + buddy ---- */}
         <div className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all duration-100" style={{ left: `${pos.x}%`, top: `${pos.y}%` }}>
           <span className="absolute inset-0 -m-3 rounded-full bg-ocean-400/30 animate-ripple" />
           <span className="relative grid place-items-center h-12 w-12 rounded-full bg-ocean-500 ring-4 ring-white text-2xl shadow-card">
             {player.avatar}
+          </span>
+          {/* buddy Eco-Spirit trails beside you */}
+          <span className="absolute -right-7 top-6 text-xl animate-floaty drop-shadow" style={{ animationDelay: '0.6s' }}>
+            {buddy.emoji}
           </span>
           {walking && (
             <span className="absolute -top-6 left-1/2 -translate-x-1/2 rounded-full bg-black/70 text-white text-[10px] font-bold px-2 py-0.5 whitespace-nowrap flex items-center gap-1">
@@ -152,12 +172,21 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
         </Pill>
       </div>
 
-      {/* radar line */}
+      {/* radar + cleanliness line */}
       <div className="absolute top-14 inset-x-0 flex justify-center pointer-events-none">
         <span className="rounded-full bg-black/45 text-white/90 text-[11px] font-bold px-3 py-1 backdrop-blur">
-          {activeCount} litter spawns nearby — walk into your ring to clean
+          🏙️ {Math.round(cleanliness)}% clean · {activeCount} litter spawns nearby
         </span>
       </div>
+
+      {/* live event banner */}
+      {rushLeft > 0 && (
+        <div className="absolute top-[5.6rem] inset-x-0 flex justify-center pointer-events-none">
+          <span className="rounded-full bg-gradient-to-r from-fuchsia-500 to-sun-500 text-white text-[11px] font-black px-3.5 py-1.5 shadow-card animate-pulseGlow">
+            ⚡ LITTER RUSH ×{RUSH_MULT} · {Math.floor(rushLeft / 60000)}:{String(Math.floor(rushLeft / 1000) % 60).padStart(2, '0')} left
+          </span>
+        </div>
+      )}
 
       {/* toast */}
       {toast && (
@@ -191,6 +220,19 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
         {soundOn ? <Volume2 className="h-5 w-5 text-white/85" /> : <VolumeX className="h-5 w-5 text-white/40" />}
       </button>
 
+      {/* left column: Today quests + Trashdex */}
+      <button onClick={() => { play('tick'); onToday(); }} className="absolute bottom-20 left-3 grid place-items-center h-10 w-10 rounded-full bg-grime-900/85 backdrop-blur shadow-card active:scale-95">
+        <ClipboardList className="h-5 w-5 text-sun-400" />
+        {claimable > 0 && (
+          <span className="absolute -top-1 -right-1 grid place-items-center h-4.5 min-w-4.5 px-1 rounded-full bg-rose-500 text-white text-[9px] font-black ring-2 ring-grime-900 animate-pulseGlow">
+            {claimable}
+          </span>
+        )}
+      </button>
+      <button onClick={() => { play('tick'); onDex(); }} className="absolute bottom-32 left-3 grid place-items-center h-10 w-10 rounded-full bg-grime-900/85 backdrop-blur shadow-card active:scale-95">
+        <BookOpen className="h-5 w-5 text-ocean-400" />
+      </button>
+
       {/* ---- selected spawn card ---- */}
       {sel && (
         <div className="absolute bottom-20 inset-x-3 z-20 animate-slideUp">
@@ -205,10 +247,11 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="flex items-center gap-2 mt-3 mb-3">
+            <div className="flex items-center gap-2 mt-3 mb-3 flex-wrap">
               <Pill className="bg-white/10 text-white/85">{meters} m away</Pill>
               <Pill className="bg-sun-500/20 text-sun-400">{'⭐'.repeat(sel.density)} density</Pill>
-              <Pill className="bg-quest-500/20 text-quest-300">2× bonus zone</Pill>
+              {sel.id === goldenId && <Pill className="bg-gradient-to-r from-yellow-200 to-sun-400 text-grime-900">🌟 GOLDEN ×{GOLDEN_MULT}</Pill>}
+              {rushLeft > 0 && <Pill className="bg-fuchsia-500/25 text-fuchsia-300">⚡ Rush ×{RUSH_MULT}</Pill>}
             </div>
             {inReach ? (
               <BigBtn onClick={() => { setSelected(null); onEncounter(sel); }}>

@@ -72,6 +72,26 @@ const BankedOverlay = () => {
           </div>
         )}
 
+        {/* Trashdex discoveries */}
+        {banked.newSpecies && banked.newSpecies.length > 0 && (
+          <div className="mt-2.5 rounded-2xl bg-ocean-500/15 ring-1 ring-ocean-400/30 p-3.5 flex items-center gap-3 animate-slideUp">
+            <span className="text-2xl shrink-0">📖</span>
+            <p className="text-white font-black text-sm text-left">
+              New Trashdex entry{banked.newSpecies.length > 1 ? 'ies' : ''}: <span className="text-ocean-400">{banked.newSpecies.join(', ')}</span>
+            </p>
+          </div>
+        )}
+
+        {/* buddy evolution */}
+        {banked.buddyUp && (
+          <div className="mt-2.5 rounded-2xl bg-fuchsia-500/15 ring-1 ring-fuchsia-400/30 p-3.5 flex items-center gap-3 animate-slideUp">
+            <span className="text-2xl shrink-0 animate-floaty">{banked.buddyUp.to.emoji}</span>
+            <p className="text-white font-black text-sm text-left">
+              Your buddy evolved! {banked.buddyUp.from.emoji} {banked.buddyUp.from.name} → <span className="text-fuchsia-300">{banked.buddyUp.to.name}</span>
+            </p>
+          </div>
+        )}
+
         {/* breakdown */}
         <div className="mt-4 rounded-2xl bg-white/5 ring-1 ring-white/10 p-3.5 text-left space-y-1.5">
           {banked.breakdown.map((b) => (

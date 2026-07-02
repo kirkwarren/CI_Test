@@ -3,16 +3,53 @@
 
 // COCO-SSD classes the on-device detector reports, mapped to litter + points.
 export const LITTER_CLASS_MAP = {
-  bottle: { type: 'Plastic bottle', emoji: '🍾', points: 12, recyclable: true },
-  cup: { type: 'Cup', emoji: '🥤', points: 8, recyclable: false },
-  'wine glass': { type: 'Glass bottle', emoji: '🍶', points: 13, recyclable: true },
-  bowl: { type: 'Container', emoji: '🥡', points: 7, recyclable: true },
-  book: { type: 'Paper / carton', emoji: '🗞️', points: 7, recyclable: true },
-  'sports ball': { type: 'Debris', emoji: '🥫', points: 6, recyclable: false },
-  banana: { type: 'Food waste', emoji: '🍌', points: 5, recyclable: false },
-  apple: { type: 'Food waste', emoji: '🍎', points: 5, recyclable: false },
-  donut: { type: 'Food waste', emoji: '🍩', points: 5, recyclable: false },
+  bottle: { type: 'Plastic bottle', emoji: '🍾', points: 12, recyclable: true, rarity: 'common' },
+  cup: { type: 'Cup', emoji: '🥤', points: 8, recyclable: false, rarity: 'common' },
+  'wine glass': { type: 'Glass bottle', emoji: '🍶', points: 13, recyclable: true, rarity: 'rare' },
+  bowl: { type: 'Container', emoji: '🥡', points: 7, recyclable: true, rarity: 'uncommon' },
+  book: { type: 'Paper / carton', emoji: '🗞️', points: 7, recyclable: true, rarity: 'uncommon' },
+  'sports ball': { type: 'Debris', emoji: '🥫', points: 6, recyclable: false, rarity: 'uncommon' },
+  banana: { type: 'Food waste', emoji: '🍌', points: 5, recyclable: false, rarity: 'common' },
+  apple: { type: 'Food waste', emoji: '🍎', points: 5, recyclable: false, rarity: 'common' },
+  donut: { type: 'Food waste', emoji: '🍩', points: 5, recyclable: false, rarity: 'rare' },
 };
+
+// ---- Trashdex: the collection log (the Pokédex analog) ----
+export const TRASHDEX = Object.values(
+  Object.values(LITTER_CLASS_MAP).reduce((acc, m) => { acc[m.type] = m; return acc; }, {})
+);
+export const RARITY_STYLE = {
+  common: 'bg-white/10 text-white/60',
+  uncommon: 'bg-ocean-500/20 text-ocean-400',
+  rare: 'bg-fuchsia-500/20 text-fuchsia-300',
+};
+
+// ---- The daily loop: quests that reset each day ----
+export const DAILY_QUESTS = [
+  { id: 'q-items', label: 'Clean 5 pieces of litter', emoji: '🧤', target: 5, type: 'items', reward: 40 },
+  { id: 'q-large', label: 'Bag a Large or XL item', emoji: '📦', target: 1, type: 'large', reward: 30 },
+  { id: 'q-combo', label: 'Hit a ×3 grab combo', emoji: '⚡', target: 3, type: 'combo', reward: 35 },
+  { id: 'q-banks', label: 'Bank at 2 different bins', emoji: '🗑️', target: 2, type: 'banks', reward: 25 },
+];
+
+// ---- Buddy Eco-Spirit: grows with every cleanup ----
+export const BUDDY_STAGES = [
+  { min: 0, emoji: '🌱', name: 'Sprout' },
+  { min: 120, emoji: '🌿', name: 'Sapling' },
+  { min: 350, emoji: '🌳', name: 'Grove Guardian' },
+];
+export const buddyStage = (xp) => [...BUDDY_STAGES].reverse().find((s) => xp >= s.min);
+export const buddyNext = (xp) => BUDDY_STAGES.find((s) => s.min > xp) || null;
+
+// ---- Events ----
+export const GOLDEN_MULT = 3; // golden spawns pay 3×
+export const GOLDEN_CHANCE = 0.35; // chance a respawn comes back golden
+export const RUSH_MULT = 2; // Litter Rush: everything 2×
+export const RUSH_MINUTES = 30;
+
+// Neighborhood cleanliness — the civic payoff meter. Community goal unlocks
+// a real-world sponsor action.
+export const CLEAN_GOAL = { at: 80, reward: 'City sponsor plants 50 trees in Riverton Commons' };
 
 // Classes the detector may see that are definitely NOT litter. They render
 // as grey "not litter" boxes so players watch the AI discriminate in real time.

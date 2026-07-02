@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGame } from '../game/GameState';
-import { xpForLevel } from '../game/data';
+import { xpForLevel, buddyStage, buddyNext } from '../game/data';
 import { cx, Sheet } from '../ui/bits';
 import { Zap, Flame, ShoppingBag, CheckCircle2, Share2 } from 'lucide-react';
 
@@ -20,9 +20,11 @@ const Ring = ({ pct, children }) => {
 };
 
 const Profile = ({ onClose }) => {
-  const { player, myRank, showToast } = useGame();
+  const { player, myRank, showToast, buddyXp } = useGame();
   const need = xpForLevel(player.level);
   const pct = Math.min(100, (player.xp / need) * 100);
+  const buddy = buddyStage(buddyXp);
+  const next = buddyNext(buddyXp);
 
   return (
     <Sheet onClose={onClose}>
@@ -51,6 +53,25 @@ const Profile = ({ onClose }) => {
         <p className="text-white/60 text-[13px] font-bold mt-5">
           Rank <span className="text-sun-400 font-black">#{myRank}</span> in this week's Cleanup Cup
         </p>
+
+        {/* buddy Eco-Spirit */}
+        <div className="mt-5 rounded-3xl bg-gradient-to-br from-quest-500/12 to-fuchsia-500/8 ring-1 ring-quest-400/20 p-4 flex items-center gap-4">
+          <span className="text-5xl animate-floaty shrink-0">{buddy.emoji}</span>
+          <div className="flex-1 text-left">
+            <p className="text-white font-black text-base leading-tight">{buddy.name}</p>
+            <p className="text-white/50 text-[11px] font-bold">Your buddy grows with every item you clean</p>
+            {next ? (
+              <>
+                <div className="h-2 rounded-full bg-white/10 overflow-hidden mt-2">
+                  <div className="h-full rounded-full bg-gradient-to-r from-quest-400 to-fuchsia-400 transition-all duration-500" style={{ width: `${Math.min(100, (buddyXp / next.min) * 100)}%` }} />
+                </div>
+                <p className="text-white/45 text-[10px] font-bold mt-1">{buddyXp} / {next.min} · evolves into {next.emoji} {next.name}</p>
+              </>
+            ) : (
+              <p className="text-fuchsia-300 text-[11px] font-black mt-1.5">Fully evolved — a true guardian 🌟</p>
+            )}
+          </div>
+        </div>
 
         <div className="mt-5">
           <p className="text-left text-white font-black text-sm mb-2">Badges</p>

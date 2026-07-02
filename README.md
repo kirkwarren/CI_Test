@@ -6,7 +6,23 @@ bin it, and bank points onto the Weekly Cleanup Cup leaderboard.
 
 Built with Create React App + Tailwind + TensorFlow.js.
 
-## The loop
+## The engagement loop
+
+Designed so cleaning is the addictive part and the city is the winner:
+
+1. **Daily hook** — fresh daily quests, a streak that needs one banked cleanup a
+   day, and a timed **⚡ Litter Rush** (everything ×2) create a reason to open
+   the app *today*.
+2. **Session loop** — golden spawns (×3), size-weighted grabs, combos, and the
+   fly-to-bag juice make each encounter satisfying moment-to-moment.
+3. **Meta progression** — the **Trashdex** (collect every litter species), a
+   **buddy Eco-Spirit** that evolves as you clean (🌱→🌿→🌳), levels, badges,
+   and the Weekly Cleanup Cup keep long arcs running.
+4. **Civic payoff** — every verified bank raises the public **Neighborhood
+   Cleanliness** meter; hitting the community goal triggers a real sponsor
+   action (e.g. 50 trees planted). Your points are your impact.
+
+## The session loop
 
 1. **Map (home screen)** — a bright overworld with bobbing litter spawns. A reach
    ring surrounds your avatar; walk to a spawn to activate it *(prototype
