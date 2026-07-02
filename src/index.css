@@ -48,6 +48,30 @@
   }
 }
 
+/* Map ambience: drifting cloud shadows + flowing river highlight */
+@keyframes cq-drift {
+  from { transform: translateX(-40%); }
+  to { transform: translateX(140%); }
+}
+.cq-cloud {
+  animation: cq-drift 80s linear infinite;
+}
+@keyframes cq-flow {
+  to { stroke-dashoffset: -48; }
+}
+.cq-flow {
+  stroke-dasharray: 7 9;
+  animation: cq-flow 2.6s linear infinite;
+}
+@keyframes cq-sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2.5deg); }
+}
+.cq-sway {
+  animation: cq-sway 5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
 /* Custom range slider for the cleanup timer / sorting controls */
 input[type='range'].cq-range {
   -webkit-appearance: none;

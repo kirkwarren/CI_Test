@@ -1,8 +1,9 @@
 import React from 'react';
 import { useGame } from '../game/GameState';
 import { REACH } from '../game/data';
+import { play, isSoundOn, setSoundOn } from '../game/sound';
 import { cx, Pill, BigBtn } from '../ui/bits';
-import { Trophy, Flame, Zap, Footprints, ShieldCheck, X, Leaf } from 'lucide-react';
+import { Trophy, Flame, Zap, Footprints, ShieldCheck, X, Leaf, Volume2, VolumeX } from 'lucide-react';
 
 // The Pokémon-Go-style overworld: a bright park map, litter spawns bobbing on
 // it, your avatar with a reach ring, and chunky HUD corners.
@@ -10,6 +11,15 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
   const { player, spawns, pos, myRank, walkTo, toast } = useGame();
   const [selected, setSelected] = React.useState(null);
   const [walking, setWalking] = React.useState(false);
+  const [soundOn, setSound] = React.useState(isSoundOn());
+
+  const toggleSound = () => {
+    const v = !soundOn;
+    setSoundOn(v);
+    setSound(v);
+    if (v) play('tick');
+  };
+  const select = (id) => { play('tick'); setSelected(id); };
 
   const sel = spawns.find((s) => s.id === selected);
   const dist = sel ? Math.hypot(sel.x - pos.x, sel.y - pos.y) : 0;
@@ -47,10 +57,24 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
           {/* paths */}
           <path d="M8,100 C 22,74 40,70 46,52 C 52,36 44,22 54,0" fill="none" stroke="#e8d9ae" strokeWidth="3.4" strokeLinecap="round" opacity="0.95" />
           <path d="M0,66 C 24,62 52,68 74,60 S 96,50 104,54" fill="none" stroke="#e8d9ae" strokeWidth="2.6" strokeLinecap="round" opacity="0.9" />
-          {/* plaza */}
+          {/* animated river highlight */}
+          <path className="cq-flow" d="M-4,40 C 18,36 32,49 50,46 S 82,33 106,39" fill="none" stroke="#e6f8fd" strokeWidth="0.45" opacity="0.55" strokeLinecap="round" />
+          {/* plaza + fountain */}
           <circle cx="30" cy="30" r="6" fill="#dfd2a8" opacity="0.95" />
           <circle cx="30" cy="30" r="2" fill="#5ec8e8" />
         </svg>
+
+        {/* fountain ripple */}
+        <span className="absolute h-10 w-10 rounded-full border-2 border-white/50 animate-ripple pointer-events-none" style={{ left: '30%', top: '30%', transform: 'translate(-50%,-50%)' }} />
+
+        {/* scattered flora — swaying gently */}
+        {[['🌼', 22, 44], ['🌷', 58, 14], ['🌻', 8, 44], ['🌼', 90, 54], ['🍄', 38, 66], ['🌷', 78, 86], ['🌼', 54, 92]].map(([e, x, y], i) => (
+          <span key={i} className="cq-sway absolute text-sm pointer-events-none drop-shadow" style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${i * 0.7}s` }}>{e}</span>
+        ))}
+
+        {/* drifting cloud shadows */}
+        <div className="cq-cloud absolute top-[18%] h-24 w-52 rounded-full bg-black/10 blur-2xl pointer-events-none" />
+        <div className="cq-cloud absolute top-[62%] h-28 w-64 rounded-full bg-black/10 blur-2xl pointer-events-none" style={{ animationDelay: '-38s', animationDuration: '95s' }} />
 
         {/* soft vignette so HUD reads */}
         <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(6,25,18,0.42) 100%)' }} />
@@ -69,7 +93,7 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
           return (
             <button
               key={s.id}
-              onClick={() => !cleaned && setSelected(s.id)}
+              onClick={() => !cleaned && select(s.id)}
               className="absolute -translate-x-1/2 -translate-y-full"
               style={{ left: `${s.x}%`, top: `${s.y}%` }}
             >
@@ -159,9 +183,12 @@ const MapHome = ({ onEncounter, onLeaderboard, onProfile, onFairPlay }) => {
         <span className="text-grime-900 font-black text-sm">#{myRank}</span>
       </button>
 
-      {/* fair-play shield */}
+      {/* fair-play shield + sound toggle */}
       <button onClick={onFairPlay} className="absolute bottom-20 right-3 grid place-items-center h-10 w-10 rounded-full bg-grime-900/85 backdrop-blur shadow-card active:scale-95">
         <ShieldCheck className="h-5 w-5 text-quest-300" />
+      </button>
+      <button onClick={toggleSound} className="absolute bottom-32 right-3 grid place-items-center h-10 w-10 rounded-full bg-grime-900/85 backdrop-blur shadow-card active:scale-95">
+        {soundOn ? <Volume2 className="h-5 w-5 text-white/85" /> : <VolumeX className="h-5 w-5 text-white/40" />}
       </button>
 
       {/* ---- selected spawn card ---- */}

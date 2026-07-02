@@ -25,10 +25,29 @@ Built with Create React App + Tailwind + TensorFlow.js.
 - Full-screen `getUserMedia` camera; detection runs **entirely on-device**
   (no video leaves the phone).
 - The model is **self-hosted** at `public/models/coco-ssd/` — no runtime CDN.
+- **Trash vs. not-trash, visibly**: litter classes get green GRAB boxes;
+  known non-litter (people, pets, cars, benches…) renders as grey
+  "✕ not litter" boxes, with a live `🤖 N litter · M not litter` readout.
+- **Size-weighted scoring**: the share of frame a detection covers maps to
+  S ×1 / M ×1.5 / L ×2 / XL ×3 multipliers — bigger trash scores more. Boxes
+  covering >50% of the frame are rejected as "too close" (anti-cheat: items
+  held against the lens don't count).
 - Litter classes and per-item points live in `src/game/data.js`
-  (`LITTER_CLASS_MAP`); a fine-tuned litter model can drop into the same slot.
-- QA on a desktop with no litter handy: append `?debugClasses=person,frisbee`
+  (`LITTER_CLASS_MAP`, `SIZE_TIERS`); a fine-tuned litter model drops into
+  the same slot.
+- QA on a desktop with no litter handy: append `?debugClasses=frisbee`
   to add extra detector classes (labeled `QA:`).
+
+## Juice: sound, haptics, motion
+
+- All SFX are **synthesized with WebAudio** (`src/game/sound.js`) — grab pop,
+  bag thunk, rising combo dings, bank arpeggio, level-up fanfare, reject buzz.
+  No audio assets to download. Mute toggle on the map HUD.
+- **Haptics** via `navigator.vibrate` (Android/Chrome; iOS ignores it):
+  ticks on grab, thunk on bag, celebration patterns on bank/level-up.
+- Grabbed items **fly into the bag** with a floating `+pts` popup; the map has
+  drifting cloud shadows, a flowing river highlight, swaying flowers, and a
+  rippling fountain.
 
 ## Anti-cheat (why the leaderboard is trustworthy)
 

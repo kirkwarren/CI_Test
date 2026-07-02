@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useGame } from '../game/GameState';
+import { play, buzz } from '../game/sound';
 import { BigBtn } from './bits';
 import { TrendingUp, Trophy } from 'lucide-react';
 
@@ -13,6 +14,8 @@ const BankedOverlay = () => {
 
   useEffect(() => {
     if (!banked) return undefined;
+    if (banked.leveled) { setTimeout(() => { play('level'); buzz([40, 60, 40, 60, 120]); }, 600); }
+    else if (banked.rankAfter < banked.rankBefore) { setTimeout(() => { play('combo', 4); buzz([30, 50, 80]); }, 600); }
     setShown(0);
     const step = Math.max(1, Math.round(banked.total / 30));
     const t = setInterval(() => setShown((s) => {

@@ -14,6 +14,26 @@ export const LITTER_CLASS_MAP = {
   donut: { type: 'Food waste', emoji: '🍩', points: 5, recyclable: false },
 };
 
+// Classes the detector may see that are definitely NOT litter. They render
+// as grey "not litter" boxes so players watch the AI discriminate in real time.
+export const NON_LITTER_CLASSES = [
+  'person', 'dog', 'cat', 'bird', 'car', 'truck', 'bicycle', 'motorcycle',
+  'chair', 'bench', 'potted plant', 'tv', 'laptop', 'cell phone',
+  'backpack', 'handbag', 'umbrella', 'skateboard', 'fire hydrant',
+];
+
+// Size-weighted scoring: bigger litter = more points. Fraction is the share
+// of the camera frame the detection box covers.
+export const SIZE_TIERS = [
+  { max: 0.02, label: 'S', mult: 1, ring: 'border-quest-300' },
+  { max: 0.06, label: 'M', mult: 1.5, ring: 'border-quest-300' },
+  { max: 0.16, label: 'L', mult: 2, ring: 'border-ocean-400' },
+  { max: 0.5, label: 'XL', mult: 3, ring: 'border-sun-400' },
+];
+// Boxes covering more than this are implausible ground litter (likely held
+// against the lens) and are rejected — anti-cheat, not a bonus.
+export const TOO_CLOSE_FRAC = 0.5;
+
 // Litter spawns on the map (x/y are % positions). density scales the bonus.
 export const INITIAL_SPAWNS = [
   { id: 's1', name: 'Fountain Plaza', emoji: '🥤', x: 30, y: 30, density: 2, hint: 'Cups & wrappers around the benches' },
@@ -66,5 +86,6 @@ export const FAIR_PLAY = [
   { emoji: '🔍', title: 'Every item fingerprinted', body: 'Per-item perceptual hashing rejects the same bottle re-submitted across grabs, sessions, or accounts.' },
   { emoji: '📍', title: 'Location can’t be spoofed', body: 'GPS + geofence + motion sensors are fused with device attestation and mock-location detection.' },
   { emoji: '🗑️', title: 'Points bank only at disposal', body: 'Everything stays pending until you scan an approved bin’s QR code. No bin, no points.' },
+  { emoji: '📏', title: 'Size-aware, size-checked', body: 'Bigger litter scores more (S→XL), but box size is sanity-checked: items shoved against the lens are rejected and sessions with implausible size mixes get re-scored.' },
   { emoji: '🛡️', title: 'Trust gates the leaderboard', body: 'Low-trust accounts earn provisional points that are re-scored server-side and can be revoked before they ever touch the public board.' },
 ];
