@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders the CleanQuest brand header', () => {
+test('renders the map home with the CleanQuest HUD', () => {
   render(<App />);
-  const brand = screen.getAllByText(/CleanQuest/i)[0];
-  expect(brand).toBeInTheDocument();
+  expect(screen.getByText(/CleanQuest/i)).toBeInTheDocument();
 });
 
-test('shows the pilot city tagline', () => {
+test('shows litter spawns and the leaderboard rank button', () => {
   render(<App />);
-  expect(screen.getByText(/your city is the game board/i)).toBeInTheDocument();
+  expect(screen.getByText(/litter spawns nearby/i)).toBeInTheDocument();
+  expect(screen.getByText(/^#\d+$/)).toBeInTheDocument();
 });

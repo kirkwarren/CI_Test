@@ -1,83 +1,61 @@
 # CleanQuest 🌱
 
-**Clean the world. Level up.** A location-based augmented-reality game that turns
-picking up litter into something people want to play every day. Players explore an
-AR map of their city, run **live AR cleanup sessions**, earn verified Impact Score,
-level up, collect Eco Spirits, join crews, and push a city-wide environmental dashboard.
+**Pokémon Go, but for picking up litter.** Explore a live map, walk to litter
+spawns, open a real AR camera encounter, grab trash the detector actually sees,
+bin it, and bank points onto the Weekly Cleanup Cup leaderboard.
 
-This repo is an interactive **prototype** (Create React App + Tailwind) built around a
-single pilot city, *Riverton*.
+Built with Create React App + Tailwind + TensorFlow.js.
 
----
+## The loop
 
-## The core loop: a live AR cleanup session
+1. **Map (home screen)** — a bright overworld with bobbing litter spawns. A reach
+   ring surrounds your avatar; walk to a spawn to activate it *(prototype
+   simulates GPS walking)*.
+2. **AR encounter** — the live camera fills the screen. An on-device
+   **COCO-SSD** detector boxes litter-relevant objects (bottles, cups, glass,
+   containers, paper…) in real time. Tap **GRAB** and the item is tracked
+   ground → hand → bag. Chain grabs for a **combo** multiplier.
+3. **Bank at the bin** — everything stays *pending* until you scan an approved
+   bin's QR. Then points bank, XP flows, and you see your **leaderboard rank
+   change** on the spot.
+4. **Weekly Cleanup Cup** — podium + ranked list; rivals earn while you play.
 
-The heart of the game is one **continuous, camera-on session** that witnesses the entire
-journey of every piece of litter — so points reflect real, verified cleanup, not photos.
+## Real AR, real detection
 
-1. **Arm the session.** Layered integrity checks must pass first (geofence, device
-   attestation, continuous-stream, motion plausibility, per-item de-dupe).
-2. **Detect & collect.** On-device vision boxes each item, classifies it
-   (PET bottle, aluminum can, wrapper…) and assigns **per-item points**. You must be
-   seen moving each item **ground → hand → bag** in one unbroken sequence.
-3. **Dispose to earn.** Every item stays **pending** until the full bag is deposited at
-   an approved disposal QR / staffed station. No station scan, no credit.
-4. **Transform.** The zone flips from grey/polluted to green/restored, and you earn
-   Impact Score, XP, badges, and rare Eco Spirits.
+- Full-screen `getUserMedia` camera; detection runs **entirely on-device**
+  (no video leaves the phone).
+- The model is **self-hosted** at `public/models/coco-ssd/` — no runtime CDN.
+- Litter classes and per-item points live in `src/game/data.js`
+  (`LITTER_CLASS_MAP`); a fine-tuned litter model can drop into the same slot.
+- QA on a desktop with no litter handy: append `?debugClasses=person,frisbee`
+  to add extra detector classes (labeled `QA:`).
 
-### Why it's hard to cheat (and skew leaderboards)
+## Anti-cheat (why the leaderboard is trustworthy)
 
-No single signal decides a cleanup — layers stack (see the in-app **Fair Play** sheet):
+One unbroken camera session · the whole ground→hand→bag transfer is observed ·
+per-item perceptual hashing kills duplicates · GPS/geofence/motion fused with
+device attestation · points bank **only** at an approved bin scan · low-trust
+accounts get provisional, revocable points and never touch the public board.
+(See the in-app shield → Fair play sheet.)
 
-- **One unbroken session** — continuous signed camera stream; break it and pending items void.
-- **See the full pickup** — motion/optical-flow check; still photos & screen-of-a-screen fail.
-- **Points only after disposal** — approved station scan required.
-- **Per-item perceptual hashing** — reusing the same bottle across items/sessions/accounts is rejected.
-- **Location can't be faked** — GPS + geofence + IMU fused with attestation & mock-location detection.
-- **Not household dumping** — CV distinguishes weathered field litter; items/minute capped.
-- **Trust gates the board** — low-trust accounts earn provisional points; async server re-scoring can revoke; suspicious accounts are quarantined off public leaderboards.
+## Structure
 
-### Real augmented reality
+```
+src/App.js               shell: map + encounter + sheets + celebration
+src/game/data.js         spawns, rivals, litter classes, levels, fair-play copy
+src/game/GameState.js    state: player, spawns, walking, leaderboard, banking
+src/screens/MapHome.js   the overworld map + HUD
+src/screens/Encounter.js live-camera AR: detect → grab → dispose → bank
+src/screens/Leaderboard.js  Weekly Cleanup Cup (podium + list)
+src/screens/Profile.js   level ring, stats, badges
+src/ui/                  shared bits, banked celebration, fair-play sheet
+```
 
-The AR session is **live camera + real on-device object detection**:
-
-- The device camera fills the screen (`getUserMedia`, `object-cover`).
-- A **TensorFlow.js COCO-SSD** detector runs continuously on the video and returns
-  bounding boxes for litter-relevant classes (bottle, cup, glass, container, paper…),
-  mapped to CleanQuest litter types & points in `LITTER_CLASS_MAP`.
-- Boxes are composited over the live feed; tap one to run the ground → hand → bag transfer.
-- The model is **self-hosted** in `public/models/coco-ssd/` (no runtime CDN dependency),
-  and detection runs entirely on-device.
-
-> Point the camera at real litter and it gets boxed and classified live. Detection is fast
-> on a phone (WebGL/WebGPU); it also runs on CPU as a fallback.
-
-### Impact Score (balanced, not raw weight)
-
-40% verified activity · 20% area priority & density · 15% disposal/recycling · 15% consistency &
-streaks · 10% crew & event contribution. Weight is tracked as an environmental metric but capped
-in competitive scoring.
-
----
-
-## App structure
-
-- `src/App.js` — phone-frame shell, top bar, tab navigation, overlays
-- `src/context/GameContext.js` — game state & actions (mission completion, rewards, toasts)
-- `src/data/gameData.js` — pilot-city content: zones, litter types, crews, events, dashboard, anti-cheat copy
-- `src/components/ARCleanupSession.js` — the live AR capture flow (arming → live detection → disposal)
-- `src/components/RewardOverlay.js` — celebration + Impact Score breakdown
-- `src/components/Charts.js` — lightweight dependency-free SVG charts
-- `src/screens/` — Map, Quests, Crew, Events, Dashboard, Profile
-
-## Run it
+## Run
 
 ```bash
 npm install
-npm start      # dev server at http://localhost:3000
-npm test       # test suite
-npm run build  # production build
+npm start        # http://localhost:3000  (camera needs localhost or HTTPS)
+npm test
+npm run build
 ```
-
-Allow camera access to see the live feed behind the AR detection layer (optional — the
-session works fully without it).
