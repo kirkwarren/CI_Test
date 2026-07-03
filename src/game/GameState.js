@@ -71,10 +71,13 @@ export const GameProvider = ({ children }) => {
   }, [rivals, player.points, player.name, player.avatar]);
   const myRank = leaderboard.find((r) => r.you).rank;
 
-  // Bank a finished encounter. This is the hub of the loop: points/XP/rank,
-  // Trashdex discoveries, buddy growth, quest progress, cleanliness, respawn.
-  const bankEncounter = useCallback((spawn, { items, breakdown, total, comboMax = 1 }) => {
+  // Bank a cleanup run (may span several litter zones — or none: street litter
+  // counts too). The hub of the loop: points/XP/rank, Trashdex, buddy, quests,
+  // cleanliness, and zone respawns.
+  const bankRun = useCallback(({ items, breakdown, total, comboMax = 1, zoneIds = [] }) => {
     const rankBefore = myRank;
+    const firstZone = spawns.find((s) => s.id === zoneIds[0]);
+    const title = firstZone ? firstZone.name : 'Street cleanup';
 
     // Trashdex: count every banked item; note first-time discoveries.
     const newSpecies = [];
@@ -125,22 +128,24 @@ export const GameProvider = ({ children }) => {
       };
       const after = [...rivals.map((r) => r.points), next.points].sort((a, b) => b - a).indexOf(next.points) + 1;
       setTimeout(() => setBanked({
-        spawn, items, breakdown, total, leveled, level,
+        title, items, breakdown, total, leveled, level,
         rankBefore, rankAfter: after, newSpecies, buddyUp,
       }), 0);
       return next;
     });
 
-    setSpawns((prev) => prev.map((s) => (s.id === spawn.id ? { ...s, status: 'cleaned' } : s)));
-    setGoldenId((g) => (g === spawn.id ? null : g));
-    // respawn elsewhere; sometimes it comes back golden
-    setTimeout(() => {
-      setSpawns((prev) => prev.map((s) => (s.id === spawn.id
-        ? { ...s, status: 'active', x: 10 + Math.random() * 78, y: 14 + Math.random() * 68 }
-        : s)));
-      if (Math.random() < GOLDEN_CHANCE) setGoldenId(spawn.id);
-    }, 25000);
-  }, [myRank, rivals]);
+    // every zone touched in this run gets cleaned + respawned elsewhere
+    zoneIds.forEach((zid) => {
+      setSpawns((prev) => prev.map((s) => (s.id === zid ? { ...s, status: 'cleaned' } : s)));
+      setGoldenId((g) => (g === zid ? null : g));
+      setTimeout(() => {
+        setSpawns((prev) => prev.map((s) => (s.id === zid
+          ? { ...s, status: 'active', x: 10 + Math.random() * 78, y: 14 + Math.random() * 68 }
+          : s)));
+        if (Math.random() < GOLDEN_CHANCE) setGoldenId(zid);
+      }, 25000);
+    });
+  }, [myRank, rivals, spawns]);
 
   // Claim a completed daily quest → instant points on the leaderboard.
   const claimQuest = useCallback((id) => {
@@ -158,9 +163,9 @@ export const GameProvider = ({ children }) => {
     player, spawns, pos, leaderboard, myRank, banked, toast,
     quests, claimQuest, claimable, dex, buddyXp, goldenId, cleanliness,
     rushEndsAt: rushEndsAtRef.current,
-    walkTo, bankEncounter, showToast,
+    walkTo, bankRun, showToast,
     dismissBanked: () => setBanked(null),
-  }), [player, spawns, pos, leaderboard, myRank, banked, toast, quests, claimQuest, claimable, dex, buddyXp, goldenId, cleanliness, walkTo, bankEncounter, showToast]);
+  }), [player, spawns, pos, leaderboard, myRank, banked, toast, quests, claimQuest, claimable, dex, buddyXp, goldenId, cleanliness, walkTo, bankRun, showToast]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 };

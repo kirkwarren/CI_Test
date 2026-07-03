@@ -1,10 +1,26 @@
 # CleanQuest 🌱
 
-**Pokémon Go, but for picking up litter.** Explore a live map, walk to litter
-spawns, open a real AR camera encounter, grab trash the detector actually sees,
-bin it, and bank points onto the Weekly Cleanup Cup leaderboard.
+**Pokémon Go, but for picking up litter — and AR-first.** The live camera IS
+the app: litter gets detected and boxed over the real world, you grab it,
+bin it, and bank points onto the Weekly Cleanup Cup leaderboard. A
+**picture-in-picture mini-map** in the corner guides you to litter zones and
+golden ×3 rewards; tap it to expand into a full navigator with "Guide me"
+routing.
 
 Built with Create React App + Tailwind + TensorFlow.js.
+
+## AR-first layout
+
+- **Home screen = live camera.** No map-home to leave; detection, grabbing,
+  disposal, and celebrations all happen over the feed.
+- **PiP mini-map** (bottom-left): terrain, spawns, the golden reward with a
+  live distance readout, your position + reach ring. Tap → full-screen
+  navigator; tap a spawn → **🧭 Guide me there** walks you over (prototype
+  simulates GPS); arrival flips the zone pill gold and activates bonuses.
+- **Navigation HUD**: standing in a zone shows its name + density; otherwise
+  a bearing arrow points toward the golden spawn with meters remaining.
+- Grabs work anywhere (street litter counts); zone density, golden ×3, and
+  rush ×2 bonuses attach per-item based on where you actually were.
 
 ## The engagement loop
 
