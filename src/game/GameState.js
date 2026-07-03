@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useRef, useEffect, useCallb
 import {
   INITIAL_SPAWNS, RIVALS, PLAYER_START, xpForLevel,
   DAILY_QUESTS, buddyStage, GOLDEN_CHANCE, RUSH_MINUTES,
+  REPORT_TYPES, COMMUNITY_START,
 } from './data';
 
 const Ctx = createContext(null);
@@ -26,6 +27,8 @@ export const GameProvider = ({ children }) => {
   const [buddyXp, setBuddyXp] = useState(84);
   const [goldenId, setGoldenId] = useState('s2'); // one spawn shines gold (3×)
   const [cleanliness, setCleanliness] = useState(62);
+  const [adoptedId, setAdoptedId] = useState(null); // your Adopt-a-Block zone
+  const [community, setCommunity] = useState(COMMUNITY_START);
   const rushEndsAtRef = useRef(Date.now() + RUSH_MINUTES * 60 * 1000);
 
   // Rivals keep earning and the neighborhood keeps (slowly) getting cleaner
@@ -112,8 +115,9 @@ export const GameProvider = ({ children }) => {
       return { ...q, progress: Math.min(q.target, p) };
     }));
 
-    // The neighborhood visibly improves.
+    // The neighborhood visibly improves — and the community feed grows.
     setCleanliness((c) => Math.min(99, c + 1));
+    setCommunity((c) => ({ ...c, itemsThisWeek: c.itemsThisWeek + items.length, blooms: c.blooms + zoneIds.length }));
 
     setPlayer((prev) => {
       let xp = prev.xp + Math.round(total * 0.6);
@@ -159,13 +163,49 @@ export const GameProvider = ({ children }) => {
 
   const claimable = quests.filter((q) => !q.claimed && q.progress >= q.target).length;
 
+  // Adopt a block: one zone at a time, +25% bonus there, your name on it.
+  const adoptBlock = useCallback((id) => {
+    setAdoptedId(id);
+    const s = spawns.find((x) => x.id === id);
+    showToast(`You now steward ${s ? s.name : 'this block'} 🏡 (+25% there)`, '🏡');
+  }, [spawns, showToast]);
+
+  // File a report from the AR view. Hazards/dumping are "forwarded to the
+  // city"; hotspots & dumping create real spawns other players can clear.
+  const fileReport = useCallback((typeId) => {
+    const rt = REPORT_TYPES.find((t) => t.id === typeId);
+    if (!rt) return;
+    setPlayer((p) => ({ ...p, points: p.points + rt.pts }));
+    setCommunity((c) => ({
+      ...c,
+      hotspots: c.hotspots + (rt.makesSpawn ? 1 : 0),
+      hazards: c.hazards + (rt.forwards ? 1 : 0),
+    }));
+    if (rt.makesSpawn) {
+      setSpawns((prev) => {
+        // drop the new spawn near the player, clamped onto the map
+        const nx = Math.max(8, Math.min(92, pos.x + (Math.random() * 30 - 15)));
+        const ny = Math.max(10, Math.min(88, pos.y + (Math.random() * 30 - 15)));
+        return [...prev, {
+          id: `r-${Date.now()}`,
+          name: rt.id === 'dump' ? 'Reported dumping' : 'Reported hotspot',
+          emoji: rt.id === 'dump' ? '🛋️' : '🚮',
+          x: nx, y: ny, density: 2, status: 'active', reported: true,
+          hint: 'Reported by a player — help clear it for bonus impact',
+        }];
+      });
+    }
+    showToast(`Report sent · +${rt.pts} pts${rt.forwards ? ' · forwarded to Riverton 311' : ''}`, rt.emoji);
+  }, [pos, showToast]);
+
   const value = useMemo(() => ({
     player, spawns, pos, leaderboard, myRank, banked, toast,
     quests, claimQuest, claimable, dex, buddyXp, goldenId, cleanliness,
+    adoptedId, adoptBlock, fileReport, community,
     rushEndsAt: rushEndsAtRef.current,
     walkTo, bankRun, showToast,
     dismissBanked: () => setBanked(null),
-  }), [player, spawns, pos, leaderboard, myRank, banked, toast, quests, claimQuest, claimable, dex, buddyXp, goldenId, cleanliness, walkTo, bankRun, showToast]);
+  }), [player, spawns, pos, leaderboard, myRank, banked, toast, quests, claimQuest, claimable, dex, buddyXp, goldenId, cleanliness, adoptedId, adoptBlock, fileReport, community, walkTo, bankRun, showToast]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 };

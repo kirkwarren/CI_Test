@@ -13,7 +13,7 @@ const mmss = (ms) => {
 // The daily loop hub: quests to claim, the rush timer, the streak, and the
 // neighborhood cleanliness goal — the "why come back today" screen.
 const Today = ({ onClose }) => {
-  const { quests, claimQuest, player, cleanliness, rushEndsAt } = useGame();
+  const { quests, claimQuest, player, cleanliness, rushEndsAt, community } = useGame();
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 1000);
@@ -99,6 +99,30 @@ const Today = ({ onClose }) => {
               At <b className="text-sun-400">{CLEAN_GOAL.at}%</b>: {CLEAN_GOAL.reward}. Every player's verified cleanup moves this bar.
             </p>
           </div>
+        </div>
+
+        {/* community impact — the data the city actually gets */}
+        <div className="mt-4 rounded-3xl bg-white/5 ring-1 ring-white/10 p-4">
+          <p className="text-white font-black text-sm mb-3">📊 Riverton this week — everyone together</p>
+          <div className="grid grid-cols-2 gap-2.5">
+            {[
+              ['🧤', community.itemsThisWeek.toLocaleString(), 'items cleaned'],
+              ['📣', community.hotspots, 'hotspots reported'],
+              ['⚠️', community.hazards, 'hazards → city crews'],
+              ['🌸', community.blooms, 'zones restored & blooming'],
+            ].map(([e, v, l]) => (
+              <div key={l} className="rounded-2xl bg-white/5 p-3 flex items-center gap-2.5">
+                <span className="text-xl">{e}</span>
+                <div>
+                  <p className="text-white font-black text-base leading-tight">{v}</p>
+                  <p className="text-white/45 text-[10px] font-bold">{l}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-white/35 text-[10px] font-semibold mt-3">
+            Verified cleanup data flows to the parks department as an open civic dataset.
+          </p>
         </div>
       </div>
     </Sheet>

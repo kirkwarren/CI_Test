@@ -51,6 +51,24 @@ export const RUSH_MINUTES = 30;
 // a real-world sponsor action.
 export const CLEAN_GOAL = { at: 80, reward: 'City sponsor plants 50 trees in Riverton Commons' };
 
+// ---- Reporting: players are the city's sensing network ----
+// Hazards and dumping are forwarded to city crews (311-style); hotspots
+// become new spawns for OTHER players — the community authors the game board.
+export const REPORT_TYPES = [
+  { id: 'hazard', emoji: '⚠️', label: 'Hazard — don\'t touch', desc: 'Needles, chemicals, broken glass. Forwarded straight to city crews.', pts: 15, forwards: true, makesSpawn: false },
+  { id: 'dump', emoji: '🛋️', label: 'Illegal dumping', desc: 'Too big to bag. City pickup requested + spawn marked for the crew.', pts: 20, forwards: true, makesSpawn: true },
+  { id: 'hotspot', emoji: '📣', label: 'Litter hotspot', desc: 'Creates a live spawn on the map so nearby players can clear it.', pts: 10, forwards: false, makesSpawn: true },
+];
+
+// Adopt-a-Block: steward one zone for a +25% bonus there — your name on it.
+export const ADOPT_BONUS = 0.25;
+
+// Rough environmental equivalents for the Impact Receipt (grams CO2e saved).
+export const CO2_G_PER_ITEM = { recyclable: 60, other: 20 };
+
+// Community-wide stats (city feed; seeded for the pilot).
+export const COMMUNITY_START = { itemsThisWeek: 12480, hotspots: 214, hazards: 37, blooms: 3 };
+
 // Classes the detector may see that are definitely NOT litter. They render
 // as grey "not litter" boxes so players watch the AI discriminate in real time.
 export const NON_LITTER_CLASSES = [

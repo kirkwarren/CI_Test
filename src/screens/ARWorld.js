@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useGame } from '../game/GameState';
 import {
   LITTER_CLASS_MAP, NON_LITTER_CLASSES, SIZE_TIERS, TOO_CLOSE_FRAC,
-  GOLDEN_MULT, RUSH_MULT, REACH,
+  GOLDEN_MULT, RUSH_MULT, REACH, REPORT_TYPES, ADOPT_BONUS,
 } from '../game/data';
 import { play, buzz, isSoundOn, setSoundOn } from '../game/sound';
 import ParkMap from '../ui/ParkMap';
@@ -10,7 +10,7 @@ import { cx, Pill, BigBtn } from '../ui/bits';
 import {
   ShieldCheck, QrCode, Check, Loader2, Hand, ShoppingBag, Crosshair,
   CameraOff, RefreshCw, ChevronRight, Leaf, Trophy, ClipboardList, BookOpen,
-  Volume2, VolumeX, Navigation2, Maximize2, X, Footprints,
+  Volume2, VolumeX, Navigation2, Maximize2, X, Footprints, Flag, Camera,
 } from 'lucide-react';
 
 const DETECT_MS = 220;
@@ -27,6 +27,7 @@ const metersOf = (d) => Math.round(d * 7);
 const ARWorld = ({ onSheet }) => {
   const {
     bankRun, player, goldenId, rushEndsAt, spawns, pos, walkTo, showToast, myRank, claimable, toast,
+    adoptedId, adoptBlock, fileReport,
   } = useGame();
 
   // Optional QA flag: ?debugClasses=frisbee adds detector classes for desktop QA.
@@ -67,6 +68,7 @@ const ARWorld = ({ onSheet }) => {
   const [mapSel, setMapSel] = useState(null);
   const [guiding, setGuiding] = useState(null); // spawn being walked to
   const [soundOn, setSound] = useState(isSoundOn());
+  const [report, setReport] = useState(null); // null | {step:'pick'|'sending'|'done', type}
 
   const rushActive = Date.now() < rushEndsAt;
   const pending = bag.reduce((s, b) => s + b.pts, 0);
@@ -252,17 +254,19 @@ const ARWorld = ({ onSheet }) => {
     const rushPts = rushActive ? base * (RUSH_MULT - 1) : 0;
     const comboPts = Math.round(base * (comboBonusPct / 100));
     const streakPts = Math.round(base * Math.min(0.15, player.streak * 0.03));
+    const adoptedPts = adoptedId ? Math.round(bag.reduce((s, b) => s + (b.zoneId === adoptedId ? b.pts * ADOPT_BONUS : 0), 0)) : 0;
     const xl = bag.filter((b) => b.size && b.size.mult >= 2).length;
     const breakdown = [
       { label: `${bag.length} items, size-weighted${xl ? ` (${xl} large!)` : ''}`, pts: base },
       ...(goldenPts ? [{ label: `🌟 Golden zone ×${GOLDEN_MULT}`, pts: goldenPts }] : []),
       ...(rushActive ? [{ label: `⚡ Litter Rush ×${RUSH_MULT}`, pts: rushPts }] : []),
+      ...(adoptedPts ? [{ label: '🏡 Your adopted block +25%', pts: adoptedPts }] : []),
       { label: `Combo ×${Math.max(combo, 1)} bonus`, pts: comboPts },
       ...(zonePts ? [{ label: 'Litter-zone density bonus', pts: zonePts }] : []),
       { label: `${player.streak}-day streak`, pts: streakPts },
     ];
-    return { breakdown, total: base + goldenPts + rushPts + comboPts + zonePts + streakPts };
-  }, [bag, comboBonusPct, combo, player.streak, rushActive]);
+    return { breakdown, total: base + goldenPts + rushPts + adoptedPts + comboPts + zonePts + streakPts };
+  }, [bag, comboBonusPct, combo, player.streak, rushActive, adoptedId]);
 
   const scanBin = () => {
     play('bank'); buzz([30, 40, 30, 40, 60]);
@@ -406,7 +410,7 @@ const ARWorld = ({ onSheet }) => {
       <div className="absolute top-[3.4rem] inset-x-0 flex justify-center gap-1.5 z-20 pointer-events-none flex-wrap px-3">
         {currentZone ? (
           <span className={cx('rounded-full text-[11px] font-black px-3 py-1 shadow-card', goldenHere ? 'bg-gradient-to-r from-yellow-200 to-sun-400 text-grime-900' : 'bg-quest-400/90 text-quest-900')}>
-            📍 {currentZone.name} · {'⭐'.repeat(currentZone.density)}{goldenHere ? ` · 🌟×${GOLDEN_MULT}` : ''}
+            📍 {currentZone.name} · {'⭐'.repeat(currentZone.density)}{goldenHere ? ` · 🌟×${GOLDEN_MULT}` : ''}{currentZone.id === adoptedId ? ' · 🏡 yours' : ''}
           </span>
         ) : guiding ? (
           <span className="rounded-full bg-ocean-500/85 text-white text-[11px] font-black px-3 py-1 shadow-card flex items-center gap-1">
@@ -512,9 +516,18 @@ const ARWorld = ({ onSheet }) => {
         </div>
 
         {mode === 'hunt' && (
-          <BigBtn tone={bag.length ? 'go' : 'plain'} disabled={bag.length === 0 || !!grabFx} onClick={() => setMode('dispose')}>
-            🗑️ Dispose bag & bank points
-          </BigBtn>
+          <div className="flex gap-2">
+            <button
+              onClick={() => { play('tick'); setReport({ step: 'pick', type: null }); }}
+              className="shrink-0 grid place-items-center w-[52px] rounded-2xl bg-sun-500/20 ring-1 ring-sun-400/40 text-sun-400 active:scale-95 transition"
+              aria-label="Report hazard or hotspot"
+            >
+              <Flag className="h-5 w-5" />
+            </button>
+            <BigBtn tone={bag.length ? 'go' : 'plain'} disabled={bag.length === 0 || !!grabFx} onClick={() => setMode('dispose')} className="flex-1">
+              🗑️ Dispose bag & bank points
+            </BigBtn>
+          </div>
         )}
         {mode === 'dispose' && (
           <div className="flex gap-2">
@@ -552,6 +565,57 @@ const ARWorld = ({ onSheet }) => {
         </div>
       )}
 
+      {/* ============ REPORT FLOW — players are the city's sensors ============ */}
+      {report && (
+        <div className="absolute inset-0 z-40 flex items-end">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setReport(null)} />
+          <div className="relative w-full rounded-t-[30px] bg-grime-900 ring-1 ring-white/10 animate-slideUp p-5 pb-7">
+            {report.step === 'pick' && (
+              <>
+                <h3 className="text-white font-black text-lg flex items-center gap-2"><Flag className="h-5 w-5 text-sun-400" /> Report what you see</h3>
+                <p className="text-white/45 text-[12px] font-semibold mt-0.5 mb-4">Can't (or shouldn't) bag it? Reporting still earns points — and helps the whole city.</p>
+                <div className="space-y-2.5">
+                  {REPORT_TYPES.map((t) => (
+                    <button key={t.id} onClick={() => { play('tick'); setReport({ step: 'sending', type: t }); setTimeout(() => { fileReport(t.id); setReport({ step: 'done', type: t }); play('bank'); buzz([20, 30, 40]); }, 1300); }}
+                      className="w-full rounded-2xl bg-white/5 ring-1 ring-white/10 p-3.5 flex items-center gap-3 active:scale-[0.98] transition text-left">
+                      <span className="text-2xl shrink-0">{t.emoji}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white font-black text-[13px]">{t.label}</p>
+                        <p className="text-white/50 text-[11px] leading-snug">{t.desc}</p>
+                      </div>
+                      <span className="shrink-0 rounded-xl bg-quest-500/15 text-quest-300 font-black text-[12px] px-2.5 py-1.5">+{t.pts}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+            {report.step === 'sending' && (
+              <div className="text-center py-6">
+                <div className="relative mx-auto h-16 w-16">
+                  <Loader2 className="h-16 w-16 text-quest-300 animate-spinSlow" />
+                  <Camera className="absolute inset-0 m-auto h-6 w-6 text-white/70" />
+                </div>
+                <p className="text-white font-black text-base mt-3">Capturing & geotagging…</p>
+                <p className="text-white/45 text-[11px] mt-1">In-app capture · location-locked · sent securely</p>
+              </div>
+            )}
+            {report.step === 'done' && report.type && (
+              <div className="text-center py-4">
+                <span className="text-4xl">{report.type.emoji}</span>
+                <p className="text-white font-black text-lg mt-2">Report sent · +{report.type.pts} pts</p>
+                <div className="mt-3 space-y-1.5 text-[12px] font-bold">
+                  {report.type.forwards && <p className="text-ocean-400">📨 Forwarded to Riverton 311 — city crew dispatched</p>}
+                  {report.type.makesSpawn && <p className="text-quest-300">🗺️ New spawn added to the map for nearby players</p>}
+                </div>
+                <div className="mt-5">
+                  <BigBtn onClick={() => setReport(null)}>Back to hunting</BigBtn>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ============ EXPANDED MAP ============ */}
       {mapOpen && (
         <div className="absolute inset-0 z-40">
@@ -574,8 +638,16 @@ const ARWorld = ({ onSheet }) => {
                     <p className="text-white/50 text-[11px]">
                       {metersOf(mapSelDist)} m · {'⭐'.repeat(mapSelSpawn.density)}
                       {mapSelSpawn.id === goldenId && <span className="text-sun-400 font-black"> · 🌟 GOLDEN ×{GOLDEN_MULT}</span>}
+                      {mapSelSpawn.reported && <span className="text-ocean-400 font-black"> · 📣 player-reported</span>}
                     </p>
                   </div>
+                  {mapSelSpawn.id === adoptedId ? (
+                    <span className="shrink-0 rounded-xl bg-quest-500/15 text-quest-300 font-black text-[11px] px-2.5 py-1.5">🏡 Yours · +25%</span>
+                  ) : (
+                    <button onClick={() => { adoptBlock(mapSelSpawn.id); play('combo', 2); }} className="shrink-0 rounded-xl bg-white/8 ring-1 ring-white/15 text-white font-black text-[11px] px-2.5 py-1.5 active:scale-95">
+                      🏡 Adopt
+                    </button>
+                  )}
                 </div>
                 {mapSelDist <= REACH ? (
                   <BigBtn onClick={() => { setMapOpen(false); setMapSel(null); play('tick'); }}>📷 You're here — look around!</BigBtn>

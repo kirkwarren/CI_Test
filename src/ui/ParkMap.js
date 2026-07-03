@@ -7,7 +7,7 @@ import { cx } from './bits';
 // and the expanded navigator. Renders terrain, spawns, golden highlight,
 // the player + buddy, and the reach ring.
 const ParkMap = ({ compact = false, onSelectSpawn, selectedId }) => {
-  const { spawns, pos, goldenId, buddyXp } = useGame();
+  const { spawns, pos, goldenId, buddyXp, adoptedId } = useGame();
   const buddy = buddyStage(buddyXp);
 
   return (
@@ -46,7 +46,8 @@ const ParkMap = ({ compact = false, onSelectSpawn, selectedId }) => {
             style={{ left: `${s.x}%`, top: `${s.y}%` }}
           >
             {cleaned ? (
-              <span className={cx('block drop-shadow', compact ? 'text-[10px]' : 'text-xl')}>✨</span>
+              // restored zones bloom — the map stays visibly better
+              <span className={cx('block drop-shadow animate-floaty', compact ? 'text-[10px]' : 'text-xl')}>🌸</span>
             ) : (
               <span className="relative block">
                 {golden && !compact && <span className="absolute inset-0 -m-1.5 rounded-full bg-sun-400/50 animate-ripple" />}
@@ -61,6 +62,12 @@ const ParkMap = ({ compact = false, onSelectSpawn, selectedId }) => {
                 </span>
                 {golden && !compact && (
                   <span className="absolute -top-1.5 -right-1.5 rounded-full bg-sun-400 text-grime-900 text-[8px] font-black px-1 ring-1 ring-white">×3</span>
+                )}
+                {s.reported && !compact && (
+                  <span className="absolute -top-1.5 -left-1.5 grid place-items-center h-3.5 w-3.5 rounded-full bg-ocean-400 ring-1 ring-white text-[7px]">📣</span>
+                )}
+                {s.id === adoptedId && (
+                  <span className={cx('absolute rounded-full bg-quest-400 ring-1 ring-white grid place-items-center', compact ? '-bottom-1 -right-1 h-2.5 w-2.5 text-[6px]' : '-bottom-1.5 -right-1.5 h-4 w-4 text-[9px]')}>🏡</span>
                 )}
               </span>
             )}

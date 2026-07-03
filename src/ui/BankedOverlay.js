@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useGame } from '../game/GameState';
+import { CO2_G_PER_ITEM } from '../game/data';
 import { play, buzz } from '../game/sound';
 import { BigBtn } from './bits';
-import { TrendingUp, Trophy } from 'lucide-react';
+import { TrendingUp, Trophy, Receipt, Share2 } from 'lucide-react';
 
 const CONFETTI = ['#34d399', '#38bdf8', '#fbbf24', '#f472b6', '#a78bfa'];
 
 // Post-encounter celebration: count-up, breakdown, and — the payoff —
 // your leaderboard rank change.
 const BankedOverlay = () => {
-  const { banked, dismissBanked, myRank } = useGame();
+  const { banked, dismissBanked, myRank, showToast } = useGame();
   const [shown, setShown] = useState(0);
 
   useEffect(() => {
@@ -27,6 +28,8 @@ const BankedOverlay = () => {
 
   if (!banked) return null;
   const climbed = banked.rankAfter < banked.rankBefore;
+  const recyclables = banked.items.filter((i) => i.recyclable).length;
+  const co2g = recyclables * CO2_G_PER_ITEM.recyclable + (banked.items.length - recyclables) * CO2_G_PER_ITEM.other;
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center px-5">
@@ -102,8 +105,35 @@ const BankedOverlay = () => {
           ))}
         </div>
 
-        <div className="mt-5">
+        {/* impact receipt — verified, shareable proof of real-world impact */}
+        <div className="mt-2.5 rounded-2xl bg-quest-500/10 ring-1 ring-quest-400/25 p-3.5 text-left">
+          <p className="text-quest-300 font-black text-[11px] uppercase tracking-wide flex items-center gap-1.5 mb-2">
+            <Receipt className="h-3.5 w-3.5" /> Impact receipt · {banked.title}
+          </p>
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p className="text-white font-black text-lg leading-tight">{banked.items.length}</p>
+              <p className="text-white/45 text-[9px] font-bold">items off the street</p>
+            </div>
+            <div>
+              <p className="text-white font-black text-lg leading-tight">{recyclables}</p>
+              <p className="text-white/45 text-[9px] font-bold">recyclables diverted</p>
+            </div>
+            <div>
+              <p className="text-white font-black text-lg leading-tight">~{co2g}g</p>
+              <p className="text-white/45 text-[9px] font-bold">CO₂e saved (est.)</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 space-y-2">
           <BigBtn onClick={dismissBanked}>Back to the map</BigBtn>
+          <button
+            onClick={() => { showToast('Impact receipt shared 📲', '🧾'); dismissBanked(); }}
+            className="w-full rounded-2xl py-3 font-black text-sm text-white/85 bg-white/10 active:scale-[0.98] transition flex items-center justify-center gap-2"
+          >
+            <Share2 className="h-4 w-4" /> Share receipt
+          </button>
         </div>
       </div>
     </div>
