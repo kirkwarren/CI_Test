@@ -60,6 +60,8 @@ const ARWorld = ({ onSheet }) => {
   const [detections, setDetections] = useState([]);
   const [nonLitter, setNonLitter] = useState([]);
   const [flyers, setFlyers] = useState([]);
+  const [bursts, setBursts] = useState([]); // spark explosions at grab points
+  const [comboFx, setComboFx] = useState(null); // center-screen combo pop
   const [bag, setBag] = useState([]);
   const [grabFx, setGrabFx] = useState(null);
   const [combo, setCombo] = useState(0);
@@ -229,7 +231,11 @@ const ARWorld = ({ onSheet }) => {
       setCombo((c) => {
         const next = now - lastGrabRef.current < COMBO_WINDOW_MS ? c + 1 : 1;
         comboMaxRef.current = Math.max(comboMaxRef.current, next);
-        if (next > 1) setTimeout(() => play('combo', next), 140);
+        if (next > 1) {
+          setTimeout(() => play('combo', next), 140);
+          setComboFx({ n: next, id: now });
+          setTimeout(() => setComboFx((f) => (f && f.id === now ? null : f)), 950);
+        }
         return next;
       });
       lastGrabRef.current = now;
@@ -246,6 +252,8 @@ const ARWorld = ({ onSheet }) => {
       const id = now;
       setFlyers((prev) => [...prev, { id, emoji: det.emoji, pts: det.pts, x: fx, y: fy, dx: 44 - fx, dy: (wrap ? wrap.clientHeight - 96 : 700) - fy }]);
       setTimeout(() => setFlyers((prev) => prev.filter((f) => f.id !== id)), 900);
+      setBursts((prev) => [...prev, { id, x: fx, y: fy, golden: goldenHere }]);
+      setTimeout(() => setBursts((prev) => prev.filter((b) => b.id !== id)), 650);
       setGrabFx(null);
       flash(`+${det.pts}${goldenHere ? ' ×3 🌟' : ''} pending · ${det.size.label} ${det.type}`);
     }, 1150);
@@ -376,6 +384,40 @@ const ARWorld = ({ onSheet }) => {
           <span className="absolute -top-2 left-6 text-quest-300 font-black text-lg drop-shadow animate-rise">+{f.pts}</span>
         </span>
       ))}
+
+      {/* spark bursts at grab points */}
+      {bursts.map((b) => (
+        <span key={b.id} className="absolute z-30 pointer-events-none" style={{ left: b.x, top: b.y }}>
+          {Array.from({ length: 8 }).map((_, k) => {
+            const ang = (k / 8) * Math.PI * 2;
+            return (
+              <span
+                key={k}
+                className={cx('absolute block h-2 w-2 rounded-full', b.golden ? 'bg-sun-400' : k % 2 ? 'bg-quest-300' : 'bg-ocean-400')}
+                style={{ transition: 'transform 0.55s cubic-bezier(0.1,0.8,0.3,1), opacity 0.55s', transform: 'translate(0,0) scale(1.4)', opacity: 1, boxShadow: '0 0 8px rgba(110,231,183,0.9)' }}
+                ref={(el) => {
+                  if (el) requestAnimationFrame(() => {
+                    el.style.transform = `translate(${Math.cos(ang) * 62}px, ${Math.sin(ang) * 62}px) scale(0.1)`;
+                    el.style.opacity = '0';
+                  });
+                }}
+              />
+            );
+          })}
+        </span>
+      ))}
+
+      {/* center-screen combo pop */}
+      {comboFx && (
+        <div className="absolute left-1/2 top-[36%] -translate-x-1/2 z-30 pointer-events-none">
+          <span className="block text-center animate-pop">
+            <span className="block font-black text-[44px] leading-none bg-gradient-to-b from-yellow-200 to-sun-500 bg-clip-text text-transparent drop-shadow-lg" style={{ WebkitTextStroke: '1.5px rgba(0,0,0,0.35)' }}>
+              ×{comboFx.n}
+            </span>
+            <span className="block font-black text-[15px] tracking-[0.3em] text-white drop-shadow mt-0.5">COMBO!</span>
+          </span>
+        </div>
+      )}
 
       {/* grab chain */}
       {grabFx && (
@@ -525,7 +567,8 @@ const ARWorld = ({ onSheet }) => {
         <div className="glass rounded-[26px] ring-1 ring-white/20 p-3.5 shadow-soft">
         <div className="flex items-center gap-3 mb-3">
           <div className="relative shrink-0">
-            <span className="grid place-items-center h-12 w-12 rounded-2xl bg-white/15 ring-1 ring-white/25 text-2xl">🛍️</span>
+            {/* key retriggers the pop every time an item lands */}
+            <span key={bag.length} className={cx('grid place-items-center h-12 w-12 rounded-2xl bg-white/15 ring-1 ring-white/25 text-2xl', bag.length > 0 && 'animate-pop')}>🛍️</span>
             <span className="absolute -bottom-1 -right-1 grid place-items-center h-5 min-w-5 px-1 rounded-full bg-quest-300 text-quest-900 text-[11px] font-black">{bag.length}</span>
           </div>
           <div className="flex-1 flex gap-1 overflow-x-auto no-scrollbar">
