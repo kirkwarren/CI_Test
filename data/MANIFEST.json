@@ -1,0 +1,301 @@
+{
+  "fetchedAt": "2026-07-04T22:29:33.581Z",
+  "years": 3,
+  "sources": {
+    "crypto": "Coinbase Exchange API (daily candles), cross-validated against Kraken public API",
+    "equities": "Nasdaq API historical (split-adjusted, NOT dividend-adjusted)"
+  },
+  "caveats": [
+    "Equity prices are not dividend-adjusted; total-return metrics for high-yield assets are understated.",
+    "Crypto venue prices differ slightly across exchanges; Coinbase is the canonical source here.",
+    "All data is daily OHLCV. No intraday, no order-book depth, no survivorship-bias correction on the fixed universe."
+  ],
+  "assets": [
+    {
+      "symbol": "BTC-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "ETH-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "SOL-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "XRP-USD",
+      "class": "crypto",
+      "rows": 1087,
+      "from": "2023-07-13",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "ADA-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "DOGE-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "LINK-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "DOT-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "LTC-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "BCH-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "UNI-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "AAVE-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "XLM-USD",
+      "class": "crypto",
+      "rows": 1095,
+      "from": "2023-07-05",
+      "to": "2026-07-03"
+    },
+    {
+      "symbol": "SPY",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "QQQ",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "IWM",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "EFA",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "EEM",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "TLT",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "GLD",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "XLE",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "XLF",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "XLK",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "XLV",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "VNQ",
+      "class": "etf",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "AAPL",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "MSFT",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "NVDA",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "GOOGL",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "AMZN",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "META",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "TSLA",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "JPM",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "UNH",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    },
+    {
+      "symbol": "XOM",
+      "class": "stock",
+      "rows": 752,
+      "from": "2023-07-05",
+      "to": "2026-07-02"
+    }
+  ],
+  "crossValidation": [
+    {
+      "pair": "BTC-USD",
+      "overlapDays": 720,
+      "medianDivergence": 0.00015760514378331512,
+      "p95Divergence": 0.0006214819827999118
+    },
+    {
+      "pair": "ETH-USD",
+      "overlapDays": 720,
+      "medianDivergence": 0.00016128682292591422,
+      "p95Divergence": 0.0006591143151389945
+    },
+    {
+      "pair": "SOL-USD",
+      "overlapDays": 720,
+      "medianDivergence": 0.00016595983047438512,
+      "p95Divergence": 0.0007473376097652398
+    }
+  ]
+}

@@ -18,8 +18,10 @@ import {
   Dice5,
   Layers,
   FlaskConical,
+  Globe,
 } from 'lucide-react';
 import { runFullAnalysis } from './engine';
+import realAnalysis from './data/realAnalysis.json';
 
 ChartJS.register(
   CategoryScale,
@@ -208,7 +210,7 @@ export default function App() {
             </p>
           </div>
           <span className="rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-300">
-            SIMULATED DATA · NOT FINANCIAL ADVICE
+            PAPER ONLY · NOT FINANCIAL ADVICE
           </span>
         </div>
 
@@ -229,8 +231,124 @@ export default function App() {
           </div>
         </div>
 
+        {/* Real-data screen (from committed snapshot produced by scripts/analyze.sh) */}
+        <div className="mt-4 rounded-lg border border-sky-500/30 bg-sky-500/5 p-4">
+          <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-sm font-semibold text-zinc-200">
+              <Globe className="h-4 w-4 text-sky-400" /> Real-Data Screen ·{' '}
+              {realAnalysis.ranking.assets.length} assets · crypto through{' '}
+              {realAnalysis.summary.dataThrough?.crypto} · equities through{' '}
+              {realAnalysis.summary.dataThrough?.equities}
+            </div>
+            <span className="rounded-md border border-sky-500/40 bg-sky-500/10 px-2 py-0.5 text-[11px] font-semibold text-sky-300">
+              REAL MARKET DATA · Coinbase + Nasdaq
+            </span>
+          </div>
+          <p className="mb-3 text-xs text-zinc-500">
+            Actual daily history (completed days only).{' '}
+            {(() => {
+              const cv = (realAnalysis.dataProvenance.crossValidation || []).filter((v) => !v.error);
+              if (!cv.length) return null;
+              const worst = Math.max(...cv.map((v) => v.medianDivergence));
+              return `${cv.map((v) => v.pair.replace('-USD', '')).join('/')} closes cross-validated against Kraken (median venue divergence ≤ ${(worst * 100).toFixed(3)}%). `;
+            })()}
+            Composite = equal-weight momentum / risk-adjusted / trend ranks.{' '}
+            <span className="text-zinc-400">It describes the past; it does not predict.</span>
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-[11px] uppercase tracking-wider text-zinc-500">
+                  <th className="pb-2 pr-3">#</th>
+                  <th className="pb-2 pr-3">Asset</th>
+                  <th className="pb-2 pr-3">Composite</th>
+                  <th className="pb-2 pr-3">12-1 Mom</th>
+                  <th className="pb-2 pr-3">6M</th>
+                  <th className="pb-2 pr-3">Sharpe</th>
+                  <th className="pb-2 pr-3">Max DD</th>
+                  <th className="pb-2 pr-3">vs 200d</th>
+                  <th className="pb-2 pr-3">Off 52w high</th>
+                </tr>
+              </thead>
+              <tbody className="tabular-nums">
+                {realAnalysis.ranking.assets.slice(0, 10).map((a, i) => (
+                  <tr key={a.symbol} className="border-t border-zinc-800/70">
+                    <td className="py-1.5 pr-3 text-zinc-500">{i + 1}</td>
+                    <td className="py-1.5 pr-3 font-medium text-zinc-200">
+                      {a.symbol}
+                      <span className="ml-1.5 text-[10px] uppercase text-zinc-500">{a.assetClass}</span>
+                    </td>
+                    <td className="py-1.5 pr-3 text-sky-300">{a.composite.toFixed(2)}</td>
+                    <td className={`py-1.5 pr-3 ${a.mom12_1 >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {fmtPct(a.mom12_1)}
+                    </td>
+                    <td className={`py-1.5 pr-3 ${a.ret6m >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {fmtPct(a.ret6m)}
+                    </td>
+                    <td className="py-1.5 pr-3 text-zinc-400">{a.sharpe.toFixed(2)}</td>
+                    <td className="py-1.5 pr-3 text-rose-300/80">{fmtPct(-a.maxDrawdown)}</td>
+                    <td className={`py-1.5 pr-3 ${a.dist200d >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {fmtPct(a.dist200d)}
+                    </td>
+                    <td className="py-1.5 pr-3 text-zinc-400">{fmtPct(-a.pctBelow52wHigh)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-3 grid gap-3 text-sm md:grid-cols-3">
+            <div className="rounded-md border border-zinc-800 bg-zinc-900/60 p-3">
+              <div className="text-[11px] uppercase tracking-wider text-zinc-500">
+                Strategy beat buy-&-hold on
+              </div>
+              <div className="mt-1 text-xl font-semibold text-rose-400 tabular-nums">
+                {realAnalysis.summary.strategyBeatsBuyHold} / {realAnalysis.summary.assets} assets
+              </div>
+              <div className="text-[11px] text-zinc-500">
+                {realAnalysis.summary.beatsOnLosers} of those {realAnalysis.summary.strategyBeatsBuyHold} wins
+                were on assets that lost money to hold
+              </div>
+            </div>
+            <div className="rounded-md border border-zinc-800 bg-zinc-900/60 p-3">
+              <div className="text-[11px] uppercase tracking-wider text-zinc-500">
+                Median WF degradation
+              </div>
+              <div className="mt-1 text-xl font-semibold text-amber-300 tabular-nums">
+                {realAnalysis.summary.medianWfDegradation != null
+                  ? `${(realAnalysis.summary.medianWfDegradation * 100).toFixed(0)}%`
+                  : 'n/a'}
+              </div>
+              <div className="text-[11px] text-zinc-500">
+                of in-sample edge lost out-of-sample ({realAnalysis.summary.degradationAssets} assets
+                with a meaningful in-sample edge)
+              </div>
+            </div>
+            <div className="rounded-md border border-zinc-800 bg-zinc-900/60 p-3">
+              <div className="text-[11px] uppercase tracking-wider text-zinc-500">
+                Median buy-&-hold vs strategy
+              </div>
+              <div className="mt-1 text-xl font-semibold text-zinc-200 tabular-nums">
+                {fmtPct(realAnalysis.summary.medianBuyHoldReturn)} vs{' '}
+                {fmtPct(realAnalysis.summary.medianStrategyReturn)}
+              </div>
+              <div className="text-[11px] text-zinc-500">3 years, after 10bps round-trip costs</div>
+            </div>
+          </div>
+          <p className="mt-3 text-[11px] text-zinc-600">
+            Full analysis in <code className="text-zinc-400">REPORT.md</code>; refresh with{' '}
+            <code className="text-zinc-400">node scripts/fetch-data.mjs && ./scripts/analyze.sh</code>.
+            Equity prices are split- but not dividend-adjusted.
+          </p>
+        </div>
+
         {/* Controls */}
-        <div className="mt-4 grid grid-cols-1 gap-4 rounded-lg border border-zinc-800 bg-zinc-900/40 p-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 flex items-center gap-2 text-sm font-semibold text-zinc-300">
+          Strategy Lab
+          <span className="rounded-md border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-300">
+            SIMULATED DATA
+          </span>
+        </div>
+        <div className="mt-2 grid grid-cols-1 gap-4 rounded-lg border border-zinc-800 bg-zinc-900/40 p-4 sm:grid-cols-2 lg:grid-cols-4">
           <Slider
             label="Risk / trade (hard cap)"
             value={riskPerTrade}
@@ -430,8 +548,9 @@ export default function App() {
                   Overfitting Tax
                 </div>
                 <div className="mt-1 text-xl font-semibold text-amber-200 tabular-nums">
-                  {(analysis.walkForward.aggregate.degradation * 100).toFixed(0)}% of the
-                  edge lost
+                  {analysis.walkForward.aggregate.degradation != null
+                    ? `${(analysis.walkForward.aggregate.degradation * 100).toFixed(0)}% of the edge lost`
+                    : `${fmtPct(analysis.walkForward.aggregate.oosGap)} IS→OOS gap`}
                 </div>
                 <div className="text-[11px] text-amber-100/70">
                   {analysis.walkForward.aggregate.oosProfitableFolds}/

@@ -7,7 +7,10 @@
 //
 // Model: single asset, long/short, one position at a time. Entry at next bar's
 // open after a validated signal (no same-bar lookahead). Exit on ATR stop,
-// take-profit at R multiple, or an opposing signal.
+// take-profit at R multiple, or an opposing signal — reverse exits are queued
+// and filled at the NEXT bar's open, because you cannot observe a bar's close
+// and then trade at that same close. A position opened off bar i's signal is
+// not marked to market until its entry bar (i+1) exists.
 
 import { computeContext, detect, validate, DEFAULT_PARAMS } from './strategy';
 import { positionSize } from './risk';
@@ -53,6 +56,7 @@ export function runBacktest(bars, userParams = {}, userConfig = {}) {
   let sumLossR = 0;
 
   let position = null; // { dir, entry, units, stop, target, initialRisk, barIn }
+  let pendingReverseExit = false; // opposing signal seen; exit at next bar's open
 
   const estimateEdge = () => {
     const n = winCount + lossCount;
@@ -94,7 +98,14 @@ export function runBacktest(bars, userParams = {}, userConfig = {}) {
   for (let i = 0; i < bars.length; i++) {
     const bar = bars[i];
 
-    // --- Manage an open position (check stop / target intrabar) ---
+    // --- Manage an open position ---
+    if (position) {
+      // A reverse signal observed on the PREVIOUS bar fills at this bar's open.
+      if (pendingReverseExit) {
+        closePosition(bar.open, i, 'reverse');
+        pendingReverseExit = false;
+      }
+    }
     if (position) {
       const hitStop =
         position.dir > 0 ? bar.low <= position.stop : bar.high >= position.stop;
@@ -108,10 +119,11 @@ export function runBacktest(bars, userParams = {}, userConfig = {}) {
       } else if (hitTarget) {
         closePosition(position.target, i, 'target');
       } else {
-        // Opposing signal => exit at close.
+        // Opposing signal uses this bar's close-derived indicators, so the
+        // exit can only be executed at the NEXT bar's open — queue it.
         const sig = detect(ctx, i, params);
         if (sig !== 0 && sig !== position.dir) {
-          closePosition(bar.close, i, 'reverse');
+          pendingReverseExit = true;
         }
       }
     }
@@ -157,8 +169,10 @@ export function runBacktest(bars, userParams = {}, userConfig = {}) {
     }
 
     // --- Mark-to-market equity for the curve ---
+    // A position created off THIS bar's signal fills at bar i+1's open; marking
+    // it against bar i's close would leak one bar of future information.
     let markEquity = equity;
-    if (position) {
+    if (position && i >= position.barIn) {
       markEquity += position.dir * (bar.close - position.entry) * position.units;
     }
     equityCurve.push(markEquity);

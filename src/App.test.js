@@ -32,3 +32,12 @@ test('shows the honest probability-of-loss headline from Monte Carlo', () => {
   render(<App />);
   expect(screen.getByText(/of paths ended/i)).toBeInTheDocument();
 });
+
+test('renders the real-data screen with provenance and honesty caveat', () => {
+  render(<App />);
+  expect(screen.getByText(/Real-Data Screen/i)).toBeInTheDocument();
+  expect(screen.getByText(/REAL MARKET DATA/i)).toBeInTheDocument();
+  expect(screen.getByText(/does not predict/i)).toBeInTheDocument();
+  // The strategy-vs-hold honesty strip must be present.
+  expect(screen.getByText(/Strategy beat buy-&-hold on/i)).toBeInTheDocument();
+});

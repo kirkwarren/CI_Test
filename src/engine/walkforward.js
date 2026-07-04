@@ -98,6 +98,12 @@ export function walkForward(bars, {
   const avgIsReturn = avg(isReturns);
   const avgOosReturn = avg(oosReturns);
 
+  // The degradation RATIO is only meaningful when there is a real positive
+  // in-sample edge to lose — dividing by a near-zero or negative IS return
+  // produces garbage (thousands of percent). Below the threshold we report
+  // null and let callers use the absolute gap instead.
+  const MIN_IS_EDGE = 0.005;
+
   return {
     insufficientData: false,
     folds: foldResults,
@@ -106,10 +112,13 @@ export function walkForward(bars, {
       avgOosReturn,
       avgIsSharpe: avg(isSharpes),
       avgOosSharpe: avg(oosSharpes),
-      // The overfitting tax: how much of the in-sample edge evaporated
-      // out-of-sample. ~1 means it fully collapsed; <0 means OOS beat IS (rare).
+      // Absolute overfitting gap in return points: always well-defined.
+      oosGap: avgIsReturn - avgOosReturn,
+      // The overfitting tax as a fraction of the in-sample edge. ~1 means the
+      // edge fully collapsed out-of-sample; null when IS edge is too small for
+      // the ratio to mean anything.
       degradation:
-        avgIsReturn !== 0 ? (avgIsReturn - avgOosReturn) / Math.abs(avgIsReturn) : 0,
+        avgIsReturn > MIN_IS_EDGE ? (avgIsReturn - avgOosReturn) / avgIsReturn : null,
       oosProfitableFolds: oosReturns.filter((r) => r > 0).length,
       totalFolds: foldResults.length,
     },

@@ -19,6 +19,8 @@ export { runBacktest, DEFAULT_CONFIG } from './backtest';
 export { monteCarlo } from './montecarlo';
 export { walkForward, defaultGrid } from './walkforward';
 export { PaperTrader, runPaperSession } from './paper';
+export { parseCsvBars, inferPeriodsPerYear, qualityReport } from './loader';
+export { screenAsset, rankAssets } from './screener';
 export { DEFAULT_PARAMS, computeContext, detect, validate } from './strategy';
 export { kellyFraction, positionSize } from './risk';
 export * as indicators from './indicators';
