@@ -27,18 +27,30 @@ const Trashdex = ({ onClose }) => {
         <div className="grid grid-cols-3 gap-2.5">
           {TRASHDEX.map((t) => {
             const count = dex[t.type];
-            return (
-              <div key={t.type} className={cx('rounded-2xl p-3 text-center ring-1', count ? 'bg-white/6 ring-white/10' : 'bg-white/[0.02] ring-white/5')}>
-                <span className={cx('text-3xl block', !count && 'grayscale opacity-25 blur-[1.5px]')}>{t.emoji}</span>
-                <p className={cx('text-[11px] font-black mt-1.5 leading-tight', count ? 'text-white' : 'text-white/30')}>
-                  {count ? t.type : '???'}
-                </p>
-                <span className={cx('inline-block rounded-full px-2 py-0.5 text-[8px] font-black uppercase tracking-wide mt-1.5', RARITY_STYLE[t.rarity])}>
+            const frame = t.rarity === 'rare' ? 'from-fuchsia-400 via-fuchsia-500 to-ocean-500'
+              : t.rarity === 'uncommon' ? 'from-ocean-300 to-ocean-600'
+                : 'from-slate-400/70 to-slate-600/70';
+            return count ? (
+              <div key={t.type} className={cx('rounded-2xl p-[2px] bg-gradient-to-b shadow-card', frame, t.rarity === 'rare' && 'shadow-glow')}>
+                <div className="relative rounded-[14px] bg-grime-900 p-3 text-center overflow-hidden">
+                  {/* card sheen */}
+                  <span className="absolute -top-6 -left-8 h-16 w-24 bg-white/10 rotate-[20deg] pointer-events-none" />
+                  <span className="text-3xl block drop-shadow">{t.emoji}</span>
+                  <p className="text-[11px] font-black mt-1.5 leading-tight text-white">{t.type}</p>
+                  <span className={cx('inline-block rounded-full px-2 py-0.5 text-[8px] font-black uppercase tracking-wide mt-1.5', RARITY_STYLE[t.rarity])}>
+                    {t.rarity}
+                  </span>
+                  <p className="text-[10px] font-bold mt-1 text-quest-300">cleaned ×{count}</p>
+                </div>
+              </div>
+            ) : (
+              <div key={t.type} className="rounded-2xl p-3 text-center bg-white/[0.02] ring-1 ring-dashed ring-white/10">
+                <span className="text-3xl block grayscale opacity-20 blur-[2px]">{t.emoji}</span>
+                <p className="text-[13px] font-black mt-1.5 text-white/25">???</p>
+                <span className={cx('inline-block rounded-full px-2 py-0.5 text-[8px] font-black uppercase tracking-wide mt-1.5 opacity-50', RARITY_STYLE[t.rarity])}>
                   {t.rarity}
                 </span>
-                <p className={cx('text-[10px] font-bold mt-1', count ? 'text-quest-300' : 'text-white/20')}>
-                  {count ? `cleaned ×${count}` : 'not yet found'}
-                </p>
+                <p className="text-[10px] font-bold mt-1 text-white/20">not yet found</p>
               </div>
             );
           })}

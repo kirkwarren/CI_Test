@@ -1,7 +1,8 @@
 import React from 'react';
 import { useGame } from '../game/GameState';
-import { xpForLevel, buddyStage, buddyNext } from '../game/data';
+import { xpForLevel, buddyStage, buddyNext, BUDDY_STAGES } from '../game/data';
 import { cx, Sheet } from '../ui/bits';
+import { PlayerOrb, BuddySprite } from '../ui/art';
 import { Zap, Flame, ShoppingBag, CheckCircle2, Share2 } from 'lucide-react';
 
 const Ring = ({ pct, children }) => {
@@ -25,12 +26,13 @@ const Profile = ({ onClose }) => {
   const pct = Math.min(100, (player.xp / need) * 100);
   const buddy = buddyStage(buddyXp);
   const next = buddyNext(buddyXp);
+  const buddyIdx = BUDDY_STAGES.indexOf(buddy);
 
   return (
     <Sheet onClose={onClose}>
       <div className="px-5 pb-8 text-center">
         <Ring pct={pct}>
-          <span className="grid place-items-center h-20 w-20 rounded-full bg-ocean-500 ring-4 ring-grime-900 text-4xl">{player.avatar}</span>
+          <PlayerOrb size={78} avatar={player.avatar} />
         </Ring>
         <h2 className="text-white font-black text-xl mt-2">Trainer, Level {player.level}</h2>
         <p className="text-white/50 text-[12px] font-bold">{player.xp} / {need} XP to level {player.level + 1}</p>
@@ -56,7 +58,7 @@ const Profile = ({ onClose }) => {
 
         {/* buddy Eco-Spirit */}
         <div className="mt-5 rounded-3xl bg-gradient-to-br from-quest-500/12 to-fuchsia-500/8 ring-1 ring-quest-400/20 p-4 flex items-center gap-4">
-          <span className="text-5xl animate-floaty shrink-0">{buddy.emoji}</span>
+          <BuddySprite stage={buddyIdx} size={84} className="shrink-0 animate-floaty drop-shadow-lg" />
           <div className="flex-1 text-left">
             <p className="text-white font-black text-base leading-tight">{buddy.name}</p>
             <p className="text-white/50 text-[11px] font-bold">Your buddy grows with every item you clean</p>

@@ -3,10 +3,11 @@ import { useGame } from '../game/GameState';
 import { cx, Sheet } from '../ui/bits';
 import { Trophy, Clock, ShieldCheck } from 'lucide-react';
 
-const PODIUM_STYLES = [
-  { h: 'h-24', ring: 'ring-slate-300', medal: '🥈' },
-  { h: 'h-32', ring: 'ring-sun-400', medal: '🥇' },
-  { h: 'h-20', ring: 'ring-amber-600', medal: '🥉' },
+// Podium art: glossy medal-toned blocks + gradient avatar rings.
+const PODIUM = [
+  { h: 'h-24', block: 'from-slate-100 via-slate-300 to-slate-500', ring: 'from-slate-200 to-slate-500', medal: '🥈' },
+  { h: 'h-32', block: 'from-yellow-100 via-sun-400 to-amber-600', ring: 'from-yellow-200 to-sun-500', medal: '🥇' },
+  { h: 'h-20', block: 'from-orange-200 via-amber-500 to-amber-800', ring: 'from-orange-200 to-amber-700', medal: '🥉' },
 ];
 
 const Leaderboard = ({ onClose }) => {
@@ -21,7 +22,9 @@ const Leaderboard = ({ onClose }) => {
           <p className="text-sun-400 font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-1.5">
             <Trophy className="h-4 w-4" /> Weekly Cleanup Cup
           </p>
-          <h2 className="text-white font-black text-2xl tracking-tight mt-1">Riverton Commons</h2>
+          <h2 className="font-black text-2xl tracking-tight mt-1 bg-gradient-to-r from-quest-300 via-white to-ocean-400 bg-clip-text text-transparent">
+            Riverton Commons
+          </h2>
           <p className="text-white/45 text-[11px] font-bold mt-1 flex items-center justify-center gap-1">
             <Clock className="h-3 w-3" /> Resets Sunday night · verified cleanups only
           </p>
@@ -32,15 +35,20 @@ const Leaderboard = ({ onClose }) => {
           {podium.map((p, i) => p && (
             <div key={p.id} className="flex-1 max-w-[110px] text-center">
               <div className="relative inline-block">
-                <span className={cx('grid place-items-center h-14 w-14 rounded-full bg-grime-800 ring-[3px] text-2xl mx-auto', PODIUM_STYLES[i].ring, p.you && 'bg-ocean-500')}>
-                  {p.avatar}
+                {i === 1 && <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-xl drop-shadow animate-floaty">👑</span>}
+                <span className={cx('inline-block rounded-full p-[3px] bg-gradient-to-b shadow-card', PODIUM[i].ring)}>
+                  <span className={cx('grid place-items-center h-14 w-14 rounded-full text-2xl', p.you ? 'bg-ocean-500' : 'bg-grime-800')}>
+                    {p.avatar}
+                  </span>
                 </span>
-                <span className="absolute -top-2 -right-2 text-lg">{PODIUM_STYLES[i].medal}</span>
+                <span className="absolute -bottom-1 -right-1.5 text-xl drop-shadow">{PODIUM[i].medal}</span>
               </div>
-              <p className={cx('font-black text-[12px] mt-1.5 truncate', p.you ? 'text-quest-300' : 'text-white')}>{p.name}</p>
+              <p className={cx('font-black text-[12px] mt-2 truncate', p.you ? 'text-quest-300' : 'text-white')}>{p.name}</p>
               <p className="text-white/55 text-[11px] font-bold">{p.points.toLocaleString()}</p>
-              <div className={cx('mt-2 rounded-t-xl bg-gradient-to-b from-white/15 to-white/5 ring-1 ring-white/10 grid place-items-start justify-center pt-2', PODIUM_STYLES[i].h)}>
-                <span className="text-white/30 font-black text-xl">{p.rank}</span>
+              <div className={cx('relative mt-2 rounded-t-2xl bg-gradient-to-b overflow-hidden', PODIUM[i].h, PODIUM[i].block)}>
+                {/* gloss + edge */}
+                <span className="absolute inset-x-0 top-0 h-1/3 bg-white/40" style={{ borderRadius: '16px 16px 50% 50%/16px 16px 12px 12px' }} />
+                <span className="absolute inset-0 grid place-items-start justify-center pt-3 font-black text-2xl text-black/30">{p.rank}</span>
               </div>
             </div>
           ))}
@@ -51,7 +59,9 @@ const Leaderboard = ({ onClose }) => {
           {rest.map((p) => (
             <div key={p.id} className={cx('flex items-center gap-3 px-4 py-3', p.you && 'bg-quest-500/12')}>
               <span className={cx('w-6 text-center font-black text-sm', p.you ? 'text-quest-300' : 'text-white/45')}>{p.rank}</span>
-              <span className={cx('grid place-items-center h-10 w-10 rounded-full text-xl', p.you ? 'bg-ocean-500 ring-2 ring-quest-300' : 'bg-white/10')}>{p.avatar}</span>
+              <span className={cx('rounded-full p-[2.5px] bg-gradient-to-b shadow-card', p.you ? 'from-quest-300 to-ocean-500' : 'from-white/25 to-white/5')}>
+                <span className={cx('grid place-items-center h-9 w-9 rounded-full text-lg', p.you ? 'bg-ocean-500' : 'bg-grime-800')}>{p.avatar}</span>
+              </span>
               <p className={cx('flex-1 font-black text-sm truncate', p.you ? 'text-quest-300' : 'text-white')}>
                 {p.name}{p.you && <span className="ml-1.5 rounded-full bg-quest-400 text-quest-900 text-[9px] px-1.5 py-0.5 align-middle">YOU</span>}
               </p>

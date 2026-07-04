@@ -134,6 +134,38 @@ export const BuddySprite = ({ stage = 0, size = 60, className }) => {
   );
 };
 
+const MED_TONES = {
+  green: ['#a7f3d0', '#059669'],
+  gold: ['#fde68a', '#d97706'],
+  blue: ['#bae6fd', '#0284c7'],
+  pink: ['#fbcfe8', '#db2777'],
+  grey: ['#e2e8f0', '#64748b'],
+};
+
+// Glossy circular medallion holding an emoji — quest icons, list art, etc.
+export const Medallion = ({ tone = 'green', size = 44, children, className, dimmed }) => {
+  const id = useRef(uid()).current;
+  const [hi, lo] = MED_TONES[tone] || MED_TONES.green;
+  return (
+    <span className={cx('relative inline-block shrink-0', dimmed && 'grayscale opacity-40', className)} style={{ width: size, height: size }}>
+      <svg viewBox="0 0 100 100" width={size} height={size} className="absolute inset-0">
+        <defs>
+          <radialGradient id={`${id}m`} cx="32%" cy="26%" r="80%">
+            <stop offset="0%" stopColor={hi} />
+            <stop offset="100%" stopColor={lo} />
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="52" r="45" fill="rgba(0,0,0,0.25)" />
+        <circle cx="50" cy="48" r="45" fill={`url(#${id}m)`} stroke="#ffffff" strokeWidth="5" />
+        <ellipse cx="35" cy="28" rx="15" ry="8" fill="#ffffff" opacity="0.45" transform="rotate(-28 35 28)" />
+      </svg>
+      <span className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 leading-none" style={{ fontSize: size * 0.46 }}>
+        {children}
+      </span>
+    </span>
+  );
+};
+
 // Holographic detection frame: gradient marching-ants rect + solid corner ticks.
 export const DetectFrame = ({ tooClose, golden }) => {
   const id = useRef(uid()).current;

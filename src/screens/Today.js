@@ -3,7 +3,10 @@ import { useGame } from '../game/GameState';
 import { CLEAN_GOAL, RUSH_MULT } from '../game/data';
 import { play, buzz } from '../game/sound';
 import { cx, Sheet } from '../ui/bits';
+import { Medallion } from '../ui/art';
 import { Flame, Zap, Gift, Check } from 'lucide-react';
+
+const QUEST_TONES = { 'q-items': 'green', 'q-large': 'gold', 'q-combo': 'blue', 'q-banks': 'pink' };
 
 const mmss = (ms) => {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -36,19 +39,21 @@ const Today = ({ onClose }) => {
             <p className="text-white font-black text-xl mt-1">{player.streak} days</p>
             <p className="text-white/50 text-[11px] font-bold">Cleanup streak — one bank a day keeps it</p>
           </div>
-          <div className={cx('rounded-2xl p-3.5 ring-1', rushLeft > 0 ? 'bg-fuchsia-500/12 ring-fuchsia-400/25' : 'bg-white/5 ring-white/10')}>
-            <Zap className={cx('h-5 w-5', rushLeft > 0 ? 'text-fuchsia-300' : 'text-white/30')} />
-            {rushLeft > 0 ? (
-              <>
-                <p className="text-white font-black text-xl mt-1">×{RUSH_MULT} · {mmss(rushLeft)}</p>
-                <p className="text-white/50 text-[11px] font-bold">LITTER RUSH — everything pays double</p>
-              </>
-            ) : (
-              <>
-                <p className="text-white/60 font-black text-xl mt-1">Rush over</p>
-                <p className="text-white/40 text-[11px] font-bold">Next rush tomorrow 5pm</p>
-              </>
-            )}
+          <div className={cx(rushLeft > 0 && 'rounded-2xl p-[2px] bg-gradient-to-br from-fuchsia-500 via-fuchsia-400 to-sun-500 shadow-card')}>
+            <div className={cx('rounded-2xl p-3.5 h-full', rushLeft > 0 ? 'rounded-[14px] bg-grime-900' : 'bg-white/5 ring-1 ring-white/10')}>
+              <Zap className={cx('h-5 w-5', rushLeft > 0 ? 'text-fuchsia-300' : 'text-white/30')} />
+              {rushLeft > 0 ? (
+                <>
+                  <p className="font-black text-xl mt-1 bg-gradient-to-r from-fuchsia-300 to-sun-400 bg-clip-text text-transparent">×{RUSH_MULT} · {mmss(rushLeft)}</p>
+                  <p className="text-white/50 text-[11px] font-bold">LITTER RUSH — everything pays double</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-white/60 font-black text-xl mt-1">Rush over</p>
+                  <p className="text-white/40 text-[11px] font-bold">Next rush tomorrow 5pm</p>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
@@ -59,7 +64,7 @@ const Today = ({ onClose }) => {
             const done = q.progress >= q.target;
             return (
               <div key={q.id} className={cx('rounded-2xl p-3.5 ring-1 flex items-center gap-3', q.claimed ? 'bg-white/[0.03] ring-white/5' : done ? 'bg-quest-500/12 ring-quest-400/30' : 'bg-white/5 ring-white/10')}>
-                <span className={cx('text-2xl shrink-0', q.claimed && 'grayscale opacity-40')}>{q.emoji}</span>
+                <Medallion tone={QUEST_TONES[q.id] || 'green'} size={42} dimmed={q.claimed}>{q.emoji}</Medallion>
                 <div className="flex-1 min-w-0">
                   <p className={cx('font-black text-[13px]', q.claimed ? 'text-white/35 line-through' : 'text-white')}>{q.label}</p>
                   <div className="flex items-center gap-2 mt-1.5">
@@ -89,9 +94,13 @@ const Today = ({ onClose }) => {
             <p className="text-white font-black text-sm">🏙️ Neighborhood cleanliness</p>
             <p className="text-quest-300 font-black text-sm">{Math.round(cleanliness)}%</p>
           </div>
-          <div className="h-3 rounded-full bg-white/10 overflow-hidden relative">
-            <div className="h-full rounded-full bg-gradient-to-r from-quest-400 to-quest-300 shadow-glow transition-all duration-700" style={{ width: `${cleanliness}%` }} />
-            <span className="absolute top-0 bottom-0 w-0.5 bg-sun-400" style={{ left: `${CLEAN_GOAL.at}%` }} />
+          <div className="relative">
+            <div className="h-3 rounded-full bg-white/10 overflow-hidden">
+              <div className="h-full rounded-full bg-gradient-to-r from-quest-400 to-quest-300 shadow-glow transition-all duration-700" style={{ width: `${cleanliness}%` }} />
+            </div>
+            {/* the sponsor-trees goal, literally a tree on the bar */}
+            <span className="absolute -top-3.5 -translate-x-1/2 text-base drop-shadow animate-floaty" style={{ left: `${CLEAN_GOAL.at}%` }}>🌳</span>
+            <span className="absolute top-0 bottom-0 w-0.5 bg-sun-400/80" style={{ left: `${CLEAN_GOAL.at}%` }} />
           </div>
           <div className="flex items-start gap-2 mt-2.5">
             <Gift className="h-4 w-4 text-sun-400 mt-0.5 shrink-0" />
