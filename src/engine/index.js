@@ -18,6 +18,7 @@ export { generateMarket } from './market';
 export { runBacktest, DEFAULT_CONFIG } from './backtest';
 export { monteCarlo } from './montecarlo';
 export { walkForward, defaultGrid } from './walkforward';
+export { PaperTrader, runPaperSession } from './paper';
 export { DEFAULT_PARAMS, computeContext, detect, validate } from './strategy';
 export { kellyFraction, positionSize } from './risk';
 export * as indicators from './indicators';

@@ -11,6 +11,7 @@ import { generateMarket } from './market';
 import { runBacktest } from './backtest';
 import { monteCarlo } from './montecarlo';
 import { walkForward, defaultGrid } from './walkforward';
+import { PaperTrader, runPaperSession } from './paper';
 import { runFullAnalysis } from './index';
 
 describe('indicators', () => {
@@ -222,6 +223,55 @@ describe('walkForward', () => {
 
   test('the parameter grid is non-trivial', () => {
     expect(defaultGrid().length).toBeGreaterThan(5);
+  });
+});
+
+describe('PaperTrader (automated paper execution)', () => {
+  const bars = generateMarket({ seed: 42, n: 1200 });
+
+  test('streams bars and produces a marked-to-market equity point per bar', () => {
+    const trader = new PaperTrader();
+    for (const b of bars) trader.onBar(b);
+    expect(trader.equityCurve.length).toBe(bars.length);
+    expect(trader.barCount).toBe(bars.length);
+  });
+
+  test('never lets the account go negative (risk cap holds live too)', () => {
+    const { trader } = runPaperSession(bars);
+    for (const e of trader.equityCurve) expect(e).toBeGreaterThan(0);
+  });
+
+  test('records a well-formed blotter of closed trades', () => {
+    const { blotter } = runPaperSession(bars);
+    for (const t of blotter) {
+      expect([1, -1]).toContain(t.dir);
+      expect(typeof t.pnl).toBe('number');
+      expect(t.closedAt).toBeGreaterThanOrEqual(t.openedAt);
+      expect(['stop', 'target']).toContain(t.reason);
+    }
+  });
+
+  test('snapshot reports coherent live state', () => {
+    const { snapshot, trader } = runPaperSession(bars);
+    expect(snapshot.barCount).toBe(bars.length);
+    expect(snapshot.closedTrades).toBe(trader.blotter.length);
+    expect(snapshot.totalReturn).toBeCloseTo(
+      trader.equityCurve[trader.equityCurve.length - 1] / 10000 - 1
+    );
+  });
+
+  test('is deterministic for a fixed feed', () => {
+    const a = runPaperSession(generateMarket({ seed: 7, n: 800 }));
+    const b = runPaperSession(generateMarket({ seed: 7, n: 800 }));
+    expect(a.snapshot.equity).toBeCloseTo(b.snapshot.equity);
+  });
+
+  test('does not act on the entry signal before it has enough history', () => {
+    const trader = new PaperTrader();
+    // Feed only a handful of bars; no fills should occur below the warmup.
+    for (let i = 0; i < 30; i++) trader.onBar(bars[i]);
+    expect(trader.blotter.length).toBe(0);
+    expect(trader.position).toBeNull();
   });
 });
 

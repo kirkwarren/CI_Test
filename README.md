@@ -38,6 +38,7 @@ Everything is plain, dependency-free, deterministic JavaScript with unit tests.
 | `metrics.js` | Sharpe, max drawdown, CAGR, win rate, profit factor, expectancy |
 | `montecarlo.js` | Bootstrap-resamples trades to show the **distribution** of outcomes — including the downside tail |
 | `walkforward.js` | Walk-forward optimization: tune in-sample, test out-of-sample, measure the "overfitting tax" |
+| `paper.js` | Automated **paper-trading** executor: consumes bars one at a time, places simulated orders, tracks a live blotter + equity. No real money, no credentials. Swap the feed for real data to paper-trade live. |
 
 ### Design principles
 
