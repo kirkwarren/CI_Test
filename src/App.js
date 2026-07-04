@@ -7,11 +7,22 @@ import Today from './screens/Today';
 import Trashdex from './screens/Trashdex';
 import BankedOverlay from './ui/BankedOverlay';
 import FairPlay from './ui/FairPlay';
+import Onboarding from './ui/Onboarding';
+
+const INTRO_KEY = 'cq_intro_v1';
+const seenIntro = () => {
+  try { return window.localStorage.getItem(INTRO_KEY) === '1'; } catch { return true; }
+};
 
 // CleanQuest — AR-first: the live camera is the home screen. A PiP mini-map
 // guides you to litter zones and golden rewards; sheets slide over the feed.
 const App = () => {
   const [sheet, setSheet] = useState(null); // leaderboard | profile | today | dex | fairplay
+  const [intro, setIntro] = useState(() => !seenIntro());
+  const finishIntro = () => {
+    try { window.localStorage.setItem(INTRO_KEY, '1'); } catch { /* no-op */ }
+    setIntro(false);
+  };
 
   return (
     <GameProvider>
@@ -26,6 +37,8 @@ const App = () => {
           {sheet === 'dex' && <Trashdex onClose={() => setSheet(null)} />}
 
           <BankedOverlay />
+
+          {intro && <Onboarding onDone={finishIntro} />}
         </div>
       </div>
     </GameProvider>
