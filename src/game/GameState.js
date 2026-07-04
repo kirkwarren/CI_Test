@@ -12,8 +12,24 @@ export const useGame = () => {
   return v;
 };
 
+// ---- persistence: the daily loop survives app restarts ----
+const SAVE_KEY = 'cq_save_v1';
+const dayKey = (d = new Date()) => d.toDateString();
+const yesterdayKey = () => dayKey(new Date(Date.now() - 86400000));
+const loadSave = () => {
+  try {
+    const raw = window.localStorage.getItem(SAVE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+};
+
 export const GameProvider = ({ children }) => {
-  const [player, setPlayer] = useState(PLAYER_START);
+  // hydrate once from localStorage (quests reset if they're from another day)
+  const saveRef = useRef(loadSave());
+  const save = saveRef.current;
+  const freshQuests = () => DAILY_QUESTS.map((q) => ({ ...q, progress: 0, claimed: false }));
+
+  const [player, setPlayer] = useState(save?.player || PLAYER_START);
   const [spawns, setSpawns] = useState(INITIAL_SPAWNS.map((s) => ({ ...s, status: 'active' })));
   const [rivals, setRivals] = useState(RIVALS);
   const [pos, setPos] = useState({ x: 46, y: 48 });
@@ -22,14 +38,25 @@ export const GameProvider = ({ children }) => {
   const walkRef = useRef(null);
 
   // ---- the daily / civic loop ----
-  const [quests, setQuests] = useState(DAILY_QUESTS.map((q) => ({ ...q, progress: 0, claimed: false })));
-  const [dex, setDex] = useState({ 'Plastic bottle': 21, Cup: 9, 'Food waste': 5, 'Paper / carton': 2 });
-  const [buddyXp, setBuddyXp] = useState(84);
+  const [quests, setQuests] = useState(save && save.questsDay === dayKey() && save.quests ? save.quests : freshQuests());
+  const [dex, setDex] = useState(save?.dex || { 'Plastic bottle': 21, Cup: 9, 'Food waste': 5, 'Paper / carton': 2 });
+  const [buddyXp, setBuddyXp] = useState(save?.buddyXp ?? 84);
   const [goldenId, setGoldenId] = useState('s2'); // one spawn shines gold (3×)
-  const [cleanliness, setCleanliness] = useState(62);
-  const [adoptedId, setAdoptedId] = useState(null); // your Adopt-a-Block zone
-  const [community, setCommunity] = useState(COMMUNITY_START);
+  const [cleanliness, setCleanliness] = useState(save?.cleanliness ?? 62);
+  const [adoptedId, setAdoptedId] = useState(save?.adoptedId ?? null); // your Adopt-a-Block zone
+  const [community, setCommunity] = useState(save?.community || COMMUNITY_START);
+  const [lastBankDay, setLastBankDay] = useState(save?.lastBankDay || null);
   const rushEndsAtRef = useRef(Date.now() + RUSH_MINUTES * 60 * 1000);
+
+  // write-through save
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(SAVE_KEY, JSON.stringify({
+        player, dex, buddyXp, adoptedId, cleanliness, community,
+        quests, questsDay: dayKey(), lastBankDay,
+      }));
+    } catch { /* private mode etc. */ }
+  }, [player, dex, buddyXp, adoptedId, cleanliness, community, quests, lastBankDay]);
 
   // Rivals keep earning and the neighborhood keeps (slowly) getting cleaner
   // from community play — the world feels alive.
@@ -119,14 +146,21 @@ export const GameProvider = ({ children }) => {
     setCleanliness((c) => Math.min(99, c + 1));
     setCommunity((c) => ({ ...c, itemsThisWeek: c.itemsThisWeek + items.length, blooms: c.blooms + zoneIds.length }));
 
+    // calendar-real streak: first bank of a new day extends (or resets) it
+    const today = dayKey();
+    const extendsStreak = lastBankDay !== today;
+    const keepsChain = !lastBankDay || lastBankDay === yesterdayKey();
+    setLastBankDay(today);
+
     setPlayer((prev) => {
       let xp = prev.xp + Math.round(total * 0.6);
       let level = prev.level;
       let leveled = false;
       while (xp >= xpForLevel(level)) { xp -= xpForLevel(level); level += 1; leveled = true; }
+      const streak = extendsStreak ? (keepsChain ? prev.streak + 1 : 1) : prev.streak;
       const next = {
         ...prev,
-        xp, level,
+        xp, level, streak,
         points: prev.points + total,
         lifetime: { items: prev.lifetime.items + items.length, bags: prev.lifetime.bags + 1, missions: prev.lifetime.missions + 1 },
       };
@@ -149,7 +183,7 @@ export const GameProvider = ({ children }) => {
         if (Math.random() < GOLDEN_CHANCE) setGoldenId(zid);
       }, 25000);
     });
-  }, [myRank, rivals, spawns]);
+  }, [myRank, rivals, spawns, lastBankDay]);
 
   // Claim a completed daily quest → instant points on the leaderboard.
   const claimQuest = useCallback((id) => {

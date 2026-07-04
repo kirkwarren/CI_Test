@@ -97,6 +97,21 @@ const ARWorld = ({ onSheet }) => {
     return () => clearInterval(t);
   }, []);
 
+  // keep the screen awake during a cleanup session (supported browsers)
+  useEffect(() => {
+    let lock = null;
+    const request = async () => {
+      try { lock = await navigator.wakeLock?.request('screen'); } catch { /* unsupported */ }
+    };
+    request();
+    const onVis = () => { if (document.visibilityState === 'visible') request(); };
+    document.addEventListener('visibilitychange', onVis);
+    return () => {
+      document.removeEventListener('visibilitychange', onVis);
+      try { if (lock) lock.release(); } catch { /* no-op */ }
+    };
+  }, []);
+
   const flash = useCallback((msg, warn = false) => {
     setFlashMsg({ msg, warn, id: Date.now() });
     setTimeout(() => setFlashMsg((f) => (f && f.msg === msg ? null : f)), 1500);

@@ -110,3 +110,36 @@ npm start        # http://localhost:3000  (camera needs localhost or HTTPS)
 npm test
 npm run build
 ```
+
+## Deploy & play on your phone
+
+The camera requires **HTTPS**, so deploy to any static host (configs included):
+
+```bash
+# Vercel (vercel.json included)
+npx vercel --prod
+
+# — or Netlify (netlify.toml included)
+npx netlify deploy --prod
+```
+
+Then on your phone:
+1. Open the deployed URL in Chrome (Android) or Safari (iOS).
+2. Allow camera access when the AR view opens.
+3. **Add to Home Screen** — CleanQuest is an installable PWA: the app shell
+   and the 18 MB on-device detection model are cached by a service worker,
+   so launches are instant and detection works with a flaky connection.
+
+Ready-for-the-street behaviors baked in:
+- **Progress persists** (localStorage): points, level, Trashdex, buddy,
+  adopted block, and community stats survive restarts.
+- **Daily quests reset by calendar day**, and the **streak is calendar-real**:
+  first bank of a new day extends it, a missed day resets it.
+- **Screen wake-lock** keeps the display on during a cleanup session.
+- Camera-denied and detector-failure states have clear retry paths.
+
+Known prototype seams (the honest list): GPS walking is simulated on a
+fictional park map (swap in `watchPosition` + a real basemap for street use),
+rival players are simulated locally, and leaderboards/reports need a backend
+to be shared between real players. The 311 forwarding is a UI contract —
+wire it to SeeClickFix/city API in a pilot.
