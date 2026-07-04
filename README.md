@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# Honest Quant · Backtest & Risk Lab
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An interactive trading-strategy **backtesting and risk-analysis** tool — built as
+the honest counterpart to those viral "my bot made +2,140% in 42 days"
+screenshots.
 
-## Available Scripts
+It implements the same machinery those dashboards show off (a
+Scan → Detect → Validate → Size → Fill → Settle pipeline, Kelly position sizing,
+Monte Carlo, multi-asset robustness) but it reports the numbers the hype posts
+hide: **drawdowns, out-of-sample degradation, and the probability of losing
+money.**
 
-In the project directory, you can run:
+> ⚠️ **This is an educational tool. It uses simulated market data, places no real
+> orders, and moves no real money. Nothing here is financial advice.** No trading
+> strategy — however sophisticated — can reliably produce the returns shown in
+> influencer marketing. Real edges are small, fragile, and heavily competed away.
 
-### `npm start`
+## Why it exists
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The screenshot that inspired this claimed +2,140% in six weeks with a "95.7%
+edge." Those numbers are marketing fiction. This project makes the point
+concretely: run a real strategy pipeline honestly, with fees and slippage, and
+watch how modest (often negative) the results actually are — and how the
+"edge" collapses the moment you test it on data the optimizer never saw.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## The engine (`src/engine/`)
 
-### `npm test`
+Everything is plain, dependency-free, deterministic JavaScript with unit tests.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Module | Responsibility |
+| --- | --- |
+| `random.js` | Seeded PRNG + Gaussian draws (reproducible results) |
+| `market.js` | Simulated OHLC data (GBM + regime switches). Swap for a real feed loader in production. |
+| `indicators.js` | SMA, EMA, RSI (Wilder), ATR, rolling stdev |
+| `strategy.js` | The Scan → Detect → Validate → Size decision pipeline |
+| `risk.js` | Kelly criterion + **fractional** Kelly with a hard per-trade risk cap |
+| `backtest.js` | Fill + Settle: order execution with commission & slippage, ATR stops, R-multiple targets |
+| `metrics.js` | Sharpe, max drawdown, CAGR, win rate, profit factor, expectancy |
+| `montecarlo.js` | Bootstrap-resamples trades to show the **distribution** of outcomes — including the downside tail |
+| `walkforward.js` | Walk-forward optimization: tune in-sample, test out-of-sample, measure the "overfitting tax" |
 
-### `npm run build`
+### Design principles
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Deterministic.** Seeded RNG everywhere, so nobody can quietly re-roll until a
+  lucky track record appears.
+- **Costs are never optional.** Every fill pays commission + slippage. Zero-cost
+  backtests are the #1 way results lie.
+- **Risk is capped.** Fractional Kelly, then a hard cap on risk-per-trade, so the
+  account can't blow up on one trade.
+- **Out-of-sample is the truth.** In-sample results are treated as suspect until
+  they survive walk-forward validation.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## The dashboard (`src/App.js`)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+A React + Tailwind UI that mirrors the aesthetic of the hype screenshot but
+surfaces honest metrics: an equity curve, a Monte Carlo distribution with the
+probability-of-loss called out in red, a multi-asset robustness grid, and a
+walk-forward panel showing how much of the in-sample edge evaporates on unseen
+data. Tune the risk/Kelly/take-profit/fee sliders and watch how fragile the
+"edge" is.
 
-### `npm run eject`
+## Running it
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm install
+npm start        # dev server at http://localhost:3000
+npm test         # run the engine + UI test suites
+npm run build    # production build
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## What a *real* deployment would need (and why it's hard)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This repo is honest about its limits. To trade real money you would additionally
+need: real historical + live market data, an exchange/broker API with
+authentication, robust order and error handling, latency and partial-fill
+modeling, slippage that reflects real order-book depth, portfolio-level risk
+controls, monitoring/alerting, and — most importantly — a genuine, statistically
+validated edge that survives fees and competition. The last one is the part no
+tool can hand you.
