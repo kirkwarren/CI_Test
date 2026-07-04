@@ -89,6 +89,81 @@
   animation: cq-sonar 2.6s ease-out infinite;
 }
 
+/* ============ 90s retro kit ============ */
+
+/* CRT scanlines — overlay on the AR view */
+.cq-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.16) 0px,
+    rgba(0, 0, 0, 0.16) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+/* CRT vignette + faint phosphor tint */
+.cq-crt {
+  background:
+    radial-gradient(115% 100% at 50% 50%, transparent 62%, rgba(0, 10, 6, 0.55) 100%),
+    linear-gradient(rgba(38, 255, 170, 0.02), rgba(38, 255, 170, 0.02));
+}
+
+/* Arcade blink — hard steps, no fade (INSERT COIN energy) */
+@keyframes cq-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.cq-blink {
+  animation: cq-blink 1.06s steps(1) infinite;
+}
+
+/* Chunky arcade type: monospace + hard shadow + RGB fringe */
+.cq-pixel {
+  font-family: 'Courier New', ui-monospace, monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.85), -1px 0 0 rgba(255, 60, 90, 0.5), 1px 0 0 rgba(60, 220, 255, 0.5);
+}
+
+/* Game Boy DMG green LCD treatment for the mini-map */
+.cq-dmg {
+  filter: grayscale(1) sepia(1) hue-rotate(52deg) saturate(2.2) brightness(0.92) contrast(1.2);
+}
+.cq-dmg-dots {
+  background-image: repeating-linear-gradient(0deg, rgba(12, 34, 10, 0.22) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(12, 34, 10, 0.22) 0 1px, transparent 1px 3px);
+}
+
+/* Holo-foil sheen for rare cards (trading-card energy) */
+@keyframes cq-holo {
+  0% { background-position: -160% 0; }
+  100% { background-position: 260% 0; }
+}
+.cq-holo {
+  background-image: linear-gradient(105deg, transparent 38%, rgba(255, 130, 255, 0.28) 45%, rgba(120, 255, 220, 0.34) 50%, rgba(140, 180, 255, 0.28) 55%, transparent 62%);
+  background-size: 240% 100%;
+  animation: cq-holo 2.8s linear infinite;
+}
+
+/* arcade impact frame — 120ms white flash on combo hits */
+@keyframes cq-impact {
+  0% { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+.cq-impact {
+  animation: cq-impact 0.14s steps(2) forwards;
+}
+
+/* VHS jitter for the REC OSD */
+@keyframes cq-vhs {
+  0%, 92%, 100% { transform: translateY(0); }
+  93% { transform: translateY(-1px); }
+  96% { transform: translateY(1px); }
+}
+.cq-vhs {
+  animation: cq-vhs 4s steps(1) infinite;
+}
+
 /* Custom range slider for the cleanup timer / sorting controls */
 input[type='range'].cq-range {
   -webkit-appearance: none;

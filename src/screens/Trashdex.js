@@ -33,8 +33,10 @@ const Trashdex = ({ onClose }) => {
             return count ? (
               <div key={t.type} className={cx('rounded-2xl p-[2px] bg-gradient-to-b shadow-card', frame, t.rarity === 'rare' && 'shadow-glow')}>
                 <div className="relative rounded-[14px] bg-grime-900 p-3 text-center overflow-hidden">
-                  {/* card sheen */}
-                  <span className="absolute -top-6 -left-8 h-16 w-24 bg-white/10 rotate-[20deg] pointer-events-none" />
+                  {/* card sheen — rares get animated 90s holo foil */}
+                  {t.rarity === 'rare'
+                    ? <span className="cq-holo absolute inset-0 pointer-events-none" />
+                    : <span className="absolute -top-6 -left-8 h-16 w-24 bg-white/10 rotate-[20deg] pointer-events-none" />}
                   <span className="text-3xl block drop-shadow">{t.emoji}</span>
                   <p className="text-[11px] font-black mt-1.5 leading-tight text-white">{t.type}</p>
                   <span className={cx('inline-block rounded-full px-2 py-0.5 text-[8px] font-black uppercase tracking-wide mt-1.5', RARITY_STYLE[t.rarity])}>

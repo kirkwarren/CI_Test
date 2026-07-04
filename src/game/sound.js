@@ -60,6 +60,14 @@ export const play = (name, n = 1) => {
     case 'reject': // not-litter / too-close buzz
       tone(180, { dur: 0.18, type: 'sawtooth', vol: 0.07 });
       break;
+    case 'boot': // 90s console power-on jingle
+      [262, 392, 523, 784].forEach((f, i) => tone(f, { dur: 0.14, at: i * 0.11, type: 'square', vol: 0.09 }));
+      tone(1046, { dur: 0.4, at: 0.46, type: 'square', vol: 0.1 });
+      break;
+    case 'coin': // arcade coin drop
+      tone(988, { dur: 0.07, type: 'square', vol: 0.1 });
+      tone(1319, { dur: 0.22, at: 0.07, type: 'square', vol: 0.1 });
+      break;
     default:
       break;
   }

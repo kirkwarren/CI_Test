@@ -29,9 +29,11 @@ const metersOf = (d) => Math.round(d * 7);
 const ARWorld = ({ onSheet }) => {
   const {
     bankRun, player, goldenId, rushEndsAt, spawns, pos, walkTo, showToast, myRank, claimable, toast,
-    adoptedId, adoptBlock, fileReport, buddyXp,
+    adoptedId, adoptBlock, fileReport, buddyXp, leaderboard,
   } = useGame();
   const buddyIdx = BUDDY_STAGES.indexOf(buddyStage(buddyXp));
+  const hiScore = leaderboard[0] ? leaderboard[0].points : player.points;
+  const pad6 = (n) => String(Math.max(0, Math.round(n))).padStart(6, '0');
 
   // Optional QA flag: ?debugClasses=frisbee adds detector classes for desktop QA.
   const classMap = useMemo(() => {
@@ -331,6 +333,10 @@ const ARWorld = ({ onSheet }) => {
       <video ref={videoRef} muted playsInline autoPlay className={cx('absolute inset-0 h-full w-full object-cover', mode !== 'hunt' && 'opacity-60')} />
       {mode !== 'hunt' && <div className="absolute inset-0 bg-black/35" />}
 
+      {/* 90s CRT treatment: phosphor vignette under the HUD, scanlines above all */}
+      <div className="cq-crt absolute inset-0 z-[4] pointer-events-none" />
+      <div className="cq-scanlines absolute inset-0 z-[60] pointer-events-none opacity-60" />
+
       {/* AI-rejected objects */}
       {hunting && nonLitter.map((o) => (
         <div key={o.id} className="absolute z-[9] pointer-events-none" style={{ left: o.box.l, top: o.box.t, width: o.box.w, height: o.box.h }}>
@@ -407,16 +413,21 @@ const ARWorld = ({ onSheet }) => {
         </span>
       ))}
 
-      {/* center-screen combo pop */}
+      {/* arcade combo announcer + impact frame */}
       {comboFx && (
-        <div className="absolute left-1/2 top-[36%] -translate-x-1/2 z-30 pointer-events-none">
-          <span className="block text-center animate-pop">
-            <span className="block font-black text-[44px] leading-none bg-gradient-to-b from-yellow-200 to-sun-500 bg-clip-text text-transparent drop-shadow-lg" style={{ WebkitTextStroke: '1.5px rgba(0,0,0,0.35)' }}>
-              ×{comboFx.n}
+        <>
+          <div key={`if-${comboFx.id}`} className="cq-impact absolute inset-0 bg-white z-[25] pointer-events-none" />
+          <div className="absolute left-1/2 top-[34%] -translate-x-1/2 z-30 pointer-events-none w-full text-center">
+            <span className="block animate-pop">
+              <span className="block font-black text-[44px] leading-none bg-gradient-to-b from-yellow-200 to-sun-500 bg-clip-text text-transparent drop-shadow-lg" style={{ WebkitTextStroke: '1.5px rgba(0,0,0,0.35)' }}>
+                ×{comboFx.n}
+              </span>
+              <span className="cq-pixel block text-[17px] text-quest-200 mt-1">
+                {comboFx.n >= 8 ? 'PERFECT PARK!!' : comboFx.n >= 5 ? 'CLEAN COMBO!' : comboFx.n >= 3 ? 'TRIPLE!!' : 'DOUBLE PICKUP!'}
+              </span>
             </span>
-            <span className="block font-black text-[15px] tracking-[0.3em] text-white drop-shadow mt-0.5">COMBO!</span>
-          </span>
-        </div>
+          </div>
+        </>
       )}
 
       {/* grab chain */}
@@ -460,12 +471,17 @@ const ARWorld = ({ onSheet }) => {
       )}
 
       {/* ============ HUD ============ */}
-      {/* top row */}
-      <div className="absolute top-0 inset-x-0 p-3 flex items-center gap-2 bg-gradient-to-b from-black/70 to-transparent z-20">
+      {/* top row: arcade score bar + VHS OSD */}
+      <div className="absolute top-0 inset-x-0 p-3 flex items-start gap-2 bg-gradient-to-b from-black/70 to-transparent z-20">
         <Pill className="bg-grime-900/80 text-white backdrop-blur"><Leaf className="h-3.5 w-3.5 text-quest-300" /> CleanQuest</Pill>
-        <Pill className="bg-rose-500/90 text-white"><span className="h-1.5 w-1.5 rounded-full bg-white animate-pulseGlow" /> {fmtClock(seconds)}</Pill>
+        <span className="cq-pixel cq-vhs text-rose-400 text-[13px] mt-1.5 flex items-center gap-1">
+          <span className="cq-blink">●</span>REC·SP {fmtClock(seconds)}
+        </span>
         <div className="flex-1" />
-        <Pill className="bg-grime-900/80 text-quest-300 backdrop-blur">⚡ {player.points.toLocaleString()}</Pill>
+        <div className="cq-pixel text-right leading-tight mt-0.5">
+          <p className="text-sun-400 text-[13px]">SCORE {pad6(player.points)}</p>
+          <p className="text-white/60 text-[10px]">HI {pad6(hiScore)} · 1UP</p>
+        </div>
       </div>
 
       {/* status / navigation line */}
@@ -542,23 +558,37 @@ const ARWorld = ({ onSheet }) => {
         </button>
       </div>
 
-      {/* buddy companion — walks the streets with you in AR */}
-      <div className="absolute bottom-[21.5rem] left-4 z-20 pointer-events-none animate-floaty">
-        <BuddySprite stage={buddyIdx} size={62} className="drop-shadow-lg" />
+      {/* buddy companion in a Tamagotchi shell — your 90s pocket pal */}
+      <div className="absolute bottom-[21.3rem] left-3.5 z-20 pointer-events-none">
+        <span className="cq-pixel cq-blink absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] text-quest-200 z-10">1UP</span>
+        <div className="relative w-[84px] h-[96px]" style={{ borderRadius: '50% 50% 47% 47% / 56% 56% 44% 44%', background: 'linear-gradient(160deg,#67e8f9 0%,#0891b2 55%,#155e75 100%)', boxShadow: '0 6px 14px -6px rgba(0,0,0,0.6), inset 0 3px 6px rgba(255,255,255,0.5), inset 0 -4px 8px rgba(0,0,0,0.35)' }}>
+          {/* dot-matrix LCD window */}
+          <div className="cq-dmg-dots absolute left-1/2 top-[16%] -translate-x-1/2 w-[58px] h-[52px] rounded-lg ring-2 ring-[#155e75] grid place-items-center overflow-hidden" style={{ background: '#9bbc0f' }}>
+            <BuddySprite stage={buddyIdx} size={46} className="animate-floaty" />
+          </div>
+          {/* three shell buttons */}
+          <div className="absolute bottom-[9%] left-1/2 -translate-x-1/2 flex gap-1.5">
+            {[0, 1, 2].map((k) => (
+              <span key={k} className="h-2 w-2 rounded-full bg-cyan-100/90 ring-1 ring-[#155e75]" />
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* ============ PiP MINI-MAP ============ */}
+      {/* ============ PiP MINI-MAP — Game Boy radar ============ */}
       <button
         onClick={() => { play('tick'); setMapOpen(true); }}
-        className="absolute bottom-44 left-3 z-20 w-32 h-40 rounded-2xl overflow-hidden ring-2 ring-white/70 shadow-card active:scale-95 transition"
+        className="absolute bottom-44 left-3 z-20 w-32 h-40 rounded-2xl overflow-hidden ring-2 ring-[#3a4a3a] shadow-card active:scale-95 transition"
       >
-        <ParkMap compact />
-        {/* bezel gloss + compass */}
-        <span className="absolute inset-0 pointer-events-none rounded-2xl" style={{ boxShadow: 'inset 0 10px 18px -12px rgba(255,255,255,0.55), inset 0 -8px 16px -12px rgba(0,0,0,0.5)' }} />
-        <span className="absolute top-1 left-1 grid place-items-center h-5 w-5 rounded-full bg-black/55 text-[9px] font-black text-white ring-1 ring-white/40">N</span>
-        <span className="absolute top-1 right-1 grid place-items-center h-5 w-5 rounded-md bg-black/50"><Maximize2 className="h-3 w-3 text-white" /></span>
-        <span className="absolute bottom-0 inset-x-0 bg-black/55 text-white text-[9px] font-black py-0.5 text-center uppercase tracking-wider">
-          {goldenSpawn ? `🌟 ${metersOf(goldenDist)}m` : 'Map'}
+        <span className="cq-dmg absolute inset-0 block">
+          <ParkMap compact />
+        </span>
+        <span className="cq-dmg-dots absolute inset-0 pointer-events-none" />
+        <span className="absolute inset-0 pointer-events-none rounded-2xl" style={{ boxShadow: 'inset 0 0 22px rgba(20,60,20,0.55), inset 0 8px 14px -10px rgba(255,255,255,0.35)' }} />
+        <span className="absolute top-1 left-1 grid place-items-center h-5 w-5 rounded-full bg-black/55 text-[9px] font-black text-lime-200 ring-1 ring-lime-200/40">N</span>
+        <span className="absolute top-1 right-1 grid place-items-center h-5 w-5 rounded-md bg-black/50"><Maximize2 className="h-3 w-3 text-lime-200" /></span>
+        <span className="cq-pixel absolute bottom-0 inset-x-0 bg-[#0f380f]/85 text-[#9bbc0f] text-[9px] py-0.5 text-center">
+          {goldenSpawn ? `★ ${metersOf(goldenDist)}M` : 'RADAR'}
         </span>
       </button>
 
@@ -573,7 +603,7 @@ const ARWorld = ({ onSheet }) => {
           </div>
           <div className="flex-1 flex gap-1 overflow-x-auto no-scrollbar">
             {bag.length === 0
-              ? <span className="text-white/45 text-[12px] font-bold">{hunting ? (detections.length ? `${detections.length} litter in view — tap GRAB` : 'Scanning for litter…') : 'Bag is empty'}</span>
+              ? <span className={cx('text-[12px] font-bold', hunting && !detections.length ? 'cq-pixel cq-blink text-quest-200' : 'text-white/45')}>{hunting ? (detections.length ? `${detections.length} litter in view — tap GRAB` : 'INSERT LITTER · AIM CAMERA') : 'Bag is empty'}</span>
               : bag.map((b, i) => (
                 <span key={i} className={cx('relative grid place-items-center h-8 w-8 rounded-lg bg-white/12 text-base shrink-0 animate-pop', (b.golden || (b.size && b.size.mult >= 2)) && 'ring-2 ring-sun-400')}>
                   {b.emoji}

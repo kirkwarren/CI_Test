@@ -12,7 +12,7 @@ const Onboarding = ({ onDone }) => {
   const [i, setI] = useState(0);
 
   const next = () => {
-    play('tick');
+    play(i === 0 ? 'boot' : 'tick'); // console power-on jingle off the title screen
     if (i < SLIDES.length - 1) setI(i + 1);
     else onDone();
   };
@@ -41,6 +41,7 @@ const Onboarding = ({ onDone }) => {
                 Your city is the game board.<br />Real litter. Real points. Real impact.
               </p>
               <p className="text-quest-300/80 text-[12px] font-black mt-4">This is Sprout — your cleanup buddy. It grows as you clean. 🌱</p>
+              <p className="cq-pixel text-white/30 text-[10px] mt-6">© 1996 CLEANQUEST CO. · LICENSED BY CITY OF RIVERTON</p>
             </div>
           )}
 
@@ -98,7 +99,9 @@ const Onboarding = ({ onDone }) => {
               <span key={s} className={cx('h-2 rounded-full transition-all duration-300', s === i ? 'w-6 bg-quest-300' : 'w-2 bg-white/20')} />
             ))}
           </div>
-          <BigBtn onClick={next}>{i < SLIDES.length - 1 ? 'Next' : "📷 Let's clean!"}</BigBtn>
+          <BigBtn onClick={next} className={cx(i === 0 && 'cq-pixel')}>
+            {i === 0 ? <span><span className="cq-blink">▶</span> PRESS START</span> : i < SLIDES.length - 1 ? 'Next' : "📷 Let's clean!"}
+          </BigBtn>
           {i < SLIDES.length - 1 && (
             <button onClick={() => { play('tick'); onDone(); }} className="w-full text-center text-white/35 text-[12px] font-bold mt-3">
               Skip

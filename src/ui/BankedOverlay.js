@@ -43,7 +43,8 @@ const BankedOverlay = () => {
       </div>
 
       <div className="relative w-full max-w-[380px] rounded-[30px] bg-gradient-to-b from-grime-800 to-grime-900 ring-1 ring-quest-400/30 shadow-glow-lg animate-pop p-6 text-center max-h-[90%] overflow-y-auto no-scrollbar">
-        <span className="text-5xl block animate-floaty">🎉</span>
+        <p className="cq-pixel text-sun-400 text-[26px] leading-none">STAGE CLEAR<span className="cq-blink">!!</span></p>
+        <span className="text-4xl block animate-floaty mt-1.5">🎉</span>
         <p className="text-quest-300 font-black text-[11px] uppercase tracking-[0.2em] mt-2">{banked.title} cleaned</p>
         <p className="text-white font-black text-5xl tracking-tight mt-2">+{shown}</p>
         <p className="text-white/50 text-[12px] font-bold">points banked · verified</p>
