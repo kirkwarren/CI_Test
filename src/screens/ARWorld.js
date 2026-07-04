@@ -3,9 +3,11 @@ import { useGame } from '../game/GameState';
 import {
   LITTER_CLASS_MAP, NON_LITTER_CLASSES, SIZE_TIERS, TOO_CLOSE_FRAC,
   GOLDEN_MULT, RUSH_MULT, REACH, REPORT_TYPES, ADOPT_BONUS,
+  buddyStage, BUDDY_STAGES,
 } from '../game/data';
 import { play, buzz, isSoundOn, setSoundOn } from '../game/sound';
 import ParkMap from '../ui/ParkMap';
+import { DetectFrame, BuddySprite } from '../ui/art';
 import { cx, Pill, BigBtn } from '../ui/bits';
 import {
   ShieldCheck, QrCode, Check, Loader2, Hand, ShoppingBag, Crosshair,
@@ -27,8 +29,9 @@ const metersOf = (d) => Math.round(d * 7);
 const ARWorld = ({ onSheet }) => {
   const {
     bankRun, player, goldenId, rushEndsAt, spawns, pos, walkTo, showToast, myRank, claimable, toast,
-    adoptedId, adoptBlock, fileReport,
+    adoptedId, adoptBlock, fileReport, buddyXp,
   } = useGame();
+  const buddyIdx = BUDDY_STAGES.indexOf(buddyStage(buddyXp));
 
   // Optional QA flag: ?debugClasses=frisbee adds detector classes for desktop QA.
   const classMap = useMemo(() => {
@@ -315,11 +318,11 @@ const ARWorld = ({ onSheet }) => {
         </div>
       ))}
 
-      {/* litter boxes */}
+      {/* litter boxes — holographic capture frames */}
       {hunting && detections.map((d) => (
-        <button key={d.id} onClick={() => grab(d)} className="absolute z-10" style={{ left: d.box.l, top: d.box.t, width: d.box.w, height: d.box.h }}>
-          <span className={cx('absolute inset-0 rounded-xl border-[3px] animate-pop', d.tooClose ? 'border-rose-400 border-dashed' : cx(d.size.ring, 'shadow-glow'))} />
-          <span className={cx('absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-black shadow-card', d.tooClose ? 'bg-rose-400 text-white' : 'bg-quest-400 text-quest-900')}>
+        <button key={d.id} onClick={() => grab(d)} className="absolute z-10 animate-pop" style={{ left: d.box.l, top: d.box.t, width: d.box.w, height: d.box.h }}>
+          <DetectFrame tooClose={d.tooClose} golden={goldenHere} />
+          <span className={cx('absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-black shadow-card', d.tooClose ? 'bg-rose-400 text-white' : 'bg-gradient-to-r from-quest-300 to-ocean-400 text-grime-900')}>
             {d.emoji} {d.type} · {Math.round(d.score * 100)}%
           </span>
           {d.tooClose ? (
@@ -335,9 +338,11 @@ const ARWorld = ({ onSheet }) => {
         </button>
       ))}
 
-      {/* reticle */}
+      {/* sonar scan + reticle */}
       {hunting && detections.length === 0 && !grabFx && (
         <div className="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+          <span className="absolute left-1/2 top-8 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full border-2 border-quest-300/50 cq-sonar" />
+          <span className="absolute left-1/2 top-8 -translate-x-1/2 -translate-y-1/2 h-64 w-64 rounded-full border-2 border-ocean-400/40 cq-sonar" style={{ animationDelay: '1.3s' }} />
           <Crosshair className="h-12 w-12 text-white/60 animate-pulseGlow mx-auto" />
           <p className="text-white/80 text-[13px] font-bold mt-2 drop-shadow">Point your camera at litter</p>
         </div>
@@ -480,20 +485,29 @@ const ARWorld = ({ onSheet }) => {
         </button>
       </div>
 
+      {/* buddy companion — walks the streets with you in AR */}
+      <div className="absolute bottom-[21.5rem] left-4 z-20 pointer-events-none animate-floaty">
+        <BuddySprite stage={buddyIdx} size={62} className="drop-shadow-lg" />
+      </div>
+
       {/* ============ PiP MINI-MAP ============ */}
       <button
         onClick={() => { play('tick'); setMapOpen(true); }}
-        className="absolute bottom-44 left-3 z-20 w-32 h-40 rounded-2xl overflow-hidden ring-2 ring-white/60 shadow-card active:scale-95 transition"
+        className="absolute bottom-44 left-3 z-20 w-32 h-40 rounded-2xl overflow-hidden ring-2 ring-white/70 shadow-card active:scale-95 transition"
       >
         <ParkMap compact />
+        {/* bezel gloss + compass */}
+        <span className="absolute inset-0 pointer-events-none rounded-2xl" style={{ boxShadow: 'inset 0 10px 18px -12px rgba(255,255,255,0.55), inset 0 -8px 16px -12px rgba(0,0,0,0.5)' }} />
+        <span className="absolute top-1 left-1 grid place-items-center h-5 w-5 rounded-full bg-black/55 text-[9px] font-black text-white ring-1 ring-white/40">N</span>
         <span className="absolute top-1 right-1 grid place-items-center h-5 w-5 rounded-md bg-black/50"><Maximize2 className="h-3 w-3 text-white" /></span>
         <span className="absolute bottom-0 inset-x-0 bg-black/55 text-white text-[9px] font-black py-0.5 text-center uppercase tracking-wider">
           {goldenSpawn ? `🌟 ${metersOf(goldenDist)}m` : 'Map'}
         </span>
       </button>
 
-      {/* ============ bottom dock ============ */}
-      <div className="absolute bottom-0 inset-x-0 p-4 pb-5 bg-gradient-to-t from-black/90 via-black/55 to-transparent z-20">
+      {/* ============ bottom dock — glassy card ============ */}
+      <div className="absolute bottom-0 inset-x-0 p-3 pb-4 bg-gradient-to-t from-black/70 to-transparent z-20">
+        <div className="glass rounded-[26px] ring-1 ring-white/20 p-3.5 shadow-soft">
         <div className="flex items-center gap-3 mb-3">
           <div className="relative shrink-0">
             <span className="grid place-items-center h-12 w-12 rounded-2xl bg-white/15 ring-1 ring-white/25 text-2xl">🛍️</span>
@@ -535,6 +549,7 @@ const ARWorld = ({ onSheet }) => {
             <BigBtn className="flex-[1.6]" onClick={scanBin}>📷 Scan bin QR</BigBtn>
           </div>
         )}
+        </div>
       </div>
 
       {/* dispose / banking overlays */}
