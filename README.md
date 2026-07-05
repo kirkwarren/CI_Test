@@ -39,6 +39,23 @@ Everything is plain, dependency-free, deterministic JavaScript with unit tests.
 | `montecarlo.js` | Bootstrap-resamples trades to show the **distribution** of outcomes — including the downside tail |
 | `walkforward.js` | Walk-forward optimization: tune in-sample, test out-of-sample, measure the "overfitting tax" |
 | `paper.js` | Automated **paper-trading** executor: consumes bars one at a time, places simulated orders, tracks a live blotter + equity. No real money, no credentials. Swap the feed for real data to paper-trade live. |
+| `loader.js` | Strict CSV→bars parsing for the real data under `data/`, plus periods-per-year inference |
+| `screener.js` | Cross-sectional momentum / risk-adjusted / trend screen with a transparent composite rank |
+| `studies.js` | Six empirical market studies: fat tails, return concentration & best/worst-day clustering, volatility clustering, stress correlations, cross-sectional momentum, luck-vs-skill benchmark |
+
+## Real data & reports
+
+`scripts/fetch-data.mjs` pulls ~3 years of real daily OHLCV (16 crypto pairs from
+Coinbase — BTC/ETH/SOL cross-validated against Kraken with hard divergence
+gates — and 22 equities/ETFs from Nasdaq) into `data/`, completed days only.
+
+- `./scripts/analyze.sh` → **REPORT.md** + `src/data/realAnalysis.json` — the
+  screen, strategy-vs-buy-and-hold, walk-forward, Monte Carlo, paper trading on
+  every asset
+- `./scripts/insights.sh` → **INSIGHTS.md** + `src/data/insights.json` — the six
+  empirical studies, adversarially verified claim-by-claim
+
+A daily scheduled routine refreshes the data and reports automatically.
 
 ### Design principles
 
