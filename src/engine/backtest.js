@@ -32,6 +32,11 @@ export const DEFAULT_CONFIG = {
   // Rolling estimates of edge, seeded conservatively and updated as trades close.
   priorWinProb: 0.5,
   priorPayoff: 1.5,
+  // Volatility targeting (AQR-style): when set (e.g. 0.15 = 15% annualized),
+  // exposure is scaled DOWN by targetVol/realizedVol when recent realized vol
+  // exceeds the target. Never scales up (no leverage) — this uses the one
+  // predictable quantity in market data (vol) to size the unpredictable one.
+  volTargetAnnual: null,
 };
 
 function applyCost(price, side, cfg) {
@@ -152,6 +157,15 @@ export function runBacktest(bars, userParams = {}, userConfig = {}) {
           kellyMultiplier: cfg.kellyMultiplier,
           maxRiskPerTrade: cfg.maxRiskPerTrade,
         });
+
+        // Vol targeting: shrink exposure when recent realized vol exceeds the
+        // target. volScale ∈ (0, 1] — never levers up.
+        if (cfg.volTargetAnnual && ctx.dailyVol?.[i] > 0) {
+          const targetDaily = cfg.volTargetAnnual / Math.sqrt(cfg.barsPerYear);
+          const volScale = Math.min(1, targetDaily / ctx.dailyVol[i]);
+          sized.units *= volScale;
+          sized.riskAmount *= volScale;
+        }
 
         if (sized.units > 0) {
           position = {

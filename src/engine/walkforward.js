@@ -40,6 +40,10 @@ export function walkForward(bars, {
   folds = 4,
   grid = defaultGrid(),
   config = {},
+  // Base strategy params merged UNDER each grid entry — lets a signal variant
+  // (e.g. signalMode: 'ensemble') keep its identity while the grid tunes only
+  // the shared stop/target/EMA knobs.
+  baseParams = {},
 } = {}) {
   const window = Math.floor(bars.length / (folds + 1));
   if (window < 60) {
@@ -56,7 +60,7 @@ export function walkForward(bars, {
     // 1) Optimize on in-sample.
     let best = null;
     for (const params of grid) {
-      const res = runBacktest(isBars, params, config);
+      const res = runBacktest(isBars, { ...baseParams, ...params }, config);
       const s = score(res.metrics);
       if (!best || s > best.score) {
         best = { score: s, params, metrics: res.metrics };
@@ -65,7 +69,7 @@ export function walkForward(bars, {
     if (!best || best.score === -Infinity) continue;
 
     // 2) Test the winning params on untouched out-of-sample data.
-    const oos = runBacktest(oosBars, best.params, config);
+    const oos = runBacktest(oosBars, { ...baseParams, ...best.params }, config);
 
     foldResults.push({
       fold: f,
