@@ -68,6 +68,14 @@ export const play = (name, n = 1) => {
       tone(988, { dur: 0.07, type: 'square', vol: 0.1 });
       tone(1319, { dur: 0.22, at: 0.07, type: 'square', vol: 0.1 });
       break;
+    case 'lock': // target acquired: beep-beep..BOOP
+      tone(1175, { dur: 0.05, type: 'square', vol: 0.08 });
+      tone(1175, { dur: 0.05, at: 0.09, type: 'square', vol: 0.08 });
+      tone(1568, { dur: 0.16, at: 0.18, type: 'square', vol: 0.11 });
+      break;
+    case 'bloom': // the world heals — soft major swell
+      [392, 494, 587, 784].forEach((f, i) => tone(f, { dur: 0.55, at: i * 0.07, type: 'triangle', vol: 0.09 }));
+      break;
     default:
       break;
   }

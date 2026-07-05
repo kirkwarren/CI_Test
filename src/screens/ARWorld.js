@@ -11,9 +11,11 @@ import { DetectFrame, BuddySprite } from '../ui/art';
 import { cx, Pill, BigBtn } from '../ui/bits';
 import {
   ShieldCheck, QrCode, Check, Loader2, Hand, ShoppingBag, Crosshair,
-  CameraOff, RefreshCw, ChevronRight, Leaf, Trophy, ClipboardList, BookOpen,
+  CameraOff, RefreshCw, ChevronRight, ChevronLeft, Leaf, Trophy, ClipboardList, BookOpen,
   Volume2, VolumeX, Navigation2, Maximize2, X, Footprints, Flag, Camera,
 } from 'lucide-react';
+
+const LOCK_FRAMES = 4; // detector frames a target must persist to lock (~0.9s)
 
 const DETECT_MS = 220;
 const MIN_SCORE = 0.5;
@@ -76,6 +78,32 @@ const ARWorld = ({ onSheet }) => {
   const [guiding, setGuiding] = useState(null); // spawn being walked to
   const [soundOn, setSound] = useState(isSoundOn());
   const [report, setReport] = useState(null); // null | {step:'pick'|'sending'|'done', type}
+  const [bloom, setBloom] = useState(false); // the world-heals moment
+  const [ori, setOri] = useState({ a: 0, b: 60 }); // device orientation (deg)
+  const prevLitterRef = useRef([]);
+  const hasGyroRef = useRef(false);
+
+  // --- world anchoring: device orientation, with ambient drift fallback ---
+  useEffect(() => {
+    let last = 0;
+    const onOri = (e) => {
+      if (e.alpha === null || e.alpha === undefined) return;
+      hasGyroRef.current = true;
+      const now = performance.now();
+      if (now - last < 66) return; // ~15fps is plenty for parallax
+      last = now;
+      setOri({ a: e.alpha, b: e.beta ?? 60 });
+    };
+    window.addEventListener('deviceorientation', onOri);
+    // no gyro (desktop/laptop): a slow ambient drift keeps the world alive
+    let t = 0;
+    const drift = setInterval(() => {
+      if (hasGyroRef.current) return;
+      t += 0.05;
+      setOri({ a: Math.sin(t / 3) * 24, b: 60 + Math.sin(t / 5) * 6 });
+    }, 90);
+    return () => { window.removeEventListener('deviceorientation', onOri); clearInterval(drift); };
+  }, []);
 
   const rushActive = Date.now() < rushEndsAt;
   const pending = bag.reduce((s, b) => s + b.pts, 0);
@@ -196,14 +224,20 @@ const ARWorld = ({ onSheet }) => {
             const tooClose = frac > TOO_CLOSE_FRAC;
             const size = SIZE_TIERS.find((t) => frac <= t.max) || SIZE_TIERS[SIZE_TIERS.length - 1];
             const meta = classMap[p.class];
+            // aim-and-lock: a target must persist across frames to lock
+            const prev = prevLitterRef.current.find((q) => q.type === meta.type && Math.hypot(q.ncx - ncx, q.ncy - ncy) < 0.09);
+            const frames = prev ? prev.frames + 1 : 1;
+            if (frames === LOCK_FRAMES) play('lock');
             litter.push({
               id: `${p.class}-${i}`, ncx, ncy, score: p.score, ...meta,
               size, tooClose, pts: Math.round(meta.points * size.mult), box,
+              frames, lock: Math.min(1, frames / LOCK_FRAMES),
             });
           } else if (NON_LITTER_CLASSES.includes(p.class) && others.length < 4) {
             others.push({ id: `nl-${p.class}-${i}`, klass: p.class, score: p.score, box });
           }
         });
+        prevLitterRef.current = litter;
         setDetections(litter);
         setNonLitter(others);
       }
@@ -219,6 +253,11 @@ const ARWorld = ({ onSheet }) => {
     if (det.tooClose) {
       play('reject'); buzz([40, 60, 40]);
       flash('Too close — step back so we can see it', true);
+      return;
+    }
+    if (det.lock < 1) {
+      play('tick');
+      flash('Hold steady — locking target…', true);
       return;
     }
     play('grab'); buzz(15);
@@ -305,6 +344,9 @@ const ARWorld = ({ onSheet }) => {
       setCreditPct(p);
       if (p >= 100) {
         clearInterval(t);
+        // the world heals: warm grade + vines grow over the camera first
+        setBloom(true);
+        play('bloom');
         setTimeout(() => {
           const zoneIds = [...new Set(bag.map((b) => b.zoneId).filter(Boolean))];
           bankRun({ items: bag, breakdown: totals.breakdown, total: totals.total, comboMax: comboMaxRef.current, zoneIds });
@@ -313,7 +355,8 @@ const ARWorld = ({ onSheet }) => {
           comboMaxRef.current = 1;
           grabbedZonesRef.current = [];
           setMode('hunt');
-        }, 500);
+          setTimeout(() => setBloom(false), 900);
+        }, 1800);
       }
     }, 45);
   };
@@ -330,12 +373,51 @@ const ARWorld = ({ onSheet }) => {
   return (
     <div ref={wrapRef} className="absolute inset-0 bg-black overflow-hidden">
       {/* ============ THE LIVE CAMERA — the game world ============ */}
-      <video ref={videoRef} muted playsInline autoPlay className={cx('absolute inset-0 h-full w-full object-cover', mode !== 'hunt' && 'opacity-60')} />
+      <video ref={videoRef} muted playsInline autoPlay className={cx('cq-video-grade absolute inset-0 h-full w-full object-cover', mode !== 'hunt' && 'opacity-60', bloom && 'cq-bloomed')} />
       {mode !== 'hunt' && <div className="absolute inset-0 bg-black/35" />}
 
       {/* 90s CRT treatment: phosphor vignette under the HUD, scanlines above all */}
       <div className="cq-crt absolute inset-0 z-[4] pointer-events-none" />
       <div className="cq-scanlines absolute inset-0 z-[60] pointer-events-none opacity-60" />
+
+      {/* ---- world layer: gyro parallax sparkles (3 depth planes) ---- */}
+      {[0.5, 0.9, 1.5].map((depth, li) => (
+        <div key={li} className="absolute inset-0 z-[5] pointer-events-none"
+          style={{ transform: `translate3d(${-ori.a * depth * 2.2}px, ${(ori.b - 60) * depth * 1.2}px, 0)`, transition: hasGyroRef.current ? 'none' : 'transform 0.6s ease-out' }}>
+          {Array.from({ length: 3 }).map((_, k) => (
+            <span key={k} className="absolute rounded-full bg-quest-200/50 animate-pulseGlow"
+              style={{ left: `${18 + ((li * 3 + k) * 29) % 70}%`, top: `${16 + ((li * 5 + k) * 23) % 55}%`, width: 3 + depth * 2.5, height: 3 + depth * 2.5, filter: 'blur(0.5px)', animationDelay: `${(li + k) * 0.7}s` }} />
+          ))}
+        </div>
+      ))}
+
+      {/* ---- world-anchored golden beacon: a pillar of light at its bearing ---- */}
+      {hunting && goldenSpawn && (() => {
+        const rel = ((goldenBearing - 90 - ori.a + 540) % 360) - 180;
+        const wpx = wrapRef.current ? wrapRef.current.clientWidth : 440;
+        const pinned = Math.abs(rel) > 32;
+        const x = pinned ? (rel > 0 ? wpx - 30 : 30) : wpx / 2 + (rel / 32) * (wpx / 2 - 46);
+        return (
+          <div className="absolute inset-y-0 z-[6] pointer-events-none" style={{ left: x, transform: 'translateX(-50%)', transition: hasGyroRef.current ? 'none' : 'left 0.6s ease-out' }}>
+            {pinned ? (
+              <div className="absolute top-[46%] flex items-center gap-0.5 -translate-x-1/2">
+                {rel < 0 && <ChevronLeft className="h-6 w-6 text-sun-400 drop-shadow animate-pulseGlow" />}
+                <span className="text-xl drop-shadow animate-pulseGlow">🌟</span>
+                {rel > 0 && <ChevronRight className="h-6 w-6 text-sun-400 drop-shadow animate-pulseGlow" />}
+              </div>
+            ) : (
+              <>
+                <div className="absolute bottom-[30%] h-[34%] w-10 -translate-x-1/2 animate-pulseGlow"
+                  style={{ background: 'linear-gradient(to top, rgba(251,191,36,0.5), rgba(251,191,36,0.08) 70%, transparent)', filter: 'blur(3px)', borderRadius: 20 }} />
+                <div className="absolute bottom-[62%] -translate-x-1/2 text-center">
+                  <span className="block text-2xl animate-floaty drop-shadow">🌟</span>
+                  <span className="cq-pixel block text-[10px] text-sun-400 mt-0.5 whitespace-nowrap">×3 · {metersOf(goldenDist)}M</span>
+                </div>
+              </>
+            )}
+          </div>
+        );
+      })()}
 
       {/* AI-rejected objects */}
       {hunting && nonLitter.map((o) => (
@@ -347,25 +429,43 @@ const ARWorld = ({ onSheet }) => {
         </div>
       ))}
 
-      {/* litter boxes — holographic capture frames */}
-      {hunting && detections.map((d) => (
-        <button key={d.id} onClick={() => grab(d)} className="absolute z-10 animate-pop" style={{ left: d.box.l, top: d.box.t, width: d.box.w, height: d.box.h }}>
-          <DetectFrame tooClose={d.tooClose} golden={goldenHere} />
-          <span className={cx('absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-black shadow-card', d.tooClose ? 'bg-rose-400 text-white' : 'bg-gradient-to-r from-quest-300 to-ocean-400 text-grime-900')}>
-            {d.emoji} {d.type} · {Math.round(d.score * 100)}%
-          </span>
-          {d.tooClose ? (
-            <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-rose-500 text-white px-3 py-1 text-[11px] font-black shadow-card">⚠ Too close — step back</span>
-          ) : (
-            <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white text-grime-900 px-3 py-1 text-[11px] font-black shadow-card animate-pulseGlow">
-              GRAB +{d.pts}{goldenHere && ' 🌟'}
-              <span className={cx('ml-1.5 rounded-full px-1.5 py-0.5 text-[9px]', d.size.mult >= 3 ? 'bg-sun-400' : d.size.mult >= 2 ? 'bg-ocean-400 text-white' : 'bg-quest-200')}>
-                {d.size.label}{d.size.mult > 1 ? ` ×${d.size.mult}` : ''}
-              </span>
+      {/* litter boxes — holographic capture frames with aim-and-lock rings */}
+      {hunting && detections.map((d) => {
+        const R = Math.min(120, Math.max(d.box.w, d.box.h) / 2 + 16);
+        const C = 2 * Math.PI * R;
+        const locked = d.lock >= 1;
+        return (
+          <button key={d.id} onClick={() => grab(d)} className="absolute z-10 animate-pop" style={{ left: d.box.l, top: d.box.t, width: d.box.w, height: d.box.h }}>
+            <DetectFrame tooClose={d.tooClose} golden={goldenHere} />
+            {/* lock-on ring fills while the target is held steady */}
+            {!d.tooClose && (
+              <svg className="absolute overflow-visible pointer-events-none" style={{ left: '50%', top: '50%', width: 0, height: 0 }}>
+                <circle cx="0" cy="0" r={R} fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="3" />
+                <circle cx="0" cy="0" r={R} fill="none" stroke={locked ? '#fbbf24' : '#6ee7b7'} strokeWidth="3.5" strokeLinecap="round"
+                  strokeDasharray={C} strokeDashoffset={C * (1 - d.lock)} transform="rotate(-90)"
+                  style={{ transition: 'stroke-dashoffset 0.24s linear', filter: locked ? 'drop-shadow(0 0 6px rgba(251,191,36,0.9))' : 'drop-shadow(0 0 4px rgba(110,231,183,0.7))' }} />
+              </svg>
+            )}
+            <span className={cx('absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-black shadow-card', d.tooClose ? 'bg-rose-400 text-white' : 'bg-gradient-to-r from-quest-300 to-ocean-400 text-grime-900')}>
+              {d.emoji} {d.type} · {Math.round(d.score * 100)}%
             </span>
-          )}
-        </button>
-      ))}
+            {d.tooClose ? (
+              <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-rose-500 text-white px-3 py-1 text-[11px] font-black shadow-card">⚠ Too close — step back</span>
+            ) : locked ? (
+              <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white text-grime-900 px-3 py-1 text-[11px] font-black shadow-card animate-pulseGlow">
+                GRAB +{d.pts}{goldenHere && ' 🌟'}
+                <span className={cx('ml-1.5 rounded-full px-1.5 py-0.5 text-[9px]', d.size.mult >= 3 ? 'bg-sun-400' : d.size.mult >= 2 ? 'bg-ocean-400 text-white' : 'bg-quest-200')}>
+                  {d.size.label}{d.size.mult > 1 ? ` ×${d.size.mult}` : ''}
+                </span>
+              </span>
+            ) : (
+              <span className="cq-pixel absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/70 text-quest-200 px-3 py-1 text-[10px] shadow-card">
+                ◌ LOCKING {Math.round(d.lock * 100)}%
+              </span>
+            )}
+          </button>
+        );
+      })}
 
       {/* sonar scan + reticle */}
       {hunting && detections.length === 0 && !grabFx && (
@@ -665,6 +765,32 @@ const ARWorld = ({ onSheet }) => {
             <p className="text-white font-black text-2xl mt-4 drop-shadow">+{Math.round(totals.total * (creditPct / 100))}</p>
             <p className="text-quest-300 text-xs font-bold">{creditPct >= 100 ? 'Verified & banked ✓' : 'Banking your points…'}</p>
           </div>
+        </div>
+      )}
+
+      {/* ---- restoration bloom: vines + flowers grow over the healed world ---- */}
+      {bloom && (
+        <div className="absolute inset-0 z-[18] pointer-events-none">
+          <svg className="absolute inset-x-0 bottom-0 w-full h-[58%]" viewBox="0 0 440 500" preserveAspectRatio="none">
+            {[
+              'M20,500 C 60,380 10,300 90,210 C 130,165 120,120 110,80',
+              'M220,500 C 200,400 260,330 230,240 C 210,180 250,130 240,70',
+              'M420,500 C 380,390 430,310 360,220 C 320,170 340,120 330,90',
+            ].map((d, i) => (
+              <path key={i} d={d} fill="none" stroke="#34d399" strokeWidth="4" strokeLinecap="round"
+                strokeDasharray="600" strokeDashoffset="600" opacity="0.85"
+                style={{ animation: `cq-grow 1.3s ease-out ${i * 0.15}s forwards`, filter: 'drop-shadow(0 0 6px rgba(52,211,153,0.7))' }} />
+            ))}
+          </svg>
+          {[['🌸', 8, 62], ['🌼', 22, 40], ['🌺', 48, 55], ['🌸', 55, 32], ['🌼', 78, 60], ['🌸', 90, 38], ['🌷', 35, 70], ['🌼', 65, 72]].map(([e, x, y], i) => (
+            <span key={i} className="absolute text-3xl animate-pop drop-shadow-lg" style={{ left: `${x}%`, top: `${y}%`, animationDelay: `${0.5 + i * 0.12}s`, opacity: 0, animationFillMode: 'forwards' }}>{e}</span>
+          ))}
+          {Array.from({ length: 8 }).map((_, i) => (
+            <span key={`s${i}`} className="absolute text-lg animate-rise" style={{ left: `${10 + i * 11}%`, top: `${45 + (i % 3) * 12}%`, animationDelay: `${0.3 + i * 0.15}s` }}>✨</span>
+          ))}
+          <p className="cq-pixel absolute top-[22%] inset-x-0 text-center text-[19px] text-quest-200 drop-shadow-lg animate-pop" style={{ animationDelay: '0.4s', opacity: 0, animationFillMode: 'forwards' }}>
+            AREA RESTORED
+          </p>
         </div>
       )}
 

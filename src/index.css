@@ -145,6 +145,19 @@
   animation: cq-holo 2.8s linear infinite;
 }
 
+/* vine growth for the restoration bloom */
+@keyframes cq-grow {
+  to { stroke-dashoffset: 0; }
+}
+
+/* the world heals: warm restored color grade on the camera */
+.cq-bloomed {
+  filter: saturate(1.5) brightness(1.12) hue-rotate(-8deg) !important;
+}
+video.cq-video-grade {
+  transition: filter 0.9s ease;
+}
+
 /* arcade impact frame — 120ms white flash on combo hits */
 @keyframes cq-impact {
   0% { opacity: 0.3; }
