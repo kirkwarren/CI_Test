@@ -1,7 +1,7 @@
 {
- "generatedAt": "2026-07-04T22:30:14.411Z",
+ "generatedAt": "2026-07-05T05:40:10.206Z",
  "dataProvenance": {
-  "fetchedAt": "2026-07-04T22:29:33.581Z",
+  "fetchedAt": "2026-07-05T05:39:16.583Z",
   "sources": {
    "crypto": "Coinbase Exchange API (daily candles), cross-validated against Kraken public API",
    "equities": "Nasdaq API historical (split-adjusted, NOT dividend-adjusted)"
@@ -21,7 +21,7 @@
    {
     "pair": "ETH-USD",
     "overlapDays": 720,
-    "medianDivergence": 0.00016128682292591422,
+    "medianDivergence": 0.00016132991615483105,
     "p95Divergence": 0.0006591143151389945
    },
    {
@@ -93,11 +93,11 @@
     "assetClass": "etf",
     "lastDate": "2026-07-02",
     "lastClose": 712.6,
-    "composite": 0.8468468468468467,
+    "composite": 0.8378378378378378,
     "ranks": {
      "momentum": 0.8378378378378378,
      "riskAdjusted": 0.8648648648648649,
-     "trend": 0.8378378378378378
+     "trend": 0.8108108108108109
     },
     "mom12_1": 0.36412000219382423,
     "ret6m": 0.15041247598598728,
@@ -185,37 +185,13 @@
     "cagr": 0.17403000660614043
    },
    {
-    "symbol": "NEAR-USD",
-    "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 2.045,
-    "composite": 0.7747747747747749,
-    "ranks": {
-     "momentum": 0.7837837837837838,
-     "riskAdjusted": 0.5405405405405406,
-     "trend": 1
-    },
-    "mom12_1": 0.23692307692307701,
-    "ret6m": 0.2576875768757687,
-    "ret3m": 0.6928807947019868,
-    "sharpe": 0.638318799372073,
-    "sortino": 1.013746000725886,
-    "annVol": 1.036072565685536,
-    "maxDrawdown": 0.8914982499717737,
-    "above200d": true,
-    "dist200d": 0.3237702530375619,
-    "pctBelow52wHigh": 0.35752434809927736,
-    "rsi14": 52.1300579109567,
-    "cagr": 0.14776549806031336
-   },
-   {
     "symbol": "SPY",
     "assetClass": "etf",
     "lastDate": "2026-07-02",
     "lastClose": 744.78,
-    "composite": 0.7657657657657658,
+    "composite": 0.7747747747747747,
     "ranks": {
-     "momentum": 0.7027027027027027,
+     "momentum": 0.7297297297297297,
      "riskAdjusted": 0.8918918918918919,
      "trend": 0.7027027027027027
     },
@@ -237,9 +213,9 @@
     "assetClass": "stock",
     "lastDate": "2026-07-02",
     "lastClose": 194.83,
-    "composite": 0.7567567567567567,
+    "composite": 0.7657657657657658,
     "ranks": {
-     "momentum": 0.7567567567567568,
+     "momentum": 0.7837837837837838,
      "riskAdjusted": 0.972972972972973,
      "trend": 0.5405405405405406
     },
@@ -281,13 +257,37 @@
     "cagr": 0.324842393917097
    },
    {
+    "symbol": "NEAR-USD",
+    "assetClass": "crypto",
+    "lastDate": "2026-07-04",
+    "lastClose": 1.996,
+    "composite": 0.7207207207207208,
+    "ranks": {
+     "momentum": 0.6216216216216216,
+     "riskAdjusted": 0.5405405405405406,
+     "trend": 1
+    },
+    "mom12_1": 0.028584817244611038,
+    "ret6m": 0.18106508875739658,
+    "ret3m": 0.589171974522293,
+    "sharpe": 0.6413695862821996,
+    "sortino": 1.0187139292303908,
+    "annVol": 1.0359813717897004,
+    "maxDrawdown": 0.8914982499717737,
+    "above200d": true,
+    "dist200d": 0.2902683641840744,
+    "pctBelow52wHigh": 0.37291863022305993,
+    "rsi14": 49.92348476303535,
+    "cagr": 0.15143702804682135
+   },
+   {
     "symbol": "GLD",
     "assetClass": "etf",
     "lastDate": "2026-07-02",
     "lastClose": 378.13,
-    "composite": 0.6756756756756758,
+    "composite": 0.6846846846846848,
     "ranks": {
-     "momentum": 0.6756756756756757,
+     "momentum": 0.7027027027027027,
      "riskAdjusted": 0.918918918918919,
      "trend": 0.43243243243243246
     },
@@ -309,9 +309,9 @@
     "assetClass": "etf",
     "lastDate": "2026-07-02",
     "lastClose": 104.37,
-    "composite": 0.6576576576576576,
+    "composite": 0.6666666666666666,
     "ranks": {
-     "momentum": 0.6216216216216216,
+     "momentum": 0.6486486486486487,
      "riskAdjusted": 0.7297297297297297,
      "trend": 0.6216216216216216
     },
@@ -353,14 +353,62 @@
     "cagr": 0.18155932535018193
    },
    {
+    "symbol": "XLM-USD",
+    "assetClass": "crypto",
+    "lastDate": "2026-07-04",
+    "lastClose": 0.206512,
+    "composite": 0.6486486486486487,
+    "ranks": {
+     "momentum": 0.43243243243243246,
+     "riskAdjusted": 0.6756756756756757,
+     "trend": 0.8378378378378378
+    },
+    "mom12_1": -0.15261224953409025,
+    "ret6m": -0.05740159205433437,
+    "ret3m": 0.2755291748763149,
+    "sharpe": 0.6961837348729553,
+    "sortino": 1.362931035227573,
+    "annVol": 0.9715963849882805,
+    "maxDrawdown": 0.7437391422464021,
+    "above200d": true,
+    "dist200d": 0.13172183499155699,
+    "pctBelow52wHigh": 0.5850681433229992,
+    "rsi14": 56.64852571968544,
+    "cagr": 0.28997487012173906
+   },
+   {
+    "symbol": "UNH",
+    "assetClass": "stock",
+    "lastDate": "2026-07-02",
+    "lastClose": 425.36,
+    "composite": 0.6126126126126127,
+    "ranks": {
+     "momentum": 0.7567567567567568,
+     "riskAdjusted": 0.10810810810810811,
+     "trend": 0.972972972972973
+    },
+    "mom12_1": 0.15876617403569027,
+    "ret6m": 0.28058766859344897,
+    "ret3m": 0.5525220819037886,
+    "sharpe": 0.09927663920634272,
+    "sortino": 0.12657168650304293,
+    "annVol": 0.36857538783726657,
+    "maxDrawdown": 0.6197201119552179,
+    "above200d": true,
+    "dist200d": 0.2610578999780917,
+    "pctBelow52wHigh": 0.00591273458131758,
+    "rsi14": 64.8663385591156,
+    "cagr": -0.03377346529604397
+   },
+   {
     "symbol": "XLE",
     "assetClass": "etf",
     "lastDate": "2026-07-02",
     "lastClose": 53.22,
-    "composite": 0.6216216216216216,
+    "composite": 0.6126126126126126,
     "ranks": {
      "momentum": 0.8918918918918919,
-     "riskAdjusted": 0.40540540540540543,
+     "riskAdjusted": 0.3783783783783784,
      "trend": 0.5675675675675675
     },
     "mom12_1": 0.3564240580388487,
@@ -377,38 +425,14 @@
     "cagr": 0.09639036010625857
    },
    {
-    "symbol": "XLM-USD",
-    "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 0.203904,
-    "composite": 0.6216216216216216,
-    "ranks": {
-     "momentum": 0.43243243243243246,
-     "riskAdjusted": 0.6216216216216216,
-     "trend": 0.8108108108108109
-    },
-    "mom12_1": -0.14128714829649414,
-    "ret6m": -0.021193458109918017,
-    "ret3m": 0.25109829426923547,
-    "sharpe": 0.6770312859177243,
-    "sortino": 1.324257863499514,
-    "annVol": 0.971911018831283,
-    "maxDrawdown": 0.7437391422464021,
-    "above200d": true,
-    "dist200d": 0.11703457734889522,
-    "pctBelow52wHigh": 0.5903082372749904,
-    "rsi14": 55.4181339439379,
-    "cagr": 0.26610658567656365
-   },
-   {
     "symbol": "AMZN",
     "assetClass": "stock",
     "lastDate": "2026-07-02",
     "lastClose": 242.67,
-    "composite": 0.6126126126126127,
+    "composite": 0.6036036036036037,
     "ranks": {
      "momentum": 0.5945945945945946,
-     "riskAdjusted": 0.6486486486486487,
+     "riskAdjusted": 0.6216216216216216,
      "trend": 0.5945945945945946
     },
     "mom12_1": 0.16356708699990907,
@@ -423,30 +447,6 @@
     "pctBelow52wHigh": 0.11753154660169474,
     "rsi14": 48.70087554758813,
     "cagr": 0.23178186642583865
-   },
-   {
-    "symbol": "UNH",
-    "assetClass": "stock",
-    "lastDate": "2026-07-02",
-    "lastClose": 425.36,
-    "composite": 0.6036036036036037,
-    "ranks": {
-     "momentum": 0.7297297297297297,
-     "riskAdjusted": 0.10810810810810811,
-     "trend": 0.972972972972973
-    },
-    "mom12_1": 0.15876617403569027,
-    "ret6m": 0.28058766859344897,
-    "ret3m": 0.5525220819037886,
-    "sharpe": 0.09927663920634272,
-    "sortino": 0.12657168650304293,
-    "annVol": 0.36857538783726657,
-    "maxDrawdown": 0.6197201119552179,
-    "above200d": true,
-    "dist200d": 0.2610578999780917,
-    "pctBelow52wHigh": 0.00591273458131758,
-    "rsi14": 64.8663385591156,
-    "cagr": -0.03377346529604397
    },
    {
     "symbol": "XLV",
@@ -521,37 +521,13 @@
     "cagr": 0.05077171470903008
    },
    {
-    "symbol": "META",
-    "assetClass": "stock",
-    "lastDate": "2026-07-02",
-    "lastClose": 582.9,
-    "composite": 0.49549549549549554,
-    "ranks": {
-     "momentum": 0.40540540540540543,
-     "riskAdjusted": 0.6756756756756757,
-     "trend": 0.40540540540540543
-    },
-    "mom12_1": -0.16905814632518568,
-    "ret6m": -0.12470906224191014,
-    "ret3m": 0.0063359977901695785,
-    "sharpe": 0.8037769948835439,
-    "sortino": 1.2503108333190056,
-    "annVol": 0.36856684545410634,
-    "maxDrawdown": 0.3420934746901597,
-    "above200d": false,
-    "dist200d": -0.09839267497025184,
-    "pctBelow52wHigh": 0.2621518987341772,
-    "rsi14": 49.597276504812285,
-    "cagr": 0.25764661338016204
-   },
-   {
     "symbol": "TSLA",
     "assetClass": "stock",
     "lastDate": "2026-07-02",
     "lastClose": 393.45,
-    "composite": 0.48648648648648646,
+    "composite": 0.4954954954954955,
     "ranks": {
-     "momentum": 0.6486486486486487,
+     "momentum": 0.6756756756756757,
      "riskAdjusted": 0.35135135135135137,
      "trend": 0.4594594594594595
     },
@@ -569,86 +545,110 @@
     "cagr": 0.1176006296026153
    },
    {
+    "symbol": "META",
+    "assetClass": "stock",
+    "lastDate": "2026-07-02",
+    "lastClose": 582.9,
+    "composite": 0.48648648648648657,
+    "ranks": {
+     "momentum": 0.40540540540540543,
+     "riskAdjusted": 0.6486486486486487,
+     "trend": 0.40540540540540543
+    },
+    "mom12_1": -0.16905814632518568,
+    "ret6m": -0.12470906224191014,
+    "ret3m": 0.0063359977901695785,
+    "sharpe": 0.8037769948835439,
+    "sortino": 1.2503108333190056,
+    "annVol": 0.36856684545410634,
+    "maxDrawdown": 0.3420934746901597,
+    "above200d": false,
+    "dist200d": -0.09839267497025184,
+    "pctBelow52wHigh": 0.2621518987341772,
+    "rsi14": 49.597276504812285,
+    "cagr": 0.25764661338016204
+   },
+   {
     "symbol": "SOL-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 82.28,
-    "composite": 0.45045045045045046,
+    "lastDate": "2026-07-04",
+    "lastClose": 81.72,
+    "composite": 0.44144144144144143,
     "ranks": {
      "momentum": 0.1891891891891892,
      "riskAdjusted": 0.7837837837837838,
-     "trend": 0.3783783783783784
+     "trend": 0.35135135135135137
     },
-    "mom12_1": -0.5306778660017062,
-    "ret6m": -0.35074567979168314,
-    "ret3m": 0.023510386864037836,
-    "sharpe": 0.9957976164513995,
-    "sortino": 1.569253238679479,
-    "annVol": 0.8451707840965906,
+    "mom12_1": -0.5343847299309598,
+    "ret6m": -0.38207939508506616,
+    "ret3m": 0.011010763330446593,
+    "sharpe": 0.9808225895686857,
+    "sortino": 1.5453328254426335,
+    "annVol": 0.8450176144518512,
     "maxDrawdown": 0.7627772052368411,
     "above200d": false,
-    "dist200d": -0.12266344365261161,
-    "pctBelow52wHigh": 0.6676361286152852,
-    "rsi14": 65.69662305077942,
-    "cagr": 0.6307003949156282
+    "dist200d": -0.12642749251979457,
+    "pctBelow52wHigh": 0.6698982064953951,
+    "rsi14": 64.3523844872812,
+    "cagr": 0.6101995221686751
    },
    {
     "symbol": "BTC-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 62520.22,
-    "composite": 0.41441441441441446,
+    "lastDate": "2026-07-04",
+    "lastClose": 63086.45,
+    "composite": 0.4234234234234235,
     "ranks": {
      "momentum": 0.35135135135135137,
      "riskAdjusted": 0.5945945945945946,
-     "trend": 0.2972972972972973
+     "trend": 0.32432432432432434
     },
-    "mom12_1": -0.4158470905873939,
-    "ret6m": -0.29545425348276744,
-    "ret3m": -0.06630481874325256,
-    "sharpe": 0.7443338010851904,
-    "sortino": 1.1235508585027991,
-    "annVol": 0.46857591272334814,
+    "mom12_1": -0.40935992875960636,
+    "ret6m": -0.29871209883635697,
+    "ret3m": -0.06249326626020757,
+    "sharpe": 0.7649970166923089,
+    "sortino": 1.155198717092039,
+    "annVol": 0.46844743619385704,
     "maxDrawdown": 0.5307577953158951,
     "above200d": false,
-    "dist200d": -0.16586536255645068,
-    "pctBelow52wHigh": 0.49871572414676735,
-    "rsi14": 47.82637146544835,
-    "cagr": 0.27058970761107926
+    "dist200d": -0.1569178532841392,
+    "pctBelow52wHigh": 0.49417571780135827,
+    "rsi14": 49.915049726808974,
+    "cagr": 0.2828920267525321
    },
    {
     "symbol": "LINK-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 7.967,
-    "composite": 0.3423423423423424,
+    "lastDate": "2026-07-04",
+    "lastClose": 8,
+    "composite": 0.3333333333333333,
     "ranks": {
      "momentum": 0.2972972972972973,
-     "riskAdjusted": 0.4594594594594595,
+     "riskAdjusted": 0.43243243243243246,
      "trend": 0.2702702702702703
     },
-    "mom12_1": -0.39110395786085306,
-    "ret6m": -0.3680996192893402,
-    "ret3m": -0.07959796672828101,
-    "sharpe": 0.5154384354230281,
-    "sortino": 0.7988792114455516,
-    "annVol": 0.863598578097433,
+    "mom12_1": -0.3920898808168224,
+    "ret6m": -0.3969546208352178,
+    "ret3m": -0.07993099482461186,
+    "sharpe": 0.5304332963397652,
+    "sortino": 0.8224086595808769,
+    "annVol": 0.8633562005600416,
     "maxDrawdown": 0.7542054157549234,
     "above200d": false,
-    "dist200d": -0.18319181612947555,
-    "pctBelow52wHigh": 0.7023907358983937,
-    "rsi14": 53.365575183346124,
-    "cagr": 0.08147334674280837
+    "dist200d": -0.177731319597335,
+    "pctBelow52wHigh": 0.7011580127007845,
+    "rsi14": 54.04921908232418,
+    "cagr": 0.09564490125313174
    },
    {
     "symbol": "TLT",
     "assetClass": "etf",
     "lastDate": "2026-07-02",
     "lastClose": 85.51,
-    "composite": 0.3333333333333333,
+    "composite": 0.32432432432432434,
     "ranks": {
      "momentum": 0.4594594594594595,
-     "riskAdjusted": 0.05405405405405406,
+     "riskAdjusted": 0.02702702702702703,
      "trend": 0.4864864864864865
     },
     "mom12_1": -0.02825051055139549,
@@ -669,11 +669,11 @@
     "assetClass": "stock",
     "lastDate": "2026-07-02",
     "lastClose": 390.49,
-    "composite": 0.31531531531531537,
+    "composite": 0.3153153153153153,
     "ranks": {
      "momentum": 0.3783783783783784,
-     "riskAdjusted": 0.21621621621621623,
-     "trend": 0.35135135135135137
+     "riskAdjusted": 0.1891891891891892,
+     "trend": 0.3783783783783784
     },
     "mom12_1": -0.10311960166649736,
     "ret6m": -0.1989620086977928,
@@ -691,266 +691,266 @@
    {
     "symbol": "XRP-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 1.1339,
-    "composite": 0.2792792792792793,
-    "ranks": {
-     "momentum": 0.21621621621621623,
-     "riskAdjusted": 0.4864864864864865,
-     "trend": 0.13513513513513514
-    },
-    "mom12_1": -0.46865724538165066,
-    "ret6m": -0.3959620711698274,
-    "ret3m": -0.13974660496168734,
-    "sharpe": 0.5176103131658016,
-    "sortino": 0.8354591298650926,
-    "annVol": 0.7717426615923775,
-    "maxDrawdown": 0.7076940401452662,
-    "above200d": false,
-    "dist200d": -0.23666871428932224,
-    "pctBelow52wHigh": 0.6807803834351511,
-    "rsi14": 51.36219682837965,
-    "cagr": 0.11614117872714091
-   },
-   {
-    "symbol": "DOGE-USD",
-    "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 0.07747,
-    "composite": 0.24324324324324328,
+    "lastDate": "2026-07-04",
+    "lastClose": 1.1563,
+    "composite": 0.2972972972972973,
     "ranks": {
      "momentum": 0.24324324324324326,
-     "riskAdjusted": 0.3783783783783784,
-     "trend": 0.10810810810810811
+     "riskAdjusted": 0.4864864864864865,
+     "trend": 0.16216216216216217
     },
-    "mom12_1": -0.4696344510954844,
-    "ret6m": -0.3883142518752468,
-    "ret3m": -0.15351835664335667,
-    "sharpe": 0.4896796006163945,
-    "sortino": 0.7594644334736773,
-    "annVol": 0.8841225714672385,
-    "maxDrawdown": 0.8458506490724476,
+    "mom12_1": -0.4743145288370627,
+    "ret6m": -0.42360799561337914,
+    "ret3m": -0.12081812652068114,
+    "sharpe": 0.5259200377565475,
+    "sortino": 0.8489546419551051,
+    "annVol": 0.7714630502386909,
+    "maxDrawdown": 0.7076940401452662,
     "above200d": false,
-    "dist200d": -0.2513022720903042,
-    "pctBelow52wHigh": 0.7324099340264585,
-    "rsi14": 41.458489678120934,
-    "cagr": 0.04963619428985222
+    "dist200d": -0.21955914507203012,
+    "pctBelow52wHigh": 0.6744742546662537,
+    "rsi14": 54.74572603492252,
+    "cagr": 0.1233833866435492
    },
    {
     "symbol": "AAVE-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 87.55,
-    "composite": 0.23423423423423426,
+    "lastDate": "2026-07-04",
+    "lastClose": 88.57,
+    "composite": 0.24324324324324328,
     "ranks": {
      "momentum": 0.05405405405405406,
-     "riskAdjusted": 0.43243243243243246,
+     "riskAdjusted": 0.4594594594594595,
      "trend": 0.21621621621621623
     },
-    "mom12_1": -0.7342302050162797,
-    "ret6m": -0.4117054159387179,
-    "ret3m": -0.07608695652173925,
-    "sharpe": 0.5114807164601968,
-    "sortino": 0.7815564158079552,
-    "annVol": 0.9173096220995475,
+    "mom12_1": -0.7326368009621167,
+    "ret6m": -0.46399176954732513,
+    "ret3m": -0.06324695928080382,
+    "sharpe": 0.5373895668794418,
+    "sortino": 0.8218846038196119,
+    "annVol": 0.9166761528968546,
     "maxDrawdown": 0.8408253885333682,
     "above200d": false,
-    "dist200d": -0.22072385007813045,
-    "pctBelow52wHigh": 0.7552212933709844,
-    "rsi14": 58.58410065040971,
-    "cagr": 0.05476274346261922
+    "dist200d": -0.2082123496345485,
+    "pctBelow52wHigh": 0.7523695026141416,
+    "rsi14": 59.69223185163698,
+    "cagr": 0.08038223997422977
    },
    {
-    "symbol": "UNI-USD",
+    "symbol": "DOGE-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 3.207,
-    "composite": 0.23423423423423426,
+    "lastDate": "2026-07-04",
+    "lastClose": 0.07758,
+    "composite": 0.24324324324324328,
     "ranks": {
-     "momentum": 0.10810810810810811,
-     "riskAdjusted": 0.2702702702702703,
-     "trend": 0.32432432432432434
+     "momentum": 0.21621621621621623,
+     "riskAdjusted": 0.40540540540540543,
+     "trend": 0.10810810810810811
     },
-    "mom12_1": -0.625819397993311,
-    "ret6m": -0.4471642820203413,
-    "ret3m": 0.011671924290220792,
-    "sharpe": 0.3188568998662398,
-    "sortino": 0.5345791648944197,
-    "annVol": 1.0322220784117628,
-    "maxDrawdown": 0.8714753746173264,
+    "mom12_1": -0.45787051242712495,
+    "ret6m": -0.4529299767294267,
+    "ret3m": -0.15719717544812617,
+    "sharpe": 0.5023290979375591,
+    "sortino": 0.7793063341885315,
+    "annVol": 0.8839169879918967,
+    "maxDrawdown": 0.8458506490724476,
     "above200d": false,
-    "dist200d": -0.16294402530743624,
-    "pctBelow52wHigh": 0.7356577645895153,
-    "rsi14": 61.6247058477307,
-    "cagr": -0.16009267306836428
+    "dist200d": -0.24827183916621987,
+    "pctBelow52wHigh": 0.7320299816932058,
+    "rsi14": 41.77568520821255,
+    "cagr": 0.06151377798379576
    },
    {
     "symbol": "ETH-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 1756.14,
-    "composite": 0.22522522522522526,
+    "lastDate": "2026-07-04",
+    "lastClose": 1779.34,
+    "composite": 0.22522522522522523,
     "ranks": {
      "momentum": 0.32432432432432434,
-     "riskAdjusted": 0.1891891891891892,
-     "trend": 0.16216216216216217
+     "riskAdjusted": 0.16216216216216217,
+     "trend": 0.1891891891891892
     },
-    "mom12_1": -0.3014779351344261,
-    "ret6m": -0.4146999910012298,
-    "ret3m": -0.1448147571000038,
-    "sharpe": 0.28290212241058726,
-    "sortino": 0.42473074824011703,
-    "annVol": 0.6577983538325834,
+    "mom12_1": -0.29506935586734695,
+    "ret6m": -0.43065492570170605,
+    "ret3m": -0.13840507076899244,
+    "sharpe": 0.30680663058517244,
+    "sortino": 0.4608945125697321,
+    "annVol": 0.6575419635597408,
     "maxDrawdown": 0.6760272725014695,
     "above200d": false,
-    "dist200d": -0.22775968539608238,
-    "pctBelow52wHigh": 0.636503257962759,
-    "rsi14": 55.15258959336437,
-    "cagr": -0.02765543988741359
+    "dist200d": -0.21551796066589646,
+    "pctBelow52wHigh": 0.6317011781654399,
+    "rsi14": 57.096470410083576,
+    "cagr": -0.012160061004375056
+   },
+   {
+    "symbol": "UNI-USD",
+    "assetClass": "crypto",
+    "lastDate": "2026-07-04",
+    "lastClose": 3.214,
+    "composite": 0.22522522522522523,
+    "ranks": {
+     "momentum": 0.10810810810810811,
+     "riskAdjusted": 0.2702702702702703,
+     "trend": 0.2972972972972973
+    },
+    "mom12_1": -0.6181687094448449,
+    "ret6m": -0.467792680907435,
+    "ret3m": 0.027822193795970618,
+    "sharpe": 0.3286266910876269,
+    "sortino": 0.5510760465765772,
+    "annVol": 1.0320879102989344,
+    "maxDrawdown": 0.8714753746173264,
+    "above200d": false,
+    "dist200d": -0.15894038002077815,
+    "pctBelow52wHigh": 0.7350807781074844,
+    "rsi14": 61.86476030432484,
+    "cagr": -0.15150541858493705
    },
    {
     "symbol": "ATOM-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 1.595,
+    "lastDate": "2026-07-04",
+    "lastClose": 1.593,
     "composite": 0.1711711711711712,
     "ranks": {
      "momentum": 0.2702702702702703,
      "riskAdjusted": 0,
      "trend": 0.24324324324324326
     },
-    "mom12_1": -0.5573339703774487,
-    "ret6m": -0.22909618173030444,
-    "ret3m": -0.05509478672985779,
-    "sharpe": -0.4044886009060487,
-    "sortino": -0.5815905692117244,
-    "annVol": 0.7560363806703313,
+    "mom12_1": -0.5483387459405447,
+    "ret6m": -0.2648823257960313,
+    "ret3m": -0.0695093457943925,
+    "sharpe": -0.39467636176626003,
+    "sortino": -0.5675866241437956,
+    "annVol": 0.7559216354120418,
     "maxDrawdown": 0.8937829293993678,
     "above200d": false,
-    "dist200d": -0.18830549229653504,
-    "pctBelow52wHigh": 0.6926782273603083,
-    "rsi14": 39.004745503027415,
-    "cagr": -0.44662125914689643
+    "dist200d": -0.1884828756132222,
+    "pctBelow52wHigh": 0.693063583815029,
+    "rsi14": 38.859063004193956,
+    "cagr": -0.4424229592564781
    },
    {
     "symbol": "LTC-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 44.79,
-    "composite": 0.14414414414414414,
+    "lastDate": "2026-07-04",
+    "lastClose": 44.82,
+    "composite": 0.12612612612612614,
     "ranks": {
      "momentum": 0.16216216216216217,
      "riskAdjusted": 0.08108108108108109,
-     "trend": 0.1891891891891892
+     "trend": 0.13513513513513514
     },
-    "mom12_1": -0.47166423521490297,
-    "ret6m": -0.43921372229873545,
-    "ret3m": -0.1587152516904583,
-    "sharpe": -0.0488958533897943,
-    "sortino": -0.06892807459890517,
-    "annVol": 0.6948488435772576,
+    "mom12_1": -0.4750777023138022,
+    "ret6m": -0.4527472527472528,
+    "ret3m": -0.1638059701492538,
+    "sharpe": -0.014111798588905636,
+    "sortino": -0.019928539590967083,
+    "annVol": 0.6936102608359039,
     "maxDrawdown": 0.7020423048869439,
     "above200d": false,
-    "dist200d": -0.22594225415155345,
-    "pctBelow52wHigh": 0.6579349320299374,
-    "rsi14": 52.715487043701415,
-    "cagr": -0.24161901889927406
+    "dist200d": -0.22312595603433838,
+    "pctBelow52wHigh": 0.6577058194592944,
+    "rsi14": 52.849496532705324,
+    "cagr": -0.2223495728318836
    },
    {
     "symbol": "AVAX-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 6.94,
+    "lastDate": "2026-07-04",
+    "lastClose": 6.96,
     "composite": 0.11711711711711713,
     "ranks": {
      "momentum": 0.13513513513513514,
      "riskAdjusted": 0.13513513513513514,
      "trend": 0.08108108108108109
     },
-    "mom12_1": -0.5665768194070082,
-    "ret6m": -0.4882005899705014,
-    "ret3m": -0.22109988776655443,
-    "sharpe": 0.21604264452216013,
-    "sortino": 0.31922979464077056,
-    "annVol": 0.8863347639826189,
+    "mom12_1": -0.5679775280898877,
+    "ret6m": -0.496017378711079,
+    "ret3m": -0.22580645161290325,
+    "sharpe": 0.22517806315238637,
+    "sortino": 0.33276527515174337,
+    "annVol": 0.8862457529548066,
     "maxDrawdown": 0.9029334212261041,
     "above200d": false,
-    "dist200d": -0.2833539859562201,
-    "pctBelow52wHigh": 0.8028409090909091,
-    "rsi14": 52.13482954052267,
-    "cagr": -0.18173173609319004
+    "dist200d": -0.2792867423967895,
+    "pctBelow52wHigh": 0.8022727272727272,
+    "rsi14": 52.534432892020966,
+    "cagr": -0.1750334670345245
    },
    {
     "symbol": "BCH-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 229.15,
+    "lastDate": "2026-07-04",
+    "lastClose": 236.04,
     "composite": 0.10810810810810811,
     "ranks": {
      "momentum": 0.08108108108108109,
      "riskAdjusted": 0.24324324324324326,
      "trend": 0
     },
-    "mom12_1": -0.5102830093665022,
-    "ret6m": -0.6135815584897388,
-    "ret3m": -0.4826496286094868,
-    "sharpe": 0.32061243410210905,
-    "sortino": 0.5221699106295574,
-    "annVol": 0.823571068618477,
+    "mom12_1": -0.49356657510481416,
+    "ret6m": -0.6127571611379072,
+    "ret3m": -0.4648589824975061,
+    "sharpe": 0.3285925009320961,
+    "sortino": 0.5352682732862794,
+    "annVol": 0.8237272914719493,
     "maxDrawdown": 0.7259618847322856,
     "above200d": false,
-    "dist200d": -0.489397903980067,
-    "pctBelow52wHigh": 0.649735562960472,
-    "rsi14": 54.41271702631748,
-    "cagr": -0.05575127248440437
+    "dist200d": -0.4722227718970028,
+    "pctBelow52wHigh": 0.6392039375133747,
+    "rsi14": 57.59250137709444,
+    "cagr": -0.04960039610529221
    },
    {
     "symbol": "ADA-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 0.1797,
-    "composite": 0.08108108108108109,
+    "lastDate": "2026-07-04",
+    "lastClose": 0.192,
+    "composite": 0.0990990990990991,
     "ranks": {
      "momentum": 0.02702702702702703,
-     "riskAdjusted": 0.16216216216216217,
+     "riskAdjusted": 0.21621621621621623,
      "trend": 0.05405405405405406
     },
-    "mom12_1": -0.6660550458715597,
-    "ret6m": -0.49536647009267065,
-    "ret3m": -0.27010560519902516,
-    "sharpe": 0.25921367491770636,
-    "sortino": 0.4329525065056208,
-    "annVol": 0.916743292366527,
+    "mom12_1": -0.6862882096069869,
+    "ret6m": -0.5141700404858299,
+    "ret3m": -0.2254941508672852,
+    "sharpe": 0.2910592729684835,
+    "sortino": 0.4866505245674277,
+    "annVol": 0.9175032718633045,
     "maxDrawdown": 0.8832574031890661,
     "above200d": false,
-    "dist200d": -0.335639063831514,
-    "pctBelow52wHigh": 0.8130461922596754,
-    "rsi14": 58.40137621877152,
-    "cagr": -0.14161388908952
+    "dist200d": -0.28761318880290754,
+    "pctBelow52wHigh": 0.8002496878901373,
+    "rsi14": 64.14510533468008,
+    "cagr": -0.11659165318319731
    },
    {
     "symbol": "DOT-USD",
     "assetClass": "crypto",
-    "lastDate": "2026-07-03",
-    "lastClose": 0.88,
-    "composite": 0.018018018018018018,
+    "lastDate": "2026-07-04",
+    "lastClose": 0.883,
+    "composite": 0.02702702702702703,
     "ranks": {
      "momentum": 0,
-     "riskAdjusted": 0.02702702702702703,
+     "riskAdjusted": 0.05405405405405406,
      "trend": 0.02702702702702703
     },
-    "mom12_1": -0.6885060717311494,
-    "ret6m": -0.5597798899449725,
-    "ret3m": -0.28917609046849757,
-    "sharpe": -0.32827694653710365,
-    "sortino": -0.49066020942783733,
-    "annVol": 0.8137204276062419,
+    "mom12_1": -0.6912771658231617,
+    "ret6m": -0.5923361034164358,
+    "ret3m": -0.295291300877893,
+    "sharpe": -0.31201735185468615,
+    "sortino": -0.46655897625077497,
+    "annVol": 0.8134612439460132,
     "maxDrawdown": 0.9299991347235442,
     "above200d": false,
-    "dist200d": -0.3786298081166515,
-    "pctBelow52wHigh": 0.8066359041968798,
-    "rsi14": 41.12888942690606,
-    "cagr": -0.4474183692167817
+    "dist200d": -0.3742714301405621,
+    "pctBelow52wHigh": 0.8059767084157328,
+    "rsi14": 41.79250458926519,
+    "cagr": -0.43988700471618936
    }
   ]
  },
@@ -988,19 +988,19 @@
   {
    "symbol": "AAVE-USD",
    "strategy": {
-    "totalReturn": 0.03974609877331958,
-    "sharpe": 0.8281863405864074,
-    "maxDrawdown": 0.009226208039201902,
+    "totalReturn": 0.03974607443656497,
+    "sharpe": 0.828192118639001,
+    "maxDrawdown": 0.009227256169384763,
     "trades": 1,
     "winRate": 1
    },
    "buyHold": {
-    "totalReturn": 0.17327794157062448
+    "totalReturn": 0.2607829181494661
    },
    "strategyBeatsBuyHold": false,
    "walkForward": null,
    "paper": {
-    "totalReturn": 0.03974609877331958,
+    "totalReturn": 0.03974607443656497,
     "closedTrades": 1
    },
    "monteCarlo": null
@@ -1008,31 +1008,31 @@
   {
    "symbol": "ADA-USD",
    "strategy": {
-    "totalReturn": 0.031111514924850425,
-    "sharpe": 0.22310709520679875,
-    "maxDrawdown": 0.13746831767651643,
-    "trades": 14,
-    "winRate": 0.35714285714285715
+    "totalReturn": 0.010091345833342036,
+    "sharpe": 0.08976076409750691,
+    "maxDrawdown": 0.13746831767651416,
+    "trades": 15,
+    "winRate": 0.3333333333333333
    },
    "buyHold": {
-    "totalReturn": -0.36725352112676046
+    "totalReturn": -0.31034482758620685
    },
    "strategyBeatsBuyHold": true,
    "walkForward": {
-    "avgIsReturn": 0.13305252200435624,
-    "avgOosReturn": 0.02992695736152029,
-    "oosGap": 0.10312556464283595,
-    "degradation": 0.7750741067460528,
+    "avgIsReturn": 0.13281464046256464,
+    "avgOosReturn": 0.029585111823788757,
+    "oosGap": 0.10322952863877588,
+    "degradation": 0.77724510098623,
     "oosProfitableFolds": 1,
     "totalFolds": 2
    },
    "paper": {
-    "totalReturn": 0.03193980875297986,
-    "closedTrades": 13
+    "totalReturn": 0.010902754119923808,
+    "closedTrades": 14
    },
    "monteCarlo": {
-    "probLoss": 0.3835,
-    "medianMaxDrawdown": 0.07854854393748896
+    "probLoss": 0.445,
+    "medianMaxDrawdown": 0.08750128342173569
    }
   },
   {
@@ -1068,44 +1068,44 @@
   {
    "symbol": "ATOM-USD",
    "strategy": {
-    "totalReturn": 0.0781182425186393,
-    "sharpe": 0.47189350567901006,
-    "maxDrawdown": 0.07973841465077464,
+    "totalReturn": 0.07810955417489618,
+    "sharpe": 0.47175428759574595,
+    "maxDrawdown": 0.07973841465077453,
     "trades": 17,
     "winRate": 0.4117647058823529
    },
    "buyHold": {
-    "totalReturn": -0.830264978184527
+    "totalReturn": -0.8263760217983651
    },
    "strategyBeatsBuyHold": true,
    "walkForward": {
-    "avgIsReturn": 0.1095191200958292,
-    "avgOosReturn": 0.0461546758203204,
-    "oosGap": 0.0633644442755088,
-    "degradation": 0.5785696983327197,
+    "avgIsReturn": 0.10590653373127856,
+    "avgOosReturn": 0.04615468136673462,
+    "oosGap": 0.059751852364543945,
+    "degradation": 0.5641942027500874,
     "oosProfitableFolds": 1,
     "totalFolds": 2
    },
    "paper": {
-    "totalReturn": 0.07135414347690583,
+    "totalReturn": 0.07134550964371256,
     "closedTrades": 17
    },
    "monteCarlo": {
     "probLoss": 0.23,
-    "medianMaxDrawdown": 0.07850123885692463
+    "medianMaxDrawdown": 0.07850722537012607
    }
   },
   {
    "symbol": "AVAX-USD",
    "strategy": {
     "totalReturn": -0.025522093853011074,
-    "sharpe": -0.37265919423495425,
+    "sharpe": -0.3726591942349542,
     "maxDrawdown": 0.06660993505539828,
     "trades": 5,
     "winRate": 0.2
    },
    "buyHold": {
-    "totalReturn": -0.45181674565560814
+    "totalReturn": -0.43825665859564167
    },
    "strategyBeatsBuyHold": true,
    "walkForward": null,
@@ -1121,121 +1121,121 @@
   {
    "symbol": "BCH-USD",
    "strategy": {
-    "totalReturn": -0.14331701866201452,
-    "sharpe": -0.8885473046504354,
-    "maxDrawdown": 0.14331701866201457,
+    "totalReturn": -0.14331707088528112,
+    "sharpe": -0.8885424323320689,
+    "maxDrawdown": 0.1433170708852811,
     "trades": 20,
     "winRate": 0.2
    },
    "buyHold": {
-    "totalReturn": -0.15797016241640327
+    "totalReturn": -0.14142295940637284
    },
-   "strategyBeatsBuyHold": true,
+   "strategyBeatsBuyHold": false,
    "walkForward": {
-    "avgIsReturn": -0.05985486973739181,
-    "avgOosReturn": 0.013203029754614848,
-    "oosGap": -0.07305789949200667,
+    "avgIsReturn": -0.06106488416263023,
+    "avgOosReturn": 0.013203120137023294,
+    "oosGap": -0.07426800429965352,
     "degradation": null,
     "oosProfitableFolds": 1,
     "totalFolds": 3
    },
    "paper": {
-    "totalReturn": -0.15700424797753953,
+    "totalReturn": -0.15700429896991608,
     "closedTrades": 20
    },
    "monteCarlo": {
     "probLoss": 0.912,
-    "medianMaxDrawdown": 0.18316824226709832
+    "medianMaxDrawdown": 0.18316824570768758
    }
   },
   {
    "symbol": "BTC-USD",
    "strategy": {
-    "totalReturn": 0.2748927209501453,
-    "sharpe": 0.816267598283587,
-    "maxDrawdown": 0.12913529158636694,
+    "totalReturn": 0.2720877690849304,
+    "sharpe": 0.8092916584399015,
+    "maxDrawdown": 0.12913529158636686,
     "trades": 41,
     "winRate": 0.43902439024390244
    },
    "buyHold": {
-    "totalReturn": 1.0498923416855552
+    "totalReturn": 1.1099584673662126
    },
    "strategyBeatsBuyHold": false,
    "walkForward": {
-    "avgIsReturn": 0.049218991003018436,
-    "avgOosReturn": -0.036817348492547364,
-    "oosGap": 0.0860363394955658,
-    "degradation": 1.7480313542041015,
+    "avgIsReturn": 0.058540864757875344,
+    "avgOosReturn": -0.03392573911053043,
+    "oosGap": 0.09246660386840577,
+    "degradation": 1.5795223430820005,
     "oosProfitableFolds": 1,
     "totalFolds": 4
    },
    "paper": {
-    "totalReturn": 0.16658757006882774,
+    "totalReturn": 0.1640240916314657,
     "closedTrades": 39
    },
    "monteCarlo": {
-    "probLoss": 0.093,
-    "medianMaxDrawdown": 0.10279776966534585
+    "probLoss": 0.099,
+    "medianMaxDrawdown": 0.10319897712989924
    }
   },
   {
    "symbol": "DOGE-USD",
    "strategy": {
-    "totalReturn": 0.09465153960402617,
-    "sharpe": 0.5860626115524457,
-    "maxDrawdown": 0.056371179149649904,
+    "totalReturn": 0.09463895680782453,
+    "sharpe": 0.583715785801859,
+    "maxDrawdown": 0.0563711791496498,
     "trades": 13,
     "winRate": 0.46153846153846156
    },
    "buyHold": {
-    "totalReturn": 0.15626865671641776
+    "totalReturn": 0.19593032218282724
    },
    "strategyBeatsBuyHold": false,
    "walkForward": {
-    "avgIsReturn": 0.06583377461316142,
+    "avgIsReturn": 0.06203881794579269,
     "avgOosReturn": 0,
-    "oosGap": 0.06583377461316142,
+    "oosGap": 0.06203881794579269,
     "degradation": 1,
     "oosProfitableFolds": 0,
     "totalFolds": 1
    },
    "paper": {
-    "totalReturn": 0.09465153960597417,
+    "totalReturn": 0.0946389568097723,
     "closedTrades": 13
    },
    "monteCarlo": {
     "probLoss": 0.1975,
-    "medianMaxDrawdown": 0.059764195240726015
+    "medianMaxDrawdown": 0.0597750011352885
    }
   },
   {
    "symbol": "DOT-USD",
    "strategy": {
-    "totalReturn": -0.07638718157496294,
-    "sharpe": -0.5196102800641021,
-    "maxDrawdown": 0.16133195522328211,
+    "totalReturn": -0.07639337505536836,
+    "sharpe": -0.5151787752514413,
+    "maxDrawdown": 0.1613319552232824,
     "trades": 13,
     "winRate": 0.23076923076923078
    },
    "buyHold": {
-    "totalReturn": -0.830996735164202
+    "totalReturn": -0.8239984054215667
    },
    "strategyBeatsBuyHold": true,
    "walkForward": {
-    "avgIsReturn": 0.027775347790891414,
-    "avgOosReturn": 0.009811498711799538,
-    "oosGap": 0.017963849079091876,
-    "degradation": 0.6467551446820371,
+    "avgIsReturn": 0.027770778546873376,
+    "avgOosReturn": 0.0098115020609299,
+    "oosGap": 0.017959276485943476,
+    "degradation": 0.646696903208191,
     "oosProfitableFolds": 1,
     "totalFolds": 2
    },
    "paper": {
-    "totalReturn": -0.08358916180379816,
+    "totalReturn": -0.08359530698980688,
     "closedTrades": 13
    },
    "monteCarlo": {
     "probLoss": 0.8285,
-    "medianMaxDrawdown": 0.12118848927695454
+    "medianMaxDrawdown": 0.12118848927769213
    }
   },
   {
@@ -1301,31 +1301,31 @@
   {
    "symbol": "ETH-USD",
    "strategy": {
-    "totalReturn": 0.02625876402275895,
-    "sharpe": 0.14563119716590786,
-    "maxDrawdown": 0.11336670606795599,
+    "totalReturn": 0.023385547055661204,
+    "sharpe": 0.1342401905274457,
+    "maxDrawdown": 0.11336670606798846,
     "trades": 37,
     "winRate": 0.3783783783783784
    },
    "buyHold": {
-    "totalReturn": -0.08062236275875068
+    "totalReturn": -0.03600606782966742
    },
    "strategyBeatsBuyHold": true,
    "walkForward": {
-    "avgIsReturn": 0.03795789884620689,
-    "avgOosReturn": 0.008217300250002299,
-    "oosGap": 0.029740598596204593,
-    "degradation": 0.7835154078655371,
-    "oosProfitableFolds": 2,
+    "avgIsReturn": 0.04427513967266394,
+    "avgOosReturn": -0.0036851039705191324,
+    "oosGap": 0.047960243643183076,
+    "degradation": 1.0832318993856132,
+    "oosProfitableFolds": 1,
     "totalFolds": 3
    },
    "paper": {
-    "totalReturn": 0.13370984761325122,
+    "totalReturn": 0.13054943281590625,
     "closedTrades": 34
    },
    "monteCarlo": {
-    "probLoss": 0.294,
-    "medianMaxDrawdown": 0.12736907115735166
+    "probLoss": 0.2975,
+    "medianMaxDrawdown": 0.12803807785585472
    }
   },
   {
@@ -1451,54 +1451,54 @@
   {
    "symbol": "LINK-USD",
    "strategy": {
-    "totalReturn": 0.13123827067691884,
-    "sharpe": 0.923721205169419,
-    "maxDrawdown": 0.04651071338352114,
+    "totalReturn": 0.1312382636024556,
+    "sharpe": 0.9237206836163145,
+    "maxDrawdown": 0.046510713383521134,
     "trades": 9,
     "winRate": 0.5555555555555556
    },
    "buyHold": {
-    "totalReturn": 0.2646031746031745
+    "totalReturn": 0.3149243918474689
    },
    "strategyBeatsBuyHold": false,
    "walkForward": null,
    "paper": {
-    "totalReturn": 0.07719381338029208,
+    "totalReturn": 0.0771938066438087,
     "closedTrades": 8
    },
    "monteCarlo": {
     "probLoss": 0.069,
-    "medianMaxDrawdown": 0.03999250494174275
+    "medianMaxDrawdown": 0.039992504941742765
    }
   },
   {
    "symbol": "LTC-USD",
    "strategy": {
-    "totalReturn": -0.003622749746802212,
-    "sharpe": 0.016374651598982257,
-    "maxDrawdown": 0.10363824778512543,
+    "totalReturn": -0.003633377572214491,
+    "sharpe": 0.016453768631681364,
+    "maxDrawdown": 0.10363824778512569,
     "trades": 21,
     "winRate": 0.2857142857142857
    },
    "buyHold": {
-    "totalReturn": -0.5634928369554624
+    "totalReturn": -0.5293994120117598
    },
    "strategyBeatsBuyHold": true,
    "walkForward": {
-    "avgIsReturn": -0.01365947914615954,
-    "avgOosReturn": 0.019399280921322593,
-    "oosGap": -0.03305876006748213,
+    "avgIsReturn": -0.0113570884589738,
+    "avgOosReturn": 0.02181215162397902,
+    "oosGap": -0.03316924008295282,
     "degradation": null,
     "oosProfitableFolds": 1,
     "totalFolds": 3
    },
    "paper": {
-    "totalReturn": 0.00040349239757264677,
+    "totalReturn": 0.00040114941892266387,
     "closedTrades": 27
    },
    "monteCarlo": {
     "probLoss": 0.5655,
-    "medianMaxDrawdown": 0.11229371161902875
+    "medianMaxDrawdown": 0.11229374286373639
    }
   },
   {
@@ -1564,24 +1564,31 @@
   {
    "symbol": "NEAR-USD",
    "strategy": {
-    "totalReturn": 0.01679600138729187,
-    "sharpe": 0.16131723039668117,
-    "maxDrawdown": 0.06738465098008035,
+    "totalReturn": 0.016795913526213457,
+    "sharpe": 0.16152868719418992,
+    "maxDrawdown": 0.0673846509800805,
     "trades": 5,
     "winRate": 0.4
    },
    "buyHold": {
-    "totalReturn": 0.5114560236511456
+    "totalReturn": 0.5259938837920488
    },
    "strategyBeatsBuyHold": false,
-   "walkForward": null,
+   "walkForward": {
+    "avgIsReturn": 0.0168630089805073,
+    "avgOosReturn": 0,
+    "oosGap": 0.0168630089805073,
+    "degradation": 1,
+    "oosProfitableFolds": 0,
+    "totalFolds": 1
+   },
    "paper": {
-    "totalReturn": 0.016796001386151227,
+    "totalReturn": 0.016795913525073036,
     "closedTrades": 5
    },
    "monteCarlo": {
     "probLoss": 0.374,
-    "medianMaxDrawdown": 0.04014330490299399
+    "medianMaxDrawdown": 0.040143459733135024
    }
   },
   {
@@ -1647,19 +1654,19 @@
   {
    "symbol": "SOL-USD",
    "strategy": {
-    "totalReturn": 0.12221073543823047,
-    "sharpe": 0.743251956480993,
-    "maxDrawdown": 0.05962068887434552,
+    "totalReturn": 0.12221073902218427,
+    "sharpe": 0.7432521901661124,
+    "maxDrawdown": 0.05962068887434541,
     "trades": 12,
     "winRate": 0.5
    },
    "buyHold": {
-    "totalReturn": 3.3305263157894736
+    "totalReturn": 3.169387755102041
    },
    "strategyBeatsBuyHold": false,
    "walkForward": null,
    "paper": {
-    "totalReturn": 0.11792129324095502,
+    "totalReturn": 0.11792129681121022,
     "closedTrades": 12
    },
    "monteCarlo": {
@@ -1790,31 +1797,31 @@
   {
    "symbol": "UNI-USD",
    "strategy": {
-    "totalReturn": -0.0038177132148268234,
-    "sharpe": -0.012817772174472532,
-    "maxDrawdown": 0.04759152947732112,
+    "totalReturn": -0.0038247878481227904,
+    "sharpe": -0.012692833031591614,
+    "maxDrawdown": 0.04943470364772697,
     "trades": 6,
     "winRate": 0.3333333333333333
    },
    "buyHold": {
-    "totalReturn": -0.4072088724584104
+    "totalReturn": -0.3888571971857768
    },
    "strategyBeatsBuyHold": true,
    "walkForward": {
-    "avgIsReturn": -0.05983776412771835,
+    "avgIsReturn": -0.059846686726573894,
     "avgOosReturn": 0,
-    "oosGap": -0.05983776412771835,
+    "oosGap": -0.059846686726573894,
     "degradation": null,
     "oosProfitableFolds": 0,
     "totalFolds": 1
    },
    "paper": {
-    "totalReturn": -0.0038177132154287863,
+    "totalReturn": -0.0038247878487245313,
     "closedTrades": 6
    },
    "monteCarlo": {
     "probLoss": 0.6525,
-    "medianMaxDrawdown": 0.05948472102292786
+    "medianMaxDrawdown": 0.05948519071049446
    }
   },
   {
@@ -1940,31 +1947,31 @@
   {
    "symbol": "XLM-USD",
    "strategy": {
-    "totalReturn": -0.15675705538662077,
-    "sharpe": -0.8901164858986654,
-    "maxDrawdown": 0.19157690110516606,
+    "totalReturn": -0.15676858559338958,
+    "sharpe": -0.8894402050058516,
+    "maxDrawdown": 0.19158795519763916,
     "trades": 20,
     "winRate": 0.15
    },
    "buyHold": {
-    "totalReturn": 1.0282900626678604
+    "totalReturn": 1.1450666334278563
    },
    "strategyBeatsBuyHold": false,
    "walkForward": {
-    "avgIsReturn": -0.019610179343435712,
-    "avgOosReturn": -0.016437941869327528,
-    "oosGap": -0.0031722374741081846,
+    "avgIsReturn": -0.02672251672367017,
+    "avgOosReturn": -0.021063672694868862,
+    "oosGap": -0.005658844028801308,
     "degradation": null,
-    "oosProfitableFolds": 1,
+    "oosProfitableFolds": 0,
     "totalFolds": 3
    },
    "paper": {
-    "totalReturn": -0.15717591510842233,
+    "totalReturn": -0.15718756403486345,
     "closedTrades": 20
    },
    "monteCarlo": {
-    "probLoss": 0.9555,
-    "medianMaxDrawdown": 0.18441254959497336
+    "probLoss": 0.956,
+    "medianMaxDrawdown": 0.18442371992667822
    }
   },
   {
@@ -2031,13 +2038,13 @@
    "symbol": "XRP-USD",
    "strategy": {
     "totalReturn": -0.022703686890943153,
-    "sharpe": -0.07577504039182094,
+    "sharpe": -0.07574024080075115,
     "maxDrawdown": 0.0809448624000161,
     "trades": 20,
     "winRate": 0.3
    },
    "buyHold": {
-    "totalReturn": 0.3866943866943866
+    "totalReturn": 0.4140882964412378
    },
    "strategyBeatsBuyHold": false,
    "walkForward": {
@@ -2060,17 +2067,17 @@
  ],
  "summary": {
   "assets": 38,
-  "strategyBeatsBuyHold": 10,
-  "beatsOnLosers": 10,
+  "strategyBeatsBuyHold": 9,
+  "beatsOnLosers": 9,
   "medianStrategyReturn": 0.00009732073856943968,
-  "medianBuyHoldReturn": 0.38976817890369286,
-  "medianWfDegradation": 0.9044282529320846,
-  "degradationAssets": 24,
-  "medianOosGap": 0.029343111274580058,
+  "medianBuyHoldReturn": 0.40346513377711846,
+  "medianWfDegradation": 1,
+  "degradationAssets": 25,
+  "medianOosGap": 0.028669927776557677,
   "medianOosReturn": 0,
   "dataThrough": {
    "equities": "2026-07-02",
-   "crypto": "2026-07-03"
+   "crypto": "2026-07-04"
   }
  }
 }

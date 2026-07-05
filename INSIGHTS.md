@@ -6,7 +6,7 @@
 
 | Asset | Excess kurtosis (0 = normal) | Worst day | 3σ days observed | 3σ days a normal distribution predicts |
 |---|---|---|---|---|
-| BTC-USD | 3.50 | -14.0% | 16 | 3.0 |
+| BTC-USD | 3.51 | -14.0% | 16 | 3.0 |
 | SPY | 20.86 | -5.9% | 7 | 2.0 |
 | NVDA | 4.91 | -17.0% | 8 | 2.0 |
 
@@ -16,8 +16,8 @@
 
 | Asset | Full-period return | Missing the 10 BEST days | Missing the 10 WORST days | Best days within ±5d of a worst day |
 |---|---|---|---|---|
-| BTC-USD | +105.0% | -20.3% | +372.5% | 50% |
-| ETH-USD | -8.1% | -76.4% | +210.2% | 50% |
+| BTC-USD | +111.0% | -18.0% | +386.4% | 50% |
+| ETH-USD | -3.6% | -75.3% | +225.2% | 50% |
 | SPY | +68.1% | +21.9% | +136.9% | 40% |
 | QQQ | +92.4% | +29.5% | +194.1% | 40% |
 | NVDA | +360.4% | +70.8% | +1082.6% | 30% |
@@ -28,7 +28,7 @@
 
 | Asset | Direction: lag-1 autocorr | Direction: avg lags 1–10 | Volatility (\|r\|): lag-1 autocorr | Volatility: avg lags 1–10 |
 |---|---|---|---|---|
-| BTC-USD | -0.058 | -0.003 | 0.148 | 0.066 |
+| BTC-USD | -0.057 | -0.003 | 0.148 | 0.066 |
 | SPY | -0.069 | -0.012 | 0.204 | 0.136 |
 
 **What it means:** yesterday's return says little about which WAY today goes (direction autocorrelation small, slightly negative here — mild mean reversion at best), but yesterday's SIZE of move says a lot about today's size (volatility autocorrelation several times larger, and it persists across lags). This asymmetry is the closest thing to a free, robust "truth" in market data — and note what it implies: the predictable quantity (risk) is the one honest systems manage, while the unpredictable one (direction) is the one hype systems claim to know.
@@ -64,7 +64,7 @@ Classic 12-1 momentum (the 11-month return ending one month before entry), month
 
 | Asset | Trend strategy, unit-notional replay (actual sized backtest) | Random-trader median | Random 95th percentile | Strategy's percentile among random |
 |---|---|---|---|---|
-| BTC-USD | +80.9% (+27.5%) | -31.5% | +166.6% | 89th |
+| BTC-USD | +79.3% (+27.2%) | -30.6% | +160.0% | 88th |
 | SPY | +13.5% (+5.2%) | -8.1% | +31.4% | 83rd |
 
 **What it means:** a strategy below the ~95th percentile of random traders is statistically indistinguishable from luck. This is the test every "look at my bot's returns" screenshot silently fails — with enough random traders, some always look brilliant. Survivors post; the rest delete their accounts.
