@@ -19,6 +19,7 @@ import path from 'node:path';
 
 import { parseCsvBars, inferPeriodsPerYear, qualityReport } from '../src/engine/loader';
 import { screenAsset, rankAssets } from '../src/engine/screener';
+import { computeContext, signalVotes, detect, DEFAULT_PARAMS } from '../src/engine/strategy';
 import { runBacktest } from '../src/engine/backtest';
 import { walkForward } from '../src/engine/walkforward';
 import { monteCarlo } from '../src/engine/montecarlo';
@@ -112,6 +113,33 @@ async function main() {
   );
   const ranking = rankAssets(screens);
 
+  // ---- 1b. Current signal tilts + volatility-based uncertainty ranges ----
+  // "Tilt" = what each signal says at the LAST completed bar. It describes the
+  // present state of the rules, not the future. The range is a zero-drift
+  // ±1σ/±2σ 3-month band from MEASURED volatility — an honest quantification
+  // of uncertainty, deliberately symmetric because direction is not
+  // predictable (see INSIGHTS.md study 3).
+  const tiltBySymbol = new Map();
+  for (const a of universe) {
+    const ctx = computeContext(a.bars, DEFAULT_PARAMS);
+    const i = a.bars.length - 1;
+    const votes = signalVotes(ctx, i, DEFAULT_PARAMS);
+    const ensemble = detect(ctx, i, { ...DEFAULT_PARAMS, signalMode: 'ensemble' });
+    const s = screens.find((x) => x.symbol === a.symbol);
+    const sigma3m = s.annVol / 2; // 3 months = 1/4 year; σ scales with √t
+    const last = s.lastClose;
+    tiltBySymbol.set(a.symbol, {
+      votes,
+      ensemble,
+      range3m: {
+        low1: last * Math.exp(-sigma3m),
+        high1: last * Math.exp(sigma3m),
+        low2: last * Math.exp(-2 * sigma3m),
+        high2: last * Math.exp(2 * sigma3m),
+      },
+    });
+  }
+
   // ---- 2-5. Strategy suite on every asset ----
   const strategyResults = [];
   for (const asset of universe) {
@@ -173,6 +201,7 @@ async function main() {
         lastClose: a.lastClose,
         composite: a.composite,
         ranks: a.ranks,
+        tilt: tiltBySymbol.get(a.symbol) ?? null,
         mom12_1: a.mom12_1,
         ret6m: a.ret6m,
         ret3m: a.ret3m,

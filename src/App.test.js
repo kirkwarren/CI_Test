@@ -33,6 +33,14 @@ test('shows the honest probability-of-loss headline from Monte Carlo', () => {
   expect(screen.getByText(/of paths ended/i)).toBeInTheDocument();
 });
 
+test('renders the tilts section with its not-a-forecast framing', () => {
+  render(<App />);
+  expect(screen.getByText(/Current Tilts/i)).toBeInTheDocument();
+  expect(screen.getByText(/not a forecast/i)).toBeInTheDocument();
+  // The uncertainty range must be labeled as zero-drift.
+  expect(screen.getByText(/no drift/i)).toBeInTheDocument();
+});
+
 test('renders the real-data screen with provenance and honesty caveat', () => {
   render(<App />);
   expect(screen.getByText(/Real-Data Screen/i)).toBeInTheDocument();

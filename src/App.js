@@ -19,9 +19,11 @@ import {
   Layers,
   FlaskConical,
   Globe,
+  Compass,
 } from 'lucide-react';
 import { runFullAnalysis } from './engine';
 import realAnalysis from './data/realAnalysis.json';
+import lab from './data/lab.json';
 
 ChartJS.register(
   CategoryScale,
@@ -45,6 +47,53 @@ const PIPELINE = [
   { id: 'fill', label: 'Fill', note: 'fees + slippage' },
   { id: 'settle', label: 'Settle', note: 'realize P&L' },
 ];
+
+// One signal's current lean: ▲ long, ▼ short, — flat.
+function TiltChip({ label, dir }) {
+  const cls =
+    dir > 0
+      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
+      : dir < 0
+      ? 'border-rose-500/40 bg-rose-500/10 text-rose-300'
+      : 'border-zinc-700 bg-zinc-800/60 text-zinc-500';
+  return (
+    <span className={`inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] font-medium ${cls}`}>
+      {label} {dir > 0 ? '▲' : dir < 0 ? '▼' : '—'}
+    </span>
+  );
+}
+
+// Zero-drift uncertainty band: outer = ±2σ (≈95%), inner = ±1σ (≈68%),
+// tick = last price. Says how WIDE 3 months is, not which way.
+function RangeBar({ tilt, lastClose }) {
+  if (!tilt) return null;
+  const { low1, high1, low2, high2 } = tilt.range3m;
+  const span = high2 - low2;
+  const p = (x) => `${Math.max(0, Math.min(100, ((x - low2) / span) * 100))}%`;
+  const fmt = (x) =>
+    x >= 1000 ? `$${(x / 1000).toFixed(1)}k` : x >= 10 ? `$${x.toFixed(0)}` : `$${x.toFixed(2)}`;
+  return (
+    <div className="min-w-[180px]">
+      <div className="relative h-2 rounded-full bg-zinc-800">
+        <div
+          className="absolute h-2 rounded-full bg-sky-500/30"
+          style={{ left: p(low1), width: `calc(${p(high1)} - ${p(low1)})` }}
+        />
+        <div
+          className="absolute top-[-3px] h-3.5 w-0.5 rounded bg-zinc-100"
+          style={{ left: p(lastClose) }}
+        />
+      </div>
+      <div className="mt-0.5 flex justify-between text-[10px] tabular-nums text-zinc-500">
+        <span>{fmt(low2)}</span>
+        <span className="text-sky-300/80">
+          {fmt(low1)} – {fmt(high1)}
+        </span>
+        <span>{fmt(high2)}</span>
+      </div>
+    </div>
+  );
+}
 
 function StatCard({ label, value, tone = 'neutral', sub }) {
   const toneClass =
@@ -338,6 +387,88 @@ export default function App() {
             Full analysis in <code className="text-zinc-400">REPORT.md</code>; refresh with{' '}
             <code className="text-zinc-400">node scripts/fetch-data.mjs && ./scripts/analyze.sh</code>.
             Equity prices are split- but not dividend-adjusted.
+          </p>
+        </div>
+
+        {/* Tilts & uncertainty — the honest "where are the picks going" view */}
+        <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-900/40 p-4">
+          <div className="mb-1 flex items-center gap-2 text-sm font-semibold text-zinc-200">
+            <Compass className="h-4 w-4 text-teal-400" /> Picks · Current Tilts &amp; 3-Month Uncertainty
+          </div>
+          <p className="mb-3 text-xs text-zinc-500">
+            Signal chips show what each rule says at the last completed bar —{' '}
+            <span className="text-zinc-400">the system's current lean, not a forecast</span>. The band
+            is a zero-drift ±1σ (inner, ≈68%) / ±2σ (outer, ≈95%) 3-month range from each asset's{' '}
+            <em>measured</em> volatility: it quantifies how wide the future is, deliberately refusing
+            to guess which way (direction is not predictable — INSIGHTS.md, study 3).
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-[11px] uppercase tracking-wider text-zinc-500">
+                  <th className="pb-2 pr-3">#</th>
+                  <th className="pb-2 pr-3">Asset</th>
+                  <th className="pb-2 pr-3">Signal tilts</th>
+                  <th className="pb-2 pr-3">3-month range (±1σ / ±2σ, no drift)</th>
+                  <th className="pb-2 pr-3">Lab best (DSR)</th>
+                </tr>
+              </thead>
+              <tbody className="tabular-nums">
+                {(() => {
+                  const top = realAnalysis.ranking.assets.slice(0, 10).map((a) => a.symbol);
+                  const extras = ['BTC-USD', 'ETH-USD', 'SPY'].filter((s) => !top.includes(s));
+                  const rows = [...top, ...extras]
+                    .map((sym) => realAnalysis.ranking.assets.find((a) => a.symbol === sym))
+                    .filter(Boolean);
+                  return rows.map((a) => {
+                    const rank = realAnalysis.ranking.assets.indexOf(a) + 1;
+                    const labAsset = lab.perAsset?.[a.symbol];
+                    return (
+                      <tr key={a.symbol} className="border-t border-zinc-800/70">
+                        <td className="py-2 pr-3 text-zinc-500">{rank}</td>
+                        <td className="py-2 pr-3 font-medium text-zinc-200">
+                          {a.symbol}
+                          <div className="text-[10px] text-zinc-500">
+                            {a.assetClass} · vol {(a.annVol * 100).toFixed(0)}%
+                          </div>
+                        </td>
+                        <td className="py-2 pr-3">
+                          {a.tilt ? (
+                            <div className="flex flex-wrap gap-1">
+                              <TiltChip label="Trend" dir={a.tilt.votes.trend} />
+                              <TiltChip label="MeanRev" dir={a.tilt.votes.meanRev} />
+                              <TiltChip label="Breakout" dir={a.tilt.votes.breakout} />
+                              <TiltChip label="Ensemble" dir={a.tilt.ensemble} />
+                            </div>
+                          ) : (
+                            <span className="text-zinc-600">n/a</span>
+                          )}
+                        </td>
+                        <td className="py-2 pr-3">
+                          <RangeBar tilt={a.tilt} lastClose={a.lastClose} />
+                        </td>
+                        <td className="py-2 pr-3 text-[11px] text-zinc-400">
+                          {labAsset
+                            ? `${labAsset.bestVariant} (${
+                                labAsset.deflatedSharpe != null
+                                  ? labAsset.deflatedSharpe.toFixed(2)
+                                  : 'n/a'
+                              })`
+                            : 'n/a'}
+                        </td>
+                      </tr>
+                    );
+                  });
+                })()}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 text-[11px] text-zinc-600">
+            DSR = deflated Sharpe of the asset's best lab variant; below 0.95 means indistinguishable
+            from luck after multiple-testing correction — currently{' '}
+            {lab.dsrSurvivors?.length ?? 0} of {Object.keys(lab.perAsset ?? {}).length} assets clear
+            that bar. An "▲" tilt is a rule state, not advice; a flat "—" row means the rules see
+            nothing actionable today.
           </p>
         </div>
 
