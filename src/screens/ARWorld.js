@@ -82,6 +82,12 @@ const ARWorld = ({ onSheet }) => {
   const [ori, setOri] = useState({ a: 0, b: 60 }); // device orientation (deg)
   const prevLitterRef = useRef([]);
   const hasGyroRef = useRef(false);
+  // optical-flow world coupling: virtual layer follows real camera motion
+  const flowCanvasRef = useRef(null);
+  const flowPrevRef = useRef(null);
+  const flowOffsetRef = useRef({ x: 0, y: 0 });
+  const [flowOffset, setFlowOffset] = useState({ x: 0, y: 0 });
+  const calmSecondsRef = useRef(0);
 
   // --- world anchoring: device orientation, low-passed (jitter = nausea) ---
   const smoothRef = useRef({ a: 0, b: 60 });
@@ -136,6 +142,64 @@ const ARWorld = ({ onSheet }) => {
     const t = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(t);
   }, []);
+
+  // ---- optical-flow world lock: estimate global camera motion from the
+  // video itself (row/col luminance projections, 1-D correlation) and shift
+  // the virtual layer with it between detector ticks. No WebXR needed.
+  useEffect(() => {
+    if (camState !== 'live' || mode !== 'hunt') return undefined;
+    const FW = 64;
+    const FH = 48;
+    const MAX_SHIFT = 6;
+    if (!flowCanvasRef.current) {
+      flowCanvasRef.current = document.createElement('canvas');
+      flowCanvasRef.current.width = FW;
+      flowCanvasRef.current.height = FH;
+    }
+    const cnv = flowCanvasRef.current;
+    const ctx2 = cnv.getContext('2d', { willReadFrequently: true });
+    const bestShift = (a, b) => {
+      // shift of content a→b minimizing SAD
+      let best = 0; let bestErr = Infinity;
+      for (let s = -MAX_SHIFT; s <= MAX_SHIFT; s++) {
+        let err = 0; let n = 0;
+        for (let i = Math.max(0, -s); i < Math.min(a.length, a.length - s); i++) {
+          err += Math.abs(a[i] - b[i + s]); n++;
+        }
+        err /= n;
+        if (err < bestErr) { bestErr = err; best = s; }
+      }
+      return best;
+    };
+    const t = setInterval(() => {
+      const video = videoRef.current;
+      const wrap = wrapRef.current;
+      if (!video || video.readyState < 2 || !wrap) return;
+      try {
+        ctx2.drawImage(video, 0, 0, FW, FH);
+        const px = ctx2.getImageData(0, 0, FW, FH).data;
+        const cols = new Float32Array(FW);
+        const rows = new Float32Array(FH);
+        for (let y = 0; y < FH; y++) {
+          for (let x = 0; x < FW; x++) {
+            const l = px[(y * FW + x) * 4] + px[(y * FW + x) * 4 + 1] + px[(y * FW + x) * 4 + 2];
+            cols[x] += l; rows[y] += l;
+          }
+        }
+        const prev = flowPrevRef.current;
+        flowPrevRef.current = { cols, rows };
+        if (!prev) return;
+        const dx = bestShift(prev.cols, cols) * (wrap.clientWidth / FW);
+        const dy = bestShift(prev.rows, rows) * (wrap.clientHeight / FH);
+        const o = flowOffsetRef.current;
+        // accumulate with decay — detector re-anchors us every ~220ms anyway
+        o.x = Math.max(-90, Math.min(90, (o.x + dx * 0.8) * 0.92));
+        o.y = Math.max(-70, Math.min(70, (o.y + dy * 0.8) * 0.92));
+        if (Math.abs(o.x) > 0.4 || Math.abs(o.y) > 0.4) setFlowOffset({ x: o.x, y: o.y });
+      } catch { /* canvas not ready */ }
+    }, 66);
+    return () => clearInterval(t);
+  }, [camState, mode]);
 
   // keep the screen awake during a cleanup session (supported browsers)
   useEffect(() => {
@@ -237,7 +301,10 @@ const ARWorld = ({ onSheet }) => {
             const frames = prev ? prev.frames + 1 : 1;
             if (frames === LOCK_FRAMES) play('lock');
             litter.push({
-              id: `${p.class}-${i}`, ncx, ncy, score: p.score, ...meta,
+              // stable identity → React keeps the DOM node → CSS transitions
+              // interpolate tracking at 60fps between 4.5fps detector ticks
+              id: prev ? prev.id : `t-${Date.now()}-${i}`,
+              ncx, ncy, score: p.score, ...meta,
               size, tooClose, pts: Math.round(meta.points * size.mult), box,
               frames, lock: Math.min(1, frames / LOCK_FRAMES),
             });
@@ -248,6 +315,9 @@ const ARWorld = ({ onSheet }) => {
         prevLitterRef.current = litter;
         setDetections(litter);
         setNonLitter(others);
+        // detector re-anchored everything — release the flow offset
+        flowOffsetRef.current = { x: 0, y: 0 };
+        setFlowOffset((f) => (f.x || f.y ? { x: 0, y: 0 } : f));
       }
       loopRef.current = setTimeout(tick, DETECT_MS);
     };
@@ -373,6 +443,14 @@ const ARWorld = ({ onSheet }) => {
   const dead = camState === 'denied' || camState === 'error' || modelState === 'error';
   const hunting = camState === 'live' && modelState === 'ready' && mode === 'hunt';
 
+  // HUD focus mode: when you're just walking the world, the chrome recedes
+  const calm = hunting && detections.length === 0 && !grabFx && !mapOpen && !report && bag.length === 0;
+  useEffect(() => {
+    calmSecondsRef.current = calm ? calmSecondsRef.current + 1 : 0;
+  }, [seconds, calm]);
+  const focusDim = calm && calmSecondsRef.current >= 6;
+  const dimCls = cx('transition-opacity duration-1000', focusDim ? 'opacity-30' : 'opacity-100');
+
   const toggleSound = () => { const v = !soundOn; setSoundOn(v); setSound(v); if (v) play('tick'); };
 
   const mapSelSpawn = mapSel ? spawns.find((s) => s.id === mapSel) : null;
@@ -398,7 +476,7 @@ const ARWorld = ({ onSheet }) => {
         const rel = goldenSpawn ? ((goldenBearing - 90 - ori.a + 540) % 360) - 180 : 0;
         const sx = wpx / 2 + (Math.max(-1, Math.min(1, rel / 40))) * (wpx / 2 - 70);
         return (
-          <>
+          <div className="absolute inset-0 pointer-events-none" style={{ transform: `translate3d(${flowOffset.x * 0.85}px, ${flowOffset.y * 0.85}px, 0)`, transition: 'transform 0.12s linear' }}>
             {/* perspective floor grid — the world has a ground now */}
             <div className="absolute inset-x-0 bottom-0 z-[5] pointer-events-none overflow-hidden" style={{ top: `${groundTop}%`, transition: hasGyroRef.current ? 'none' : 'top 0.7s ease-out' }}>
               <div className="absolute inset-x-[-40%] top-0 h-[300%] opacity-[0.16]"
@@ -471,14 +549,14 @@ const ARWorld = ({ onSheet }) => {
               </span>
             ))}
             {goldenHere && <div className="absolute inset-0 z-[4] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(251,191,36,0.10), transparent 45%, rgba(251,191,36,0.08))' }} />}
-          </>
+          </div>
         );
       })()}
 
       {/* ---- world layer: gyro parallax sparkles (3 depth planes) ---- */}
       {[0.5, 0.9, 1.5].map((depth, li) => (
         <div key={li} className="absolute inset-0 z-[5] pointer-events-none"
-          style={{ transform: `translate3d(${-ori.a * depth * 2.2}px, ${(ori.b - 60) * depth * 1.2}px, 0)`, transition: hasGyroRef.current ? 'none' : 'transform 0.6s ease-out' }}>
+          style={{ transform: `translate3d(${-ori.a * depth * 2.2 + flowOffset.x * depth * 0.6}px, ${(ori.b - 60) * depth * 1.2 + flowOffset.y * depth * 0.6}px, 0)`, transition: hasGyroRef.current ? 'transform 0.12s linear' : 'transform 0.6s ease-out' }}>
           {Array.from({ length: 3 }).map((_, k) => (
             <span key={k} className="absolute rounded-full bg-quest-200/50 animate-pulseGlow"
               style={{ left: `${18 + ((li * 3 + k) * 29) % 70}%`, top: `${16 + ((li * 5 + k) * 23) % 55}%`, width: 3 + depth * 2.5, height: 3 + depth * 2.5, filter: 'blur(0.5px)', animationDelay: `${(li + k) * 0.7}s` }} />
@@ -516,7 +594,7 @@ const ARWorld = ({ onSheet }) => {
 
       {/* AI-rejected objects */}
       {hunting && nonLitter.map((o) => (
-        <div key={o.id} className="absolute z-[9] pointer-events-none" style={{ left: o.box.l, top: o.box.t, width: o.box.w, height: o.box.h }}>
+        <div key={o.id} className="absolute z-[9] pointer-events-none" style={{ left: o.box.l + flowOffset.x, top: o.box.t + flowOffset.y, width: o.box.w, height: o.box.h, transition: 'left 0.22s linear, top 0.22s linear' }}>
           <span className="absolute inset-0 rounded-xl border-2 border-dashed border-white/40" />
           <span className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/65 text-white/75 px-2.5 py-0.5 text-[10px] font-black">
             ✕ {o.klass} — not litter
@@ -524,13 +602,15 @@ const ARWorld = ({ onSheet }) => {
         </div>
       ))}
 
-      {/* litter boxes — holographic capture frames with aim-and-lock rings */}
+      {/* litter boxes — holographic capture frames with aim-and-lock rings.
+          left/top transitions + optical-flow offset = 60fps world-locked tracking */}
       {hunting && detections.map((d) => {
         const R = Math.min(120, Math.max(d.box.w, d.box.h) / 2 + 16);
         const C = 2 * Math.PI * R;
         const locked = d.lock >= 1;
         return (
-          <button key={d.id} onClick={() => grab(d)} className="absolute z-10 animate-pop" style={{ left: d.box.l, top: d.box.t, width: d.box.w, height: d.box.h }}>
+          <button key={d.id} onClick={() => grab(d)} className="absolute z-10 animate-pop"
+            style={{ left: d.box.l + flowOffset.x, top: d.box.t + flowOffset.y, width: d.box.w, height: d.box.h, transition: 'left 0.22s linear, top 0.22s linear, width 0.22s linear, height 0.22s linear' }}>
             <DetectFrame tooClose={d.tooClose} golden={goldenHere} />
             {/* lock-on ring fills while the target is held steady */}
             {!d.tooClose && (
@@ -730,7 +810,7 @@ const ARWorld = ({ onSheet }) => {
       )}
 
       {/* right button stack */}
-      <div className="absolute top-24 right-3 z-20 flex flex-col gap-2">
+      <div className={cx('absolute top-24 right-3 z-20 flex flex-col gap-2', dimCls)}>
         <button onClick={() => { play('tick'); onSheet('leaderboard'); }} className="grid place-items-center h-10 w-10 rounded-full bg-grime-900/80 backdrop-blur shadow-card active:scale-95">
           <span className="text-[10px] font-black text-sun-400 leading-none">#{myRank}</span>
           <Trophy className="h-3.5 w-3.5 text-sun-400 -mt-0.5" />
@@ -754,7 +834,7 @@ const ARWorld = ({ onSheet }) => {
       </div>
 
       {/* buddy companion in a Tamagotchi shell — your 90s pocket pal */}
-      <div className="absolute bottom-[21.3rem] left-3.5 z-20 pointer-events-none">
+      <div className={cx('absolute bottom-[21.3rem] left-3.5 z-20 pointer-events-none', dimCls)}>
         <span className="cq-pixel cq-blink absolute -top-4 left-1/2 -translate-x-1/2 text-[10px] text-quest-200 z-10">1UP</span>
         <div className="relative w-[84px] h-[96px]" style={{ borderRadius: '50% 50% 47% 47% / 56% 56% 44% 44%', background: 'linear-gradient(160deg,#67e8f9 0%,#0891b2 55%,#155e75 100%)', boxShadow: '0 6px 14px -6px rgba(0,0,0,0.6), inset 0 3px 6px rgba(255,255,255,0.5), inset 0 -4px 8px rgba(0,0,0,0.35)' }}>
           {/* dot-matrix LCD window */}
