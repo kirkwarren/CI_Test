@@ -145,6 +145,33 @@
   animation: cq-holo 2.8s linear infinite;
 }
 
+/* falling gold particles inside golden zones */
+@keyframes cq-fall {
+  0% { transform: translateY(-8vh) rotate(0deg); opacity: 0; }
+  12% { opacity: 0.9; }
+  100% { transform: translateY(96vh) rotate(220deg); opacity: 0; }
+}
+.cq-fall {
+  animation: cq-fall linear infinite;
+}
+
+/* Sprout world-walk hop */
+@keyframes cq-hop {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  30% { transform: translateY(-14px) scaleY(1.04); }
+  45% { transform: translateY(-15px) scaleY(1.02); }
+  70% { transform: translateY(0) scaleY(0.94); }
+  82% { transform: translateY(0) scaleY(1.02); }
+}
+.cq-hop {
+  animation: cq-hop 1.15s ease-in-out infinite;
+}
+
+/* ground portal ring slow spin (dash rotation) */
+@keyframes cq-ring-spin {
+  to { stroke-dashoffset: -120; }
+}
+
 /* vine growth for the restoration bloom */
 @keyframes cq-grow {
   to { stroke-dashoffset: 0; }

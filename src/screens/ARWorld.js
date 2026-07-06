@@ -83,16 +83,24 @@ const ARWorld = ({ onSheet }) => {
   const prevLitterRef = useRef([]);
   const hasGyroRef = useRef(false);
 
-  // --- world anchoring: device orientation, with ambient drift fallback ---
+  // --- world anchoring: device orientation, low-passed (jitter = nausea) ---
+  const smoothRef = useRef({ a: 0, b: 60 });
   useEffect(() => {
     let last = 0;
     const onOri = (e) => {
       if (e.alpha === null || e.alpha === undefined) return;
       hasGyroRef.current = true;
+      // critically-damped lerp with shortest-angle wrap on yaw
+      const s = smoothRef.current;
+      let da = ((e.alpha - s.a + 540) % 360) - 180;
+      if (Math.abs(da) < 0.6) da = 0; // deadband
+      s.a = (s.a + da * 0.14 + 360) % 360;
+      const db = (e.beta ?? 60) - s.b;
+      s.b += Math.abs(db) < 0.6 ? 0 : db * 0.14;
       const now = performance.now();
       if (now - last < 66) return; // ~15fps is plenty for parallax
       last = now;
-      setOri({ a: e.alpha, b: e.beta ?? 60 });
+      setOri({ a: s.a, b: s.b });
     };
     window.addEventListener('deviceorientation', onOri);
     // no gyro (desktop/laptop): a slow ambient drift keeps the world alive
@@ -379,6 +387,93 @@ const ARWorld = ({ onSheet }) => {
       {/* 90s CRT treatment: phosphor vignette under the HUD, scanlines above all */}
       <div className="cq-crt absolute inset-0 z-[4] pointer-events-none" />
       <div className="cq-scanlines absolute inset-0 z-[60] pointer-events-none opacity-60" />
+
+      {/* ---- GROUND PLANE: pitch-driven horizon + perspective floor ---- */}
+      {hunting && (() => {
+        // device pitch → horizon height; tilting down reveals more floor
+        const horizon = Math.min(0.58, Math.max(0.22, 0.30 + (72 - ori.b) * 0.008));
+        const wpx = wrapRef.current ? wrapRef.current.clientWidth : 440;
+        const groundTop = horizon * 100;
+        // world-Sprout guide: stands on the floor at the golden target's bearing
+        const rel = goldenSpawn ? ((goldenBearing - 90 - ori.a + 540) % 360) - 180 : 0;
+        const sx = wpx / 2 + (Math.max(-1, Math.min(1, rel / 40))) * (wpx / 2 - 70);
+        return (
+          <>
+            {/* perspective floor grid — the world has a ground now */}
+            <div className="absolute inset-x-0 bottom-0 z-[5] pointer-events-none overflow-hidden" style={{ top: `${groundTop}%`, transition: hasGyroRef.current ? 'none' : 'top 0.7s ease-out' }}>
+              <div className="absolute inset-x-[-40%] top-0 h-[300%] opacity-[0.16]"
+                style={{
+                  transform: 'perspective(420px) rotateX(62deg)',
+                  transformOrigin: 'top center',
+                  backgroundImage: 'repeating-linear-gradient(0deg, rgba(110,231,183,0.9) 0 2px, transparent 2px 46px), repeating-linear-gradient(90deg, rgba(110,231,183,0.7) 0 2px, transparent 2px 46px)',
+                  maskImage: 'linear-gradient(to bottom, transparent, black 18%, black 70%, transparent)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 18%, black 70%, transparent)',
+                }} />
+              {/* horizon glow line */}
+              <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-quest-300/50 to-transparent" style={{ filter: 'blur(1px)' }} />
+            </div>
+
+            {/* zone-arrival portal: a living ring on the ground at your feet */}
+            {currentZone && (
+              <div className="absolute inset-x-0 z-[6] pointer-events-none" style={{ top: `${Math.min(86, groundTop + 34)}%` }}>
+                <svg className="mx-auto block" width={wpx * 0.86} height={110} viewBox="0 0 380 110">
+                  <ellipse cx="190" cy="55" rx="172" ry={30 + Math.max(0, 66 - ori.b) * 0.5} fill={goldenHere ? 'rgba(251,191,36,0.10)' : 'rgba(52,211,153,0.10)'}
+                    stroke={goldenHere ? '#fbbf24' : '#34d399'} strokeWidth="3" strokeDasharray="26 14"
+                    style={{ animation: 'cq-ring-spin 3.5s linear infinite', filter: `drop-shadow(0 0 10px ${goldenHere ? 'rgba(251,191,36,0.8)' : 'rgba(52,211,153,0.7)'})` }} />
+                </svg>
+                <p className={cx('cq-pixel text-center text-[12px] -mt-3 drop-shadow-lg', goldenHere ? 'text-sun-400' : 'text-quest-200')}>
+                  ◈ {currentZone.name.toUpperCase()} {goldenHere ? '· GOLD ZONE ×3' : '· LITTER ZONE'}
+                </p>
+              </div>
+            )}
+
+            {/* Sprout IN the world: anchored to real detected litter when there
+                is some (the AI layer and the illusion become one world), else
+                guiding toward the gold at its bearing */}
+            {(() => {
+              const hpx2 = wrapRef.current ? wrapRef.current.clientHeight : 860;
+              const det0 = detections[0];
+              let show = false; let x = sx; let topPct = Math.min(80, groundTop + 26); let bubble = '';
+              if (det0 && !grabFx) {
+                show = true;
+                const footX = det0.box.l + det0.box.w / 2;
+                const footY = ((det0.box.t + det0.box.h) / hpx2) * 100;
+                x = footX + (footX > wpx - 130 ? -84 : 84); // stand beside, not on top
+                topPct = Math.max(groundTop + 8, Math.min(82, footY - 6));
+                bubble = det0.lock >= 1 ? 'GRAB IT!!' : 'TRASH! RIGHT HERE!';
+              } else if (goldenSpawn && !currentZone) {
+                show = true;
+                bubble = Math.abs(rel) > 32 ? (rel > 0 ? 'THIS WAY! →' : '← THIS WAY!') : `${metersOf(goldenDist)}M TO GOLD!`;
+              }
+              if (!show) return null;
+              // distance-graded scale: lower on screen = closer = bigger
+              const t = Math.max(0, Math.min(1, (topPct - groundTop) / (92 - groundTop)));
+              const size = Math.round(50 + t * 36);
+              return (
+                <div className="absolute z-[7] pointer-events-none" style={{ left: x, top: `${topPct}%`, transform: 'translateX(-50%)', transition: 'left 0.55s ease-out, top 0.55s ease-out' }}>
+                  <div className="relative cq-hop">
+                    <span className="cq-pixel absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-black/70 text-quest-200 text-[10px] px-2 py-1">
+                      {bubble}
+                    </span>
+                    <BuddySprite stage={buddyIdx} size={size} className="drop-shadow-xl" />
+                  </div>
+                  {/* contact shadow scales with distance — the depth cue that sells the floor */}
+                  <span className="block mx-auto -mt-2 rounded-full" style={{ height: 5 + t * 4, width: size * 0.62, background: `radial-gradient(ellipse, rgba(0,0,0,${0.28 + t * 0.14}), transparent 70%)`, filter: 'blur(2px)' }} />
+                </div>
+              );
+            })()}
+
+            {/* golden zone: gold rain */}
+            {goldenHere && Array.from({ length: 7 }).map((_, i) => (
+              <span key={`g${i}`} className="cq-fall absolute z-[6] pointer-events-none text-[13px]"
+                style={{ left: `${8 + i * 13}%`, top: 0, animationDuration: `${3.2 + (i % 3)}s`, animationDelay: `${i * 0.5}s` }}>
+                {i % 2 ? '✨' : '🌟'}
+              </span>
+            ))}
+            {goldenHere && <div className="absolute inset-0 z-[4] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(251,191,36,0.10), transparent 45%, rgba(251,191,36,0.08))' }} />}
+          </>
+        );
+      })()}
 
       {/* ---- world layer: gyro parallax sparkles (3 depth planes) ---- */}
       {[0.5, 0.9, 1.5].map((depth, li) => (
