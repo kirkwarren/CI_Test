@@ -33,6 +33,14 @@ test('shows the honest probability-of-loss headline from Monte Carlo', () => {
   expect(screen.getByText(/of paths ended/i)).toBeInTheDocument();
 });
 
+test('renders the weekly allocation and long-horizon sections with caveats', () => {
+  render(<App />);
+  expect(screen.getByText(/Weekly Model Allocation/i)).toBeInTheDocument();
+  expect(screen.getByText(/not advice, not a prediction/i)).toBeInTheDocument();
+  expect(screen.getByText(/Honest Long Horizon/i)).toBeInTheDocument();
+  expect(screen.getByText(/No accurate 5–10 year prediction exists/i)).toBeInTheDocument();
+});
+
 test('renders the tilts section with its not-a-forecast framing', () => {
   render(<App />);
   expect(screen.getByText(/Current Tilts/i)).toBeInTheDocument();

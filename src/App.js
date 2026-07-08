@@ -20,10 +20,13 @@ import {
   FlaskConical,
   Globe,
   Compass,
+  PieChart,
+  Telescope,
 } from 'lucide-react';
 import { runFullAnalysis } from './engine';
 import realAnalysis from './data/realAnalysis.json';
 import lab from './data/lab.json';
+import longterm from './data/longterm.json';
 
 ChartJS.register(
   CategoryScale,
@@ -470,6 +473,94 @@ export default function App() {
             that bar. An "▲" tilt is a rule state, not advice; a flat "—" row means the rules see
             nothing actionable today.
           </p>
+        </div>
+
+        {/* Weekly model allocation + long horizon */}
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-4">
+            <div className="mb-1 flex items-center gap-2 text-sm font-semibold text-zinc-200">
+              <PieChart className="h-4 w-4 text-violet-400" /> Weekly Model Allocation · rules-based
+            </div>
+            <p className="mb-3 text-xs text-zinc-500">
+              Every weight traces to a measured rule — inverse-vol core, stress-tested diversifiers,
+              bounded momentum tilt, trend-gated crypto, vol-target overlay.{' '}
+              <span className="text-zinc-400">Research model, not advice, not a prediction.</span>
+            </p>
+            <div className="space-y-1.5">
+              {[...longterm.allocation.allocations, { symbol: 'CASH', weight: longterm.allocation.cash, sleeve: 'reserve' }].map((l) => (
+                <div key={l.symbol} className="flex items-center gap-2">
+                  <span className="w-16 shrink-0 text-xs font-medium text-zinc-300">{l.symbol}</span>
+                  <div className="h-3 flex-1 rounded bg-zinc-800">
+                    <div
+                      className={`h-3 rounded ${l.symbol === 'CASH' ? 'bg-zinc-600' : l.sleeve === 'diversifier' ? 'bg-teal-500/70' : l.sleeve === 'momentum-tilt' ? 'bg-amber-500/70' : l.sleeve === 'crypto' ? 'bg-orange-500/70' : 'bg-violet-500/70'}`}
+                      style={{ width: `${Math.min(100, l.weight * 250)}%` }}
+                    />
+                  </div>
+                  <span className="w-12 shrink-0 text-right text-xs tabular-nums text-zinc-400">
+                    {(l.weight * 100).toFixed(1)}%
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-2 text-[11px] text-zinc-600">
+              Vol overlay: realized{' '}
+              {longterm.allocation.overlay.realizedVol != null
+                ? `${(longterm.allocation.overlay.realizedVol * 100).toFixed(1)}%`
+                : 'n/a'}{' '}
+              vs {(longterm.allocation.overlay.target * 100).toFixed(0)}% target → scale{' '}
+              {longterm.allocation.overlay.scale.toFixed(2)}. Crypto gate:{' '}
+              {longterm.allocation.allocations.some((l) => l.symbol === 'BTC-USD') ? 'open' : 'closed (below 200d)'}.
+              Full rationale per line in <code className="text-zinc-400">ALLOCATION.md</code>.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/40 p-4">
+            <div className="mb-1 flex items-center gap-2 text-sm font-semibold text-zinc-200">
+              <Telescope className="h-4 w-4 text-sky-400" /> The Honest Long Horizon · rolling 5-year
+              outcomes (10y history)
+            </div>
+            <p className="mb-3 text-xs text-zinc-500">
+              No accurate 5–10 year prediction exists. What does: the distribution of every 5-year
+              window that actually happened.{' '}
+              <span className="text-zinc-400">If the worst row is unacceptable, the position is too big.</span>
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-[11px] uppercase tracking-wider text-zinc-500">
+                    <th className="pb-2 pr-3">Asset</th>
+                    <th className="pb-2 pr-3">Worst 5y</th>
+                    <th className="pb-2 pr-3">Median 5y</th>
+                    <th className="pb-2 pr-3">Best 5y</th>
+                    <th className="pb-2 pr-3">Neg. windows</th>
+                  </tr>
+                </thead>
+                <tbody className="tabular-nums">
+                  {['SPY', 'QQQ', 'GLD', 'TLT', 'EEM', 'BTC-USD', 'ETH-USD']
+                    .map((sym) => longterm.trends.find((t) => t.symbol === sym))
+                    .filter((t) => t && !t.rolling5y.insufficientData)
+                    .map((t) => (
+                      <tr key={t.symbol} className="border-t border-zinc-800/70">
+                        <td className="py-1.5 pr-3 font-medium text-zinc-200">{t.symbol}</td>
+                        <td className={`py-1.5 pr-3 ${t.rolling5y.worst < 0 ? 'text-rose-400' : 'text-zinc-300'}`}>
+                          {fmtPct(t.rolling5y.worst)}
+                        </td>
+                        <td className="py-1.5 pr-3 text-zinc-300">{fmtPct(t.rolling5y.median)}</td>
+                        <td className="py-1.5 pr-3 text-emerald-400/90">{fmtPct(t.rolling5y.best)}</td>
+                        <td className={`py-1.5 pr-3 ${t.rolling5y.pctNegative > 0.2 ? 'text-rose-400' : 'text-zinc-500'}`}>
+                          {(t.rolling5y.pctNegative * 100).toFixed(0)}%
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-2 text-[11px] text-zinc-600">
+              Annualized CAGRs per rolling window, stepped weekly. Full table incl. 10-year
+              uncertainty cones in <code className="text-zinc-400">MEGATRENDS.md</code>. Equity
+              figures exclude dividends.
+            </p>
+          </div>
         </div>
 
         {/* Controls */}

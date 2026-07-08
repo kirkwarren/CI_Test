@@ -54,8 +54,16 @@ gates — and 22 equities/ETFs from Nasdaq) into `data/`, completed days only.
   every asset
 - `./scripts/insights.sh` → **INSIGHTS.md** + `src/data/insights.json` — the six
   empirical studies, adversarially verified claim-by-claim
+- `./scripts/lab.sh` → **STRATEGY-LAB.md** — six strategy variants through the
+  gauntlet, judged by the deflated Sharpe ratio
+- `NODE_USE_ENV_PROXY=1 node scripts/fetch-history.mjs` → `data/history/` — 10-year
+  deep history, consistency-checked against the verified daily set
+- `./scripts/longterm.sh` → **MEGATRENDS.md** (multi-year trends, rolling 5-year
+  outcome distributions, 10-year uncertainty cones) + **ALLOCATION.md** (the
+  weekly rules-based model allocation, every weight citing its measured rule)
 
-A daily scheduled routine refreshes the data and reports automatically.
+Scheduled routines refresh everything automatically: daily (data, screen,
+insights, strategy lab) and weekly (deep history, mega-trends, allocation).
 
 ### Design principles
 
