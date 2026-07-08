@@ -1,70 +1,145 @@
-# Getting Started with Create React App
+# CleanQuest 🌱
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Pokémon Go, but for picking up litter — and AR-first.** The live camera IS
+the app: litter gets detected and boxed over the real world, you grab it,
+bin it, and bank points onto the Weekly Cleanup Cup leaderboard. A
+**picture-in-picture mini-map** in the corner guides you to litter zones and
+golden ×3 rewards; tap it to expand into a full navigator with "Guide me"
+routing.
 
-## Available Scripts
+Built with Create React App + Tailwind + TensorFlow.js.
 
-In the project directory, you can run:
+## AR-first layout
 
-### `npm start`
+- **Home screen = live camera.** No map-home to leave; detection, grabbing,
+  disposal, and celebrations all happen over the feed.
+- **PiP mini-map** (bottom-left): terrain, spawns, the golden reward with a
+  live distance readout, your position + reach ring. Tap → full-screen
+  navigator; tap a spawn → **🧭 Guide me there** walks you over (prototype
+  simulates GPS); arrival flips the zone pill gold and activates bonuses.
+- **Navigation HUD**: standing in a zone shows its name + density; otherwise
+  a bearing arrow points toward the golden spawn with meters remaining.
+- Grabs work anywhere (street litter counts); zone density, golden ×3, and
+  rush ×2 bonuses attach per-item based on where you actually were.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## The engagement loop
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Designed so cleaning is the addictive part and the city is the winner:
 
-### `npm test`
+1. **Daily hook** — fresh daily quests, a streak that needs one banked cleanup a
+   day, and a timed **⚡ Litter Rush** (everything ×2) create a reason to open
+   the app *today*.
+2. **Session loop** — golden spawns (×3), size-weighted grabs, combos, and the
+   fly-to-bag juice make each encounter satisfying moment-to-moment.
+3. **Meta progression** — the **Trashdex** (collect every litter species), a
+   **buddy Eco-Spirit** that evolves as you clean (🌱→🌿→🌳), levels, badges,
+   and the Weekly Cleanup Cup keep long arcs running.
+4. **Civic payoff** — every verified bank raises the public **Neighborhood
+   Cleanliness** meter; hitting the community goal triggers a real sponsor
+   action (e.g. 50 trees planted). Your points are your impact.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## The session loop
 
-### `npm run build`
+1. **Map (home screen)** — a bright overworld with bobbing litter spawns. A reach
+   ring surrounds your avatar; walk to a spawn to activate it *(prototype
+   simulates GPS walking)*.
+2. **AR encounter** — the live camera fills the screen. An on-device
+   **COCO-SSD** detector boxes litter-relevant objects (bottles, cups, glass,
+   containers, paper…) in real time. Tap **GRAB** and the item is tracked
+   ground → hand → bag. Chain grabs for a **combo** multiplier.
+3. **Bank at the bin** — everything stays *pending* until you scan an approved
+   bin's QR. Then points bank, XP flows, and you see your **leaderboard rank
+   change** on the spot.
+4. **Weekly Cleanup Cup** — podium + ranked list; rivals earn while you play.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Real AR, real detection
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Full-screen `getUserMedia` camera; detection runs **entirely on-device**
+  (no video leaves the phone).
+- The model is **self-hosted** at `public/models/coco-ssd/` — no runtime CDN.
+- **Trash vs. not-trash, visibly**: litter classes get green GRAB boxes;
+  known non-litter (people, pets, cars, benches…) renders as grey
+  "✕ not litter" boxes, with a live `🤖 N litter · M not litter` readout.
+- **Size-weighted scoring**: the share of frame a detection covers maps to
+  S ×1 / M ×1.5 / L ×2 / XL ×3 multipliers — bigger trash scores more. Boxes
+  covering >50% of the frame are rejected as "too close" (anti-cheat: items
+  held against the lens don't count).
+- Litter classes and per-item points live in `src/game/data.js`
+  (`LITTER_CLASS_MAP`, `SIZE_TIERS`); a fine-tuned litter model drops into
+  the same slot.
+- QA on a desktop with no litter handy: append `?debugClasses=frisbee`
+  to add extra detector classes (labeled `QA:`).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Juice: sound, haptics, motion
 
-### `npm run eject`
+- All SFX are **synthesized with WebAudio** (`src/game/sound.js`) — grab pop,
+  bag thunk, rising combo dings, bank arpeggio, level-up fanfare, reject buzz.
+  No audio assets to download. Mute toggle on the map HUD.
+- **Haptics** via `navigator.vibrate` (Android/Chrome; iOS ignores it):
+  ticks on grab, thunk on bag, celebration patterns on bank/level-up.
+- Grabbed items **fly into the bag** with a floating `+pts` popup; the map has
+  drifting cloud shadows, a flowing river highlight, swaying flowers, and a
+  rippling fountain.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Anti-cheat (why the leaderboard is trustworthy)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+One unbroken camera session · the whole ground→hand→bag transfer is observed ·
+per-item perceptual hashing kills duplicates · GPS/geofence/motion fused with
+device attestation · points bank **only** at an approved bin scan · low-trust
+accounts get provisional, revocable points and never touch the public board.
+(See the in-app shield → Fair play sheet.)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+src/App.js               shell: map + encounter + sheets + celebration
+src/game/data.js         spawns, rivals, litter classes, levels, fair-play copy
+src/game/GameState.js    state: player, spawns, walking, leaderboard, banking
+src/screens/MapHome.js   the overworld map + HUD
+src/screens/Encounter.js live-camera AR: detect → grab → dispose → bank
+src/screens/Leaderboard.js  Weekly Cleanup Cup (podium + list)
+src/screens/Profile.js   level ring, stats, badges
+src/ui/                  shared bits, banked celebration, fair-play sheet
+```
 
-## Learn More
+## Run
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm install
+npm start        # http://localhost:3000  (camera needs localhost or HTTPS)
+npm test
+npm run build
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Deploy & play on your phone
 
-### Code Splitting
+The camera requires **HTTPS**, so deploy to any static host (configs included):
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+# Vercel (vercel.json included)
+npx vercel --prod
 
-### Analyzing the Bundle Size
+# — or Netlify (netlify.toml included)
+npx netlify deploy --prod
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Then on your phone:
+1. Open the deployed URL in Chrome (Android) or Safari (iOS).
+2. Allow camera access when the AR view opens.
+3. **Add to Home Screen** — CleanQuest is an installable PWA: the app shell
+   and the 18 MB on-device detection model are cached by a service worker,
+   so launches are instant and detection works with a flaky connection.
 
-### Making a Progressive Web App
+Ready-for-the-street behaviors baked in:
+- **Progress persists** (localStorage): points, level, Trashdex, buddy,
+  adopted block, and community stats survive restarts.
+- **Daily quests reset by calendar day**, and the **streak is calendar-real**:
+  first bank of a new day extends it, a missed day resets it.
+- **Screen wake-lock** keeps the display on during a cleanup session.
+- Camera-denied and detector-failure states have clear retry paths.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Known prototype seams (the honest list): GPS walking is simulated on a
+fictional park map (swap in `watchPosition` + a real basemap for street use),
+rival players are simulated locally, and leaderboards/reports need a backend
+to be shared between real players. The 311 forwarding is a UI contract —
+wire it to SeeClickFix/city API in a pilot.
