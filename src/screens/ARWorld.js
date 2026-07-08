@@ -634,8 +634,9 @@ const ARWorld = ({ onSheet }) => {
                 </span>
               </span>
             ) : (
-              <span className="cq-pixel absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/70 text-quest-200 px-3 py-1 text-[10px] shadow-card">
-                ◌ LOCKING {Math.round(d.lock * 100)}%
+              <span className="cq-pixel absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-black/70 px-3 py-1 text-[10px] shadow-card">
+                <span className="text-sun-400">+{d.pts} PTS</span>
+                <span className="text-quest-200"> · LOCKING {Math.round(d.lock * 100)}%</span>
               </span>
             )}
           </button>
