@@ -6,9 +6,9 @@
 
 | Asset | Excess kurtosis (0 = normal) | Worst day | 3σ days observed | 3σ days a normal distribution predicts |
 |---|---|---|---|---|
-| BTC-USD | 3.51 | -14.0% | 16 | 3.0 |
-| SPY | 20.81 | -5.9% | 7 | 2.0 |
-| NVDA | 4.90 | -17.0% | 8 | 2.0 |
+| BTC-USD | 3.50 | -14.0% | 16 | 3.0 |
+| SPY | 20.84 | -5.9% | 7 | 2.0 |
+| NVDA | 4.89 | -17.0% | 8 | 2.0 |
 
 **What it means:** every asset shows positive excess kurtosis — extreme days happen far more often than bell-curve math allows. Any risk model (or position size) calibrated to "normal" volatility will be blindsided by the tails. This is why the engine sizes positions off a hard risk cap, not off average volatility.
 
@@ -16,11 +16,11 @@
 
 | Asset | Full-period return | Missing the 10 BEST days | Missing the 10 WORST days | Best days within ±5d of a worst day |
 |---|---|---|---|---|
-| BTC-USD | +109.9% | -18.4% | +383.9% | 50% |
-| ETH-USD | -5.0% | -75.6% | +220.6% | 50% |
-| SPY | +70.1% | +23.3% | +139.7% | 40% |
-| QQQ | +93.6% | +30.3% | +196.0% | 40% |
-| NVDA | +366.9% | +73.2% | +1099.3% | 30% |
+| BTC-USD | +104.6% | -20.5% | +371.6% | 50% |
+| ETH-USD | -7.4% | -76.3% | +212.5% | 50% |
+| SPY | +69.5% | +23.0% | +138.9% | 40% |
+| QQQ | +94.2% | +30.7% | +196.8% | 40% |
+| NVDA | +383.9% | +79.5% | +1143.0% | 30% |
 
 **What it means:** missing just the 10 best days destroys most (sometimes all) of the return. Missing the 10 worst days would of course be even better — but the last column is why you can't have one without the other: it MEASURES how often the best days land within a week of the worst ones. Where that clustering is high, "getting out until things calm down" mechanically forfeits the rebound days too. Perfect foresight of bad days is not on the menu; being absent for the good ones is the realistic cost of trying.
 
@@ -64,8 +64,8 @@ Classic 12-1 momentum (the 11-month return ending one month before entry), month
 
 | Asset | Trend strategy, unit-notional replay (actual sized backtest) | Random-trader median | Random 95th percentile | Strategy's percentile among random |
 |---|---|---|---|---|
-| BTC-USD | +78.7% (+27.1%) | -30.1% | +164.0% | 87th |
-| SPY | +13.4% (+5.4%) | -9.0% | +31.3% | 83rd |
+| BTC-USD | +82.4% (+27.6%) | -31.2% | +164.3% | 88th |
+| SPY | +13.1% (+5.2%) | -8.6% | +30.5% | 83rd |
 
 **What it means:** a strategy below the ~95th percentile of random traders is statistically indistinguishable from luck. This is the test every "look at my bot's returns" screenshot silently fails — with enough random traders, some always look brilliant. Survivors post; the rest delete their accounts.
 
