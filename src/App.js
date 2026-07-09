@@ -22,11 +22,13 @@ import {
   Compass,
   PieChart,
   Telescope,
+  ClipboardCheck,
 } from 'lucide-react';
 import { runFullAnalysis } from './engine';
 import realAnalysis from './data/realAnalysis.json';
 import lab from './data/lab.json';
 import longterm from './data/longterm.json';
+import calibration from './data/calibration.json';
 
 ChartJS.register(
   CategoryScale,
@@ -560,6 +562,90 @@ export default function App() {
               uncertainty cones in <code className="text-zinc-400">MEGATRENDS.md</code>. Equity
               figures exclude dividends.
             </p>
+          </div>
+        </div>
+
+        {/* Forecast register & calibration */}
+        <div className="mt-4 rounded-lg border border-zinc-800 bg-zinc-900/40 p-4">
+          <div className="mb-1 flex items-center gap-2 text-sm font-semibold text-zinc-200">
+            <ClipboardCheck className="h-4 w-4 text-emerald-400" /> Forecast Register · accuracy on
+            the record
+          </div>
+          <p className="mb-3 text-xs text-zinc-500">
+            The platform's predictions are explicit probability intervals, registered in an
+            append-only ledger <em>before</em> outcomes, then scored when they mature. Accuracy =
+            calibration: outcomes should land inside 68% intervals ~68% of the time.{' '}
+            <span className="text-zinc-400">
+              {calibration.totalRegistered} registered · {calibration.totalMatured} scored ·{' '}
+              {calibration.pending} pending.
+            </span>
+          </p>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div>
+              <div className="mb-1 text-[11px] uppercase tracking-wider text-zinc-500">
+                Live registered forecasts (sample)
+              </div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-[11px] uppercase tracking-wider text-zinc-500">
+                    <th className="pb-1 pr-3">Asset</th>
+                    <th className="pb-1 pr-3">Horizon</th>
+                    <th className="pb-1 pr-3">68% interval</th>
+                    <th className="pb-1 pr-3">Matures</th>
+                  </tr>
+                </thead>
+                <tbody className="tabular-nums">
+                  {(calibration.samples ?? []).slice(0, 8).map((f) => {
+                    const m = (x) =>
+                      x >= 1000 ? `$${(x / 1000).toFixed(0)}k` : `$${x.toFixed(0)}`;
+                    return (
+                      <tr key={f.id} className="border-t border-zinc-800/70">
+                        <td className="py-1 pr-3 font-medium text-zinc-200">{f.symbol}</td>
+                        <td className="py-1 pr-3 text-zinc-400">{f.horizon}</td>
+                        <td className="py-1 pr-3 text-sky-300/90">
+                          {m(f.low68)} – {m(f.high68)}
+                        </td>
+                        <td className="py-1 pr-3 text-zinc-500">{f.maturesAt}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <div className="mb-1 text-[11px] uppercase tracking-wider text-zinc-500">
+                Calibration scoreboard (fills as forecasts mature)
+              </div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-[11px] uppercase tracking-wider text-zinc-500">
+                    <th className="pb-1 pr-3">Horizon</th>
+                    <th className="pb-1 pr-3">Matured</th>
+                    <th className="pb-1 pr-3">68% coverage</th>
+                    <th className="pb-1 pr-3">95% coverage</th>
+                  </tr>
+                </thead>
+                <tbody className="tabular-nums">
+                  {Object.entries(calibration.byHorizon).map(([h, r]) => (
+                    <tr key={h} className="border-t border-zinc-800/70">
+                      <td className="py-1 pr-3 font-medium text-zinc-200">{h}</td>
+                      <td className="py-1 pr-3 text-zinc-400">{r.matured}</td>
+                      <td className="py-1 pr-3 text-zinc-400">
+                        {r.matured ? `${(r.coverage68 * 100).toFixed(0)}%` : 'awaiting'}
+                      </td>
+                      <td className="py-1 pr-3 text-zinc-400">
+                        {r.matured ? `${(r.coverage95 * 100).toFixed(0)}%` : 'awaiting'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="mt-2 text-[11px] text-zinc-600">
+                No point predictions of direction — those aren't honestly makeable. The ledger lives
+                in git (<code className="text-zinc-400">data/forecasts/</code>); past entries are
+                never edited. Misses will be shown here, not deleted.
+              </p>
+            </div>
           </div>
         </div>
 

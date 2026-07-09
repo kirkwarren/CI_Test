@@ -102,9 +102,18 @@ async function main() {
   await writeFile(LEDGER, JSON.stringify(scored, null, 1));
 
   const report = calibrationReport(scored);
+  // A few live registered forecasts for the dashboard (latest per symbol).
+  const sampleSymbols = ['BTC-USD', 'SPY', 'QQQ', 'GOOGL'];
+  const samples = [];
+  for (const sym of sampleSymbols) {
+    for (const h of ['3m', '1y', '5y']) {
+      const rows = scored.filter((f) => f.symbol === sym && f.horizon === h && !f.outcome);
+      if (rows.length) samples.push(rows[rows.length - 1]);
+    }
+  }
   await writeFile(
     path.resolve(process.cwd(), 'src/data/calibration.json'),
-    JSON.stringify({ generatedAt: new Date().toISOString(), ...report }, null, 1)
+    JSON.stringify({ generatedAt: new Date().toISOString(), ...report, samples }, null, 1)
   );
 
   const L = [];

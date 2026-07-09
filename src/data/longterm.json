@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-08T22:28:38.301Z",
+ "generatedAt": "2026-07-09T15:35:35.998Z",
  "trends": [
   {
    "symbol": "NVDA",
@@ -1114,70 +1114,76 @@
  ],
  "allocation": {
   "asOf": {
-   "equities": "2026-07-07",
-   "crypto": "2026-07-07"
+   "equities": "2026-07-08",
+   "crypto": "2026-07-08"
   },
   "allocations": [
    {
     "symbol": "TLT",
-    "weight": 0.10795452023520598,
+    "weight": 0.11280958284210925,
     "sleeve": "diversifier",
     "rule": "low measured STRESS-day correlation to equities (study 4)"
    },
    {
-    "symbol": "EEM",
-    "weight": 0.09766378206790785,
-    "sleeve": "core",
-    "rule": "inverse-vol core (12m vol 19%), cap 20% + momentum-tilt: top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small"
-   },
-   {
     "symbol": "SPY",
-    "weight": 0.09334502877713108,
+    "weight": 0.09754463554438057,
     "sleeve": "core",
     "rule": "inverse-vol core (12m vol 15%), cap 20%"
    },
    {
     "symbol": "EFA",
-    "weight": 0.09232685098439732,
+    "weight": 0.09644511138374022,
     "sleeve": "core",
     "rule": "inverse-vol core (12m vol 16%), cap 20%"
    },
    {
+    "symbol": "EEM",
+    "weight": 0.07689145114065178,
+    "sleeve": "core",
+    "rule": "inverse-vol core (12m vol 19%), cap 20%"
+   },
+   {
     "symbol": "GLD",
-    "weight": 0.07260422226741367,
+    "weight": 0.07584731468336774,
     "sleeve": "diversifier",
     "rule": "low measured STRESS-day correlation to equities (study 4)"
    },
    {
     "symbol": "QQQ",
-    "weight": 0.07052602461382969,
+    "weight": 0.07370572834564156,
     "sleeve": "core",
     "rule": "inverse-vol core (12m vol 20%), cap 20%"
    },
    {
     "symbol": "IWM",
-    "weight": 0.06744204606284658,
+    "weight": 0.07045824814163529,
     "sleeve": "core",
     "rule": "inverse-vol core (12m vol 21%), cap 20%"
    },
    {
     "symbol": "GOOGL",
-    "weight": 0.024074499000349286,
+    "weight": 0.02515425300339693,
     "sleeve": "momentum-tilt",
     "rule": "top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small"
    },
    {
     "symbol": "XLK",
-    "weight": 0.024074499000349286,
+    "weight": 0.02515425300339693,
+    "sleeve": "momentum-tilt",
+    "rule": "top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small"
+   },
+   {
+    "symbol": "AAPL",
+    "weight": 0.02515425300339693,
     "sleeve": "momentum-tilt",
     "rule": "top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small"
    }
   ],
-  "cash": 0.34998852699056926,
+  "cash": 0.3208351689082829,
   "overlay": {
-   "realizedVol": 0.16615091346000455,
+   "realizedVol": 0.15901883468611944,
    "target": 0.12,
-   "scale": 0.7222349700104785
+   "scale": 0.7546275901019079
   },
   "rules": {
    "coreSleeve": 0.55,

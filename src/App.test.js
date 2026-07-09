@@ -33,6 +33,13 @@ test('shows the honest probability-of-loss headline from Monte Carlo', () => {
   expect(screen.getByText(/of paths ended/i)).toBeInTheDocument();
 });
 
+test('renders the forecast register with the calibration framing', () => {
+  render(<App />);
+  expect(screen.getByText(/Forecast Register/i)).toBeInTheDocument();
+  expect(screen.getByText(/Calibration scoreboard/i)).toBeInTheDocument();
+  expect(screen.getByText(/Misses will be shown here, not deleted/i)).toBeInTheDocument();
+});
+
 test('renders the weekly allocation and long-horizon sections with caveats', () => {
   render(<App />);
   expect(screen.getByText(/Weekly Model Allocation/i)).toBeInTheDocument();
