@@ -1,84 +1,84 @@
 {
- "generatedAt": "2026-07-18T05:37:06.082Z",
+ "generatedAt": "2026-07-19T05:37:22.810Z",
  "studies": {
   "fatTails": {
    "BTC-USD": {
     "days": 1094,
-    "annFactorFreeMean": 0.0009931350478786492,
-    "dailyStd": 0.02452933874532722,
-    "skewness": 0.310237618647633,
-    "excessKurtosis": 3.497436350034322,
+    "annFactorFreeMean": 0.0010093316498342468,
+    "dailyStd": 0.024532155330217284,
+    "skewness": 0.3082980418422645,
+    "excessKurtosis": 3.49371001841018,
     "worstDay": -0.139825748650648,
     "bestDay": 0.12321351786083978,
     "beyond3Sigma": 16,
     "gaussianExpected3Sigma": 2.9538
    },
    "SPY": {
-    "days": 752,
-    "annFactorFreeMean": 0.0007015390040896235,
-    "dailyStd": 0.009657055083850475,
-    "skewness": 0.9085834290688395,
-    "excessKurtosis": 20.808605630865223,
+    "days": 751,
+    "annFactorFreeMean": 0.0006995121066731388,
+    "dailyStd": 0.0096633309098001,
+    "skewness": 0.9086450343583675,
+    "excessKurtosis": 20.779197636901788,
     "worstDay": -0.05854294764300372,
     "bestDay": 0.10501933612632941,
     "beyond3Sigma": 7,
-    "gaussianExpected3Sigma": 2.0304
+    "gaussianExpected3Sigma": 2.0277000000000003
    },
    "NVDA": {
-    "days": 752,
-    "annFactorFreeMean": 0.002368277675195127,
-    "dailyStd": 0.02960260626062476,
-    "skewness": 0.22207481141453866,
-    "excessKurtosis": 4.865556792774369,
+    "days": 751,
+    "annFactorFreeMean": 0.0023831223277961597,
+    "dailyStd": 0.02961953379145099,
+    "skewness": 0.2205589492611436,
+    "excessKurtosis": 4.8575707102687975,
     "worstDay": -0.16968167157481417,
     "bestDay": 0.18722741433021817,
     "beyond3Sigma": 8,
-    "gaussianExpected3Sigma": 2.0304
+    "gaussianExpected3Sigma": 2.0277000000000003
    }
   },
   "concentration": {
    "BTC-USD": {
     "days": 1094,
     "topN": 10,
-    "totalReturn": 1.1357287831018907,
-    "missingBest": -0.1699280523153751,
-    "missingWorst": 3.923228623156646,
+    "totalReturn": 1.1737085248714068,
+    "missingBest": -0.15516685301300404,
+    "missingWorst": 4.010778574844909,
     "proximityDays": 5,
     "bestNearWorstPct": 0.5
    },
    "ETH-USD": {
     "days": 1094,
     "topN": 10,
-    "totalReturn": -0.025302716640282052,
-    "missingBest": -0.7501332793392939,
-    "missingWorst": 2.2884828335481386,
+    "totalReturn": -0.015953735225086252,
+    "missingBest": -0.7477366384871931,
+    "missingWorst": 2.3200248983716514,
     "proximityDays": 5,
     "bestNearWorstPct": 0.5
    },
    "SPY": {
-    "days": 752,
+    "days": 751,
     "topN": 10,
-    "totalReturn": 0.6365177568858846,
-    "missingBest": 0.1869631969654577,
-    "missingWorst": 1.30622817327276,
+    "totalReturn": 0.6328866432337434,
+    "missingBest": 0.1843295571830872,
+    "missingWorst": 1.3011111028531506,
     "proximityDays": 5,
     "bestNearWorstPct": 0.4
    },
    "QQQ": {
-    "days": 752,
+    "days": 751,
     "topN": 10,
-    "totalReturn": 0.8025872349250791,
-    "missingBest": 0.21323897014800997,
-    "missingWorst": 1.7551315029180188,
+    "totalReturn": 0.8030079087255286,
+    "missingBest": 0.21352210643042424,
+    "missingWorst": 1.7557744740972474,
     "proximityDays": 5,
     "bestNearWorstPct": 0.4
    },
    "NVDA": {
-    "days": 752,
+    "days": 751,
     "topN": 10,
-    "totalReturn": 3.270223607192488,
-    "missingBest": 0.5839552766269296,
-    "missingWorst": 9.968782159018314,
+    "totalReturn": 3.3080485162605946,
+    "missingBest": 0.5979856810782214,
+    "missingWorst": 10.065941752032098,
     "proximityDays": 5,
     "bestNearWorstPct": 0.3
    }
@@ -86,92 +86,92 @@
   "volClustering": {
    "BTC-USD": {
     "lags": 10,
-    "avgRawAutocorr": -0.0028706749118317535,
-    "avgAbsAutocorr": 0.06462905900811786,
+    "avgRawAutocorr": -0.0028880468227211738,
+    "avgAbsAutocorr": 0.0642532099186658,
     "rawByLag": [
-     -0.056635288034876316,
-     0.020367065831213487,
-     -0.024018814575242922,
-     0.006442963406252995,
-     0.022647305633928475,
-     -0.03167068854592367,
-     0.06406093065765131,
-     -0.04708632930456847,
-     0.00888567569242561,
-     0.00830043012082196
+     -0.056587331978159544,
+     0.020017360855797712,
+     -0.02405681010364709,
+     0.007076825006124531,
+     0.02216471298959339,
+     -0.031670489265167884,
+     0.06387512348147056,
+     -0.04677785875722024,
+     0.00916639446534213,
+     0.0079116050786547
     ],
     "absByLag": [
-     0.14514574472828384,
-     0.08099662793427552,
-     0.023833423500257744,
-     0.06420905253006001,
-     0.09757921270637113,
-     0.09605050290920922,
-     0.105017327671617,
-     0.020039339483633963,
-     0.029451146347044644,
-     -0.016031787729574542
+     0.1447969437993239,
+     0.08051507981019146,
+     0.02365537083142493,
+     0.06451954890761323,
+     0.09694127805937208,
+     0.09573139947857442,
+     0.10466910804481346,
+     0.019506987334411707,
+     0.02883739105794528,
+     -0.016641008137012435
     ]
    },
    "SPY": {
     "lags": 10,
-    "avgRawAutocorr": -0.011706883874319174,
-    "avgAbsAutocorr": 0.1355661147434118,
+    "avgRawAutocorr": -0.011667636230816198,
+    "avgAbsAutocorr": 0.13544212106854456,
     "rawByLag": [
-     -0.07126567464156083,
-     0.05173964979559561,
-     -0.08690371729310774,
-     -0.053259710396169245,
-     0.010295946095008678,
-     0.020771482570976683,
-     -0.035776464399797314,
-     0.0034850891224025462,
-     -0.01104236448563475,
-     0.05488692488909463
+     -0.07110811407648804,
+     0.05175728402617525,
+     -0.08698797458649846,
+     -0.05330523712842634,
+     0.010308779753094,
+     0.020932212142142484,
+     -0.035974986708508024,
+     0.003459348168149504,
+     -0.01096474560997337,
+     0.05520707171217104
     ],
     "absByLag": [
-     0.20314176819301571,
-     0.0654283400234912,
-     0.21856234935708688,
-     0.22704501139309047,
-     0.14916636927704593,
-     0.06651388986774587,
-     0.10683192233796246,
-     0.1606957968295971,
-     0.06680249951369771,
-     0.0914732006413845
+     0.20325080479099683,
+     0.06471270153551392,
+     0.21843034799495642,
+     0.22671835274782115,
+     0.14850705405640957,
+     0.06655085317469567,
+     0.10724945282059943,
+     0.1602407069427902,
+     0.06640921480943922,
+     0.09235172181222319
     ]
    }
   },
   "stressCorrelation": {
    "BTC-USD/ETH-USD": {
     "sharedDays": 1094,
-    "fullCorr": 0.8097714565410141,
-    "calmCorr": 0.5606316994012547,
+    "fullCorr": 0.8097995964266652,
+    "calmCorr": 0.561076744498766,
     "stressCorr": 0.8688410749950097
    },
    "BTC-USD/SPY": {
-    "sharedDays": 751,
-    "fullCorr": 0.35630491586284263,
-    "calmCorr": 0.20283438886623778,
+    "sharedDays": 750,
+    "fullCorr": 0.35627801419413885,
+    "calmCorr": 0.20268213158518414,
     "stressCorr": 0.43748956728418903
    },
    "SPY/QQQ": {
-    "sharedDays": 752,
-    "fullCorr": 0.9473489891107983,
-    "calmCorr": 0.8328922461735848,
+    "sharedDays": 751,
+    "fullCorr": 0.9473873543896421,
+    "calmCorr": 0.8330917475737494,
     "stressCorr": 0.9720191761888535
    },
    "SPY/TLT": {
-    "sharedDays": 752,
-    "fullCorr": 0.15137288367207316,
-    "calmCorr": 0.12466807629471595,
+    "sharedDays": 751,
+    "fullCorr": 0.15127388601956193,
+    "calmCorr": 0.12436630854681269,
     "stressCorr": 0.16202273812586557
    },
    "SPY/GLD": {
-    "sharedDays": 752,
-    "fullCorr": 0.1767457026814936,
-    "calmCorr": 0.07388872694381612,
+    "sharedDays": 751,
+    "fullCorr": 0.17676280370476055,
+    "calmCorr": 0.073939965614245,
     "stressCorr": 0.20885512910081663
    }
   },
@@ -181,20 +181,20 @@
     "assets": 16,
     "quartileSize": 4,
     "rebalances": 23,
-    "topQuartileReturn": -0.4441213325541805,
-    "bottomQuartileReturn": -0.5378317560516244,
-    "equalWeightReturn": -0.18517824985997122,
-    "topBeatBottomPct": 0.5217391304347826
+    "topQuartileReturn": -0.45483511618320904,
+    "bottomQuartileReturn": -0.4556960284903956,
+    "equalWeightReturn": -0.18507357175983996,
+    "topBeatBottomPct": 0.4782608695652174
    },
    "equities": {
     "insufficientData": false,
     "assets": 22,
     "quartileSize": 5,
     "rebalances": 22,
-    "topQuartileReturn": 0.5122627291520199,
-    "bottomQuartileReturn": 0.3449462154171674,
-    "equalWeightReturn": 0.3597893208601701,
-    "topBeatBottomPct": 0.45454545454545453
+    "topQuartileReturn": 0.4250844487608616,
+    "bottomQuartileReturn": 0.28387009247413175,
+    "equalWeightReturn": 0.33961764091769364,
+    "topBeatBottomPct": 0.5
    }
   },
   "luck": {
@@ -202,21 +202,21 @@
     "insufficientData": false,
     "trades": 40,
     "randomTraders": 2000,
-    "realReturn": 0.5290279029577933,
-    "randomMedian": -0.3426449176905636,
-    "randomP95": 1.8020385099374,
-    "percentile": 0.834,
-    "sizedBacktestReturn": 0.21980423599489574
+    "realReturn": 0.5069370035772609,
+    "randomMedian": -0.3506662142182052,
+    "randomP95": 1.6758290338987996,
+    "percentile": 0.822,
+    "sizedBacktestReturn": 0.21550447987706156
    },
    "SPY": {
     "insufficientData": false,
-    "trades": 35,
+    "trades": 38,
     "randomTraders": 2000,
-    "realReturn": 0.12794683009187313,
-    "randomMedian": -0.09334118403824354,
-    "randomP95": 0.2943079155371613,
-    "percentile": 0.8355,
-    "sizedBacktestReturn": 0.05024113913672634
+    "realReturn": 0.12722353011329335,
+    "randomMedian": -0.11120610078408166,
+    "randomP95": 0.29272598121323123,
+    "percentile": 0.845,
+    "sizedBacktestReturn": -0.02320087513248381
    }
   }
  }
