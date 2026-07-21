@@ -1,0 +1,59 @@
+{
+  "name": "Mindful Movement PT",
+  "tagline": "One-on-one physical therapy focused on lasting results",
+  "timezone": "America/New_York",
+  "phone": "+15551230000",
+  "ownerName": "Emily",
+  "ownerPhone": "+15551239999",
+  "address": "123 Main St, Suite 2, Anytown",
+  "bookingUrl": "https://mindfulmovementpt.example.com/book",
+  "googleReviewUrl": "https://g.page/r/mindful-movement-pt/review",
+  "hours": {
+    "mon": ["08:00", "18:00"],
+    "tue": ["08:00", "18:00"],
+    "wed": ["08:00", "18:00"],
+    "thu": ["08:00", "18:00"],
+    "fri": ["08:00", "16:00"],
+    "sat": null,
+    "sun": null
+  },
+  "quietHours": { "start": "20:00", "end": "08:00" },
+  "digestTime": "17:30",
+  "services": [
+    { "id": "eval", "name": "Initial Evaluation", "durationMin": 60, "cashPrice": 150 },
+    { "id": "followup", "name": "Follow-up Session", "durationMin": 60, "cashPrice": 110 },
+    { "id": "dry-needling", "name": "Dry Needling Add-on", "durationMin": 15, "cashPrice": 35 },
+    { "id": "wellness", "name": "Wellness / Maintenance Session", "durationMin": 45, "cashPrice": 95 }
+  ],
+  "packages": [
+    {
+      "id": "recovery-6",
+      "name": "6-Visit Recovery Package",
+      "visits": 6,
+      "price": 594,
+      "expiresDays": 120,
+      "pitch": "Most plans of care run 6-12 visits. The 6-Visit Recovery Package brings each session to $99 (10% off) and locks in your preferred time slot each week.",
+      "pitchWhen": ["pricing_question", "post_eval", "plan_of_care"]
+    },
+    {
+      "id": "recovery-12",
+      "name": "12-Visit Recovery Package",
+      "visits": 12,
+      "price": 1122,
+      "expiresDays": 180,
+      "pitch": "For longer plans of care, the 12-Visit Recovery Package brings each session to $93.50 (15% off) and includes a free home exercise program review.",
+      "pitchWhen": ["pricing_question", "plan_of_care"]
+    },
+    {
+      "id": "wellness-4",
+      "name": "Monthly Wellness Membership (4 sessions)",
+      "visits": 4,
+      "price": 340,
+      "expiresDays": 45,
+      "pitch": "Graduating from your plan of care? The Monthly Wellness Membership keeps you moving with 4 maintenance sessions a month at $85 each.",
+      "pitchWhen": ["graduation", "dormant_reengagement"]
+    }
+  ],
+  "pitchGuidelines": "Prescribed by Emily (owner/PT): Only mention a package when it genuinely fits the conversation - never open with a sales pitch. If someone asks about pricing, give the single-session cash price first, then mention the matching package once. If someone is finishing a plan of care, suggest the wellness membership. Never invent discounts, never negotiate prices, never pressure. If someone says no or seems hesitant, drop it immediately and just help them book. New patients with pain complaints should be steered to an Initial Evaluation, not a package.",
+  "receptionistNotes": "We are a cash-based practice and provide superbills for out-of-network reimbursement. We do not bill insurance directly. Free 15-minute discovery calls are available for people unsure whether PT is right for them."
+}
