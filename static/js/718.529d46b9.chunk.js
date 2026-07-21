@@ -1,0 +1,1 @@
+(self.webpackChunkrock_mineral_identifier=self.webpackChunkrock_mineral_identifier||[]).push([[718],{718:()=>{}}]);
