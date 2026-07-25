@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders the deal finder and analyzes listings', async () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText(/STR Deal Finder/i)).toBeInTheDocument();
+  // Data loads async (falls back to the bundled sample offline).
+  expect(await screen.findByText(/Deals analyzed/i)).toBeInTheDocument();
+  expect(await screen.findByText(/Median cap rate/i)).toBeInTheDocument();
 });

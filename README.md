@@ -1,70 +1,98 @@
-# Getting Started with Create React App
+# STR Deal Finder
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A site that ties into MLS listing data and Airbnb market data to surface the
+most valuable short-term-rental investment opportunities.
 
-## Available Scripts
+For every active for-sale listing it:
 
-In the project directory, you can run:
+1. finds comparable Airbnb rentals nearby (entire-home, ±1 bedroom, closest
+   first, radius widening automatically when comps are thin),
+2. estimates achievable **nightly rate** and **occupancy** from those comps,
+3. underwrites the deal — revenue, operating expenses, financing — and
+4. ranks everything by **cap rate, cash-on-cash return, and a composite
+   score**, with an interactive dashboard to explore the results.
 
-### `npm start`
+Click any dot or table row to open the full underwriting for that property:
+where the money goes, cash flow across an occupancy sweep with the breakeven
+point, and the actual Airbnb comps behind the estimate. Underwriting
+assumptions (down payment, rate, management fee, tax rate, occupancy haircut,
+…) are all editable and re-score every deal instantly.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Running it
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+npm install
+npm start          # dev server at http://localhost:3000
+npm test           # smoke tests
+npm run build      # production bundle in build/
+```
 
-### `npm test`
+## Data sources
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### MLS listings
 
-### `npm run build`
+On load the app fetches active listings from the **SimplyRETS demo API** — a
+public, RESO-standard MLS test feed (Houston, TX). To point it at a real MLS
+feed, create `.env.local`:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+REACT_APP_MLS_API_URL=https://api.simplyrets.com/properties
+REACT_APP_MLS_API_USER=your_vendor_key
+REACT_APP_MLS_API_PASS=your_vendor_secret
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Any RESO Web API–compatible provider that returns SimplyRETS-shaped JSON works
+out of the box; other providers only need a tweak to `normalize()` in
+`src/lib/mlsClient.js`. If the feed is unreachable (offline, CORS, bad
+credentials) the app falls back to a bundled sample dataset and says so in the
+header badge.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Airbnb comps
 
-### `npm run eject`
+Comps ship as `src/data/airbnbComps.json` in the
+[Inside Airbnb](https://insideairbnb.com/get-the-data/) schema. The bundled
+file is a **synthetic but realistic Houston sample** (Inside Airbnb does not
+publish Houston). To use real market data, download `listings.csv` for your
+city from Inside Airbnb and run:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm run import-airbnb -- path/to/listings.csv
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+which regenerates `airbnbComps.json` from the real scrape. AirDNA or other
+exports work too if mapped to the same fields. Occupancy is inferred from
+calendar availability (`1 − availability_365/365`), which overstates true
+occupancy — that's what the configurable *occupancy haircut* assumption is
+for.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+To regenerate the bundled sample data (deterministic, seeded):
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm run generate-sample-data
+```
 
-## Learn More
+## How the analysis works
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+`src/lib/analysis.js` is the whole engine, UI-free and unit-testable:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Comps** — entire-home listings with short minimum stays, within 3 km
+  (doubling once if fewer than 5 match), bedrooms within ±1 of the subject;
+  exact-bedroom comps get double weight.
+- **Revenue** — weighted-median nightly rate × estimated occupancy × 365,
+  less a platform fee.
+- **Expenses** — property tax, STR insurance, full-service management,
+  utilities, maintenance, supplies, and HOA dues from the listing itself.
+- **Financing** — standard amortized loan; cash invested = down payment +
+  closing costs + furnishing budget.
+- **Outputs** — gross yield, cap rate, annual cash flow, cash-on-cash return,
+  breakeven occupancy, comp-count confidence, and a 0–100 composite score
+  used for the default ranking.
 
-### Code Splitting
+Every default lives in `DEFAULT_ASSUMPTIONS` and is editable in the UI.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Disclaimer
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Projections are estimates built from comparable-listing data and user-set
+assumptions — not appraisals, not financial advice. Verify local short-term-
+rental regulations, taxes, HOA rules, and real market performance before
+investing.
