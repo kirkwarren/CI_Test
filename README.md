@@ -27,6 +27,22 @@ npm test           # smoke tests
 npm run build      # production bundle in build/
 ```
 
+## Deploying to Vercel
+
+The repo is Vercel-ready (`vercel.json` pins the Create React App build).
+Either:
+
+- **Dashboard:** [vercel.com/new](https://vercel.com/new) → import
+  `kirkwarren/CI_Test` → under "Git Branch" pick the branch to deploy →
+  Deploy. No settings changes needed.
+- **CLI:** from a local checkout, `npx vercel --prod`.
+
+To have the deployed site use a real MLS feed, add
+`REACT_APP_MLS_API_URL` / `REACT_APP_MLS_API_USER` / `REACT_APP_MLS_API_PASS`
+as environment variables in the Vercel project settings (they are inlined at
+build time). Without them the site uses the public SimplyRETS demo feed and
+falls back to the bundled sample data if that's unreachable.
+
 ## Data sources
 
 ### MLS listings
