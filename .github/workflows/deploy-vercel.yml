@@ -1,0 +1,36 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - master
+      - claude/real-estate-investment-finder-u2h8hu
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Deploy to Vercel (production)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: team_AmuKrgSL4S8kt8TMs1ixxbL0
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN secret is not set. Add it under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          npx vercel@latest deploy --prod --yes \
+            --token="$VERCEL_TOKEN" \
+            --scope=team_AmuKrgSL4S8kt8TMs1ixxbL0 \
+            | tee deploy-url.txt
+      - name: Show deployment URL
+        run: echo "Deployed to $(tail -1 deploy-url.txt)" >> "$GITHUB_STEP_SUMMARY"
