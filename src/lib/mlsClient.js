@@ -1,5 +1,3 @@
-import sampleListings from '../data/sampleListings.json';
-
 /**
  * MLS listing feed client.
  *
@@ -12,13 +10,17 @@ import sampleListings from '../data/sampleListings.json';
  *   REACT_APP_MLS_API_PASS
  *
  * If the feed can't be reached (offline, CORS, bad credentials) the bundled
- * sample dataset is returned instead, flagged with `source: 'sample'`.
+ * sample dataset is fetched instead, flagged with `source: 'sample'`. That
+ * dataset lives in public/data rather than src/ so it is never inlined into
+ * the JS bundle.
  */
 
 const API_URL =
   process.env.REACT_APP_MLS_API_URL || 'https://api.simplyrets.com/properties';
 const API_USER = process.env.REACT_APP_MLS_API_USER || 'simplyrets';
 const API_PASS = process.env.REACT_APP_MLS_API_PASS || 'simplyrets';
+
+export const SAMPLE_LISTINGS_URL = `${process.env.PUBLIC_URL || ''}/data/listings.json`;
 
 const TYPE_LABELS = { CND: 'Condo', LND: 'Land', RES: 'Single family' };
 
@@ -32,7 +34,7 @@ function tidyName(s) {
 }
 
 // Normalize a SimplyRETS/RESO property record into the shape the app uses.
-function normalize(raw) {
+export function normalize(raw) {
   const p = raw.property || {};
   const addr = raw.address || {};
   const geo = raw.geo || {};
@@ -64,13 +66,20 @@ function normalize(raw) {
   };
 }
 
-function usable(l) {
+export function usable(l) {
   if (!(l.price > 0) || l.lat == null || l.lng == null) return false;
   // Land has no bedroom count — the build spec supplies one downstream.
   return l.propertyType === 'Land' || l.beds != null;
 }
 
+async function fetchSample() {
+  const res = await fetch(SAMPLE_LISTINGS_URL);
+  if (!res.ok) throw new Error(`Sample listings responded ${res.status}`);
+  return res.json();
+}
+
 export async function fetchListings({ limit = 500 } = {}) {
+  let liveError;
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 8000);
@@ -85,10 +94,13 @@ export async function fetchListings({ limit = 500 } = {}) {
     if (!listings.length) throw new Error('MLS feed returned no usable listings');
     return { listings, source: 'live' };
   } catch (err) {
-    return {
-      listings: sampleListings.map(normalize).filter(usable),
-      source: 'sample',
-      error: err.message,
-    };
+    liveError = err.message;
+  }
+
+  try {
+    const raw = await fetchSample();
+    return { listings: raw.map(normalize).filter(usable), source: 'sample', error: liveError };
+  } catch (err) {
+    return { listings: [], source: 'none', error: `${liveError}; ${err.message}` };
   }
 }

@@ -1,5 +1,6 @@
 import {
   DEFAULT_ASSUMPTIONS,
+  buildCompIndex,
   dealBasis,
   distanceKm,
   findComps,
@@ -10,8 +11,16 @@ import {
   taxRateFor,
   underwrite,
 } from './analysis';
-import listingsRaw from '../data/sampleListings.json';
-import airbnb from '../data/airbnbComps.json';
+import fs from 'fs';
+import path from 'path';
+
+// The datasets live in public/data (served as static JSON, never bundled), so
+// read them from disk rather than importing them as modules.
+const readData = (name) =>
+  JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'public', 'data', name), 'utf8'));
+
+const listingsRaw = readData('listings.json');
+const airbnb = readData('airbnb-comps.json');
 
 const TYPES = { CND: 'Condo', LND: 'Land', RES: 'Single family' };
 
@@ -52,10 +61,33 @@ test('monthlyMortgagePayment matches a known amortization', () => {
   expect(monthlyMortgagePayment(320000, 0.065, 30)).toBeCloseTo(2022.62, 0);
 });
 
-test('the sample set spans multiple markets and both deal types', () => {
-  expect(new Set(listings.map((l) => l.market)).size).toBeGreaterThanOrEqual(8);
-  expect(homes.length).toBeGreaterThan(300);
-  expect(lots.length).toBeGreaterThan(50);
+test('the sample set spans many markets and both deal types', () => {
+  expect(new Set(listings.map((l) => l.market)).size).toBeGreaterThanOrEqual(30);
+  expect(homes.length).toBeGreaterThan(3000);
+  expect(lots.length).toBeGreaterThan(500);
+});
+
+test('the comp index buckets only eligible comps and finds the same set as a scan', () => {
+  const index = buildCompIndex(airbnb);
+  const indexed = [...index.cells.values()].reduce((n, b) => n + b.length, 0);
+  const eligible = airbnb.filter(
+    (c) => c.room_type === 'Entire home/apt' && c.minimum_nights <= 7 && c.price > 0
+  );
+  expect(indexed).toBe(eligible.length);
+  expect(indexed).toBeLessThan(airbnb.length); // private rooms etc. excluded
+
+  // The index must not change results — only how fast they're reached.
+  for (const l of [homes[0], homes[1500], homes[3000], lots[0], lots[400]]) {
+    const target = { lat: l.lat, lng: l.lng, beds: l.beds ?? DEFAULT_ASSUMPTIONS.buildBeds };
+    const viaIndex = findComps(target, index).map((c) => c.id);
+    const viaScan = findComps(target, airbnb).map((c) => c.id);
+    expect(viaIndex).toEqual(viaScan);
+  }
+});
+
+test('every listing gets comps at this dataset size', () => {
+  const deals = rankOpportunities(listings, airbnb, DEFAULT_ASSUMPTIONS);
+  expect(deals.length).toBe(listings.length);
 });
 
 test('findComps returns nearby entire-home comps with similar bedrooms', () => {
@@ -146,6 +178,7 @@ test('high-tax urban markets underperform low-tax vacation markets', () => {
   expect(byName['Houston, TX'].medianCashOnCash).toBeLessThan(
     byName['Gatlinburg, TN'].medianCashOnCash
   );
+  expect(rows.length).toBeGreaterThanOrEqual(30);
   // Rollup is sorted by cash-on-cash, best first.
   for (let i = 1; i < rows.length; i++) {
     expect(rows[i - 1].medianCashOnCash).toBeGreaterThanOrEqual(rows[i].medianCashOnCash);

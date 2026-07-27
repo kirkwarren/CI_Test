@@ -1,9 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Home, Database, AlertTriangle } from 'lucide-react';
 import { fetchListings } from './lib/mlsClient';
-import { rankOpportunities, marketSummary, DEFAULT_ASSUMPTIONS } from './lib/analysis';
+import { fetchComps } from './lib/airbnbClient';
+import {
+  buildCompIndex,
+  rankOpportunities,
+  marketSummary,
+  DEFAULT_ASSUMPTIONS,
+} from './lib/analysis';
 import { money, pct, num } from './lib/format';
-import airbnbComps from './data/airbnbComps.json';
 import StatTile from './components/StatTile';
 import Filters from './components/Filters';
 import AssumptionsPanel from './components/AssumptionsPanel';
@@ -20,7 +25,7 @@ function median(nums) {
 }
 
 export default function App() {
-  const [feed, setFeed] = useState(null); // {listings, source, error?}
+  const [feed, setFeed] = useState(null); // {listings, comps, source, error?}
   const [assumptions, setAssumptions] = useState({ ...DEFAULT_ASSUMPTIONS });
   const [filters, setFilters] = useState({
     market: '',
@@ -35,17 +40,28 @@ export default function App() {
 
   useEffect(() => {
     let alive = true;
-    fetchListings().then((f) => alive && setFeed(f));
+    // Listings and comps are independent fetches; load them together.
+    Promise.all([fetchListings(), fetchComps()]).then(([l, c]) => {
+      if (!alive) return;
+      setFeed({ ...l, comps: c.comps, compsError: c.error });
+    });
     return () => {
       alive = false;
     };
   }, []);
 
+  // Index the comps once per dataset, not once per underwriting pass — comp
+  // lookup is otherwise O(listings x comps) and dominates every re-run.
+  const compIndex = useMemo(
+    () => (feed?.comps?.length ? buildCompIndex(feed.comps) : null),
+    [feed]
+  );
+
   // Underwrite everything once per (feed, assumptions); filter afterwards so
   // filter changes are instant.
   const allDeals = useMemo(
-    () => (feed ? rankOpportunities(feed.listings, airbnbComps, assumptions) : []),
-    [feed, assumptions]
+    () => (feed && compIndex ? rankOpportunities(feed.listings, compIndex, assumptions) : []),
+    [feed, compIndex, assumptions]
   );
 
   const deals = useMemo(
@@ -104,9 +120,9 @@ export default function App() {
             STR Deal Finder
           </h1>
           <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-            MLS listings and vacant land across 10 markets, underwritten as
-            short-term rentals against nearby Airbnb comps and ranked by
-            projected return.
+            MLS listings and vacant land{markets.length ? ` across ${markets.length} markets` : ''},
+            underwritten as short-term rentals against nearby Airbnb comps and
+            ranked by projected return.
           </p>
         </div>
         {feed && (
@@ -118,12 +134,12 @@ export default function App() {
             {feed.source === 'live' ? (
               <span>
                 Live MLS feed · {num(feed.listings.length)} listings ·{' '}
-                {num(airbnbComps.length)} Airbnb comps
+                {num(feed.comps.length)} Airbnb comps
               </span>
             ) : (
               <span>
                 Bundled sample data · {num(feed.listings.length)} listings ·{' '}
-                {num(airbnbComps.length)} comps (MLS feed unreachable)
+                {num(feed.comps.length)} comps across {num(markets.length)} markets
               </span>
             )}
           </div>
@@ -132,7 +148,14 @@ export default function App() {
 
       {!feed ? (
         <div className="card p-10 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
-          Loading listings…
+          Loading listings and comps…
+        </div>
+      ) : !feed.listings.length || !feed.comps.length ? (
+        <div className="card p-10 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
+          <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>
+            Couldn't load the dataset.
+          </p>
+          <p>{feed.error || feed.compsError}</p>
         </div>
       ) : (
         <>
@@ -205,7 +228,7 @@ export default function App() {
               assumptions above — not financial advice. Listings and Airbnb comps
               shown here are{' '}
               {feed.source === 'sample'
-                ? 'synthetic samples calibrated to realistic price, nightly-rate, occupancy and property-tax relationships per market'
+                ? `synthetic samples across ${markets.length} markets, calibrated to realistic price, nightly-rate, occupancy and property-tax relationships`
                 : 'a live MLS feed against a static comp snapshot'}
               . Build deals apply one flat construction cost to every market,
               which flatters low-cost-to-build markets. Verify local

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   niceTicks,
   padDomain,
@@ -9,12 +9,34 @@ import {
 
 const MARGIN = { top: 12, right: 16, bottom: 40, left: 64 };
 const HIT_RADIUS = 24;
+// Past this many points, SVG circles bog the browser down; draw to canvas
+// instead. Hit-testing is nearest-point against the data either way, so
+// interaction is identical.
+const CANVAS_THRESHOLD = 400;
 
 /**
  * Generic dot plot. Points: {id, x, y, fill, r?, data?}. Hover uses
  * nearest-point hit testing (targets ~24px, far larger than the dots);
  * every dot carries a 2px surface ring.
  */
+/**
+ * Canvas takes real color values — `fillStyle = 'var(--series-1)'` is invalid
+ * and silently leaves the previous color in place (everything renders black).
+ * Resolve custom properties against the document, memoized per draw since
+ * getComputedStyle is not cheap.
+ */
+function makeColorResolver() {
+  const cache = new Map();
+  const root = getComputedStyle(document.documentElement);
+  return (color) => {
+    if (cache.has(color)) return cache.get(color);
+    const m = /^var\((--[\w-]+)\)$/.exec(String(color).trim());
+    const out = m ? root.getPropertyValue(m[1]).trim() || '#888781' : color;
+    cache.set(color, out);
+    return out;
+  };
+}
+
 export default function ScatterPlot({
   height = 320,
   points,
@@ -29,23 +51,65 @@ export default function ScatterPlot({
 }) {
   const [wrapRef, width] = useContainerWidth();
   const [hovered, setHovered] = useState(null);
+  const canvasRef = useRef(null);
+  // Canvas colors are resolved at draw time, so a light/dark switch has to
+  // force a redraw — CSS alone can't restyle pixels already painted.
+  const [scheme, setScheme] = useState(0);
+  useEffect(() => {
+    if (!window.matchMedia) return undefined;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const onChange = () => setScheme((n) => n + 1);
+    mq.addEventListener?.('change', onChange);
+    return () => mq.removeEventListener?.('change', onChange);
+  }, []);
 
   const plotW = Math.max(0, width - MARGIN.left - MARGIN.right);
   const plotH = height - MARGIN.top - MARGIN.bottom;
+  const useCanvas = points.length > CANVAS_THRESHOLD;
 
   const { placed, xTicks, yTicks, sx, sy } = useMemo(() => {
     const xd = padDomain(points.map((p) => p.x));
     const yd = padDomain(points.map((p) => p.y), 0.06, refY != null ? [refY] : []);
-    const sx = scaleLinear(xd, [0, plotW]);
-    const sy = scaleLinear(yd, [plotH, 0]);
+    const fx = scaleLinear(xd, [0, plotW]);
+    const fy = scaleLinear(yd, [plotH, 0]);
     return {
-      sx,
-      sy,
-      placed: points.map((p) => ({ ...p, px: sx(p.x), py: sy(p.y) })),
+      sx: fx,
+      sy: fy,
+      placed: points.map((p) => ({ ...p, px: fx(p.x), py: fy(p.y) })),
       xTicks: niceTicks(xd[0], xd[1], Math.max(3, Math.floor(plotW / 110))),
       yTicks: niceTicks(yd[0], yd[1], 5),
     };
   }, [points, plotW, plotH, refY]);
+
+  // Canvas marks layer. Redraws on data, size, hover or selection change.
+  useEffect(() => {
+    if (!useCanvas) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext && canvas.getContext('2d');
+    if (!ctx) return; // jsdom and other canvas-less environments
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.round(plotW * dpr));
+    canvas.height = Math.max(1, Math.round(plotH * dpr));
+    canvas.style.width = `${plotW}px`;
+    canvas.style.height = `${plotH}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, plotW, plotH);
+
+    const resolve = makeColorResolver();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = resolve('var(--surface-1)') || '#fcfcfb';
+
+    for (const p of placed) {
+      const emphasized = p.id === selectedId || p.id === hovered?.id;
+      ctx.beginPath();
+      ctx.arc(p.px, p.py, emphasized ? 7 : p.r ?? 4, 0, Math.PI * 2);
+      ctx.fillStyle = resolve(p.fill);
+      ctx.fill();
+      ctx.stroke();
+    }
+  }, [useCanvas, placed, plotW, plotH, selectedId, hovered, scheme]);
 
   const findNearest = (evt) => {
     const rect = evt.currentTarget.getBoundingClientRect();
@@ -67,10 +131,18 @@ export default function ScatterPlot({
 
   return (
     <div ref={wrapRef} className="relative" style={{ height }}>
+      {useCanvas && (
+        <canvas
+          ref={canvasRef}
+          className="absolute pointer-events-none"
+          style={{ left: MARGIN.left, top: MARGIN.top }}
+        />
+      )}
       <svg
         width={width}
         height={height}
         role="img"
+        className="relative"
         style={{ cursor: hovered && onPointClick ? 'pointer' : 'default' }}
         onMouseMove={(e) => setHovered(findNearest(e))}
         onMouseLeave={() => setHovered(null)}
@@ -112,6 +184,7 @@ export default function ScatterPlot({
             </g>
           ))}
           <line x1={0} x2={plotW} y1={plotH} y2={plotH} stroke="var(--baseline)" strokeWidth={1} />
+
           {refY != null && (
             <g>
               <line x1={0} x2={plotW} y1={sy(refY)} y2={sy(refY)} stroke="var(--series-1)" strokeWidth={2} />
@@ -131,17 +204,33 @@ export default function ScatterPlot({
               )}
             </g>
           )}
-          {placed.map((p) => (
+
+          {/* Small sets draw as SVG (crisper); large sets go to the canvas
+              layer above, with only the hovered/selected dot kept in SVG so it
+              always sits on top. */}
+          {!useCanvas &&
+            placed.map((p) => (
+              <circle
+                key={p.id}
+                cx={p.px}
+                cy={p.py}
+                r={p.id === selectedId ? 8 : hovered?.id === p.id ? 7 : p.r ?? 5.5}
+                fill={p.fill}
+                stroke="var(--surface-1)"
+                strokeWidth={2}
+              />
+            ))}
+          {useCanvas && hovered && (
             <circle
-              key={p.id}
-              cx={p.px}
-              cy={p.py}
-              r={p.id === selectedId ? 8 : hovered?.id === p.id ? 7 : p.r ?? 5.5}
-              fill={p.fill}
+              cx={hovered.px}
+              cy={hovered.py}
+              r={7}
+              fill={hovered.fill}
               stroke="var(--surface-1)"
               strokeWidth={2}
             />
-          ))}
+          )}
+
           {xLabel && (
             <text
               x={plotW / 2}

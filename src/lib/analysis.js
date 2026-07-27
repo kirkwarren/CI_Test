@@ -90,33 +90,82 @@ export function dealBasis(listing, a = DEFAULT_ASSUMPTIONS) {
   };
 }
 
+const CELL_DEG = 0.1; // ~11 km of latitude per cell
+const KM_PER_DEG = 111.0;
+
+/**
+ * Buckets comps into a lat/lng grid so comp lookup doesn't scan the whole
+ * dataset per listing. Without this the search is O(listings x comps), which
+ * at tens of thousands of comps makes every assumption change take seconds.
+ * Ineligible comps (private rooms, long-stay-only, unpriced) are dropped once
+ * here rather than re-filtered for every listing.
+ */
+export function buildCompIndex(airbnb) {
+  const cells = new Map();
+  for (const c of airbnb) {
+    if (c.room_type !== 'Entire home/apt' || c.minimum_nights > 7 || !(c.price > 0)) continue;
+    const key = `${Math.floor(c.latitude / CELL_DEG)}:${Math.floor(c.longitude / CELL_DEG)}`;
+    const bucket = cells.get(key);
+    if (bucket) bucket.push(c);
+    else cells.set(key, [c]);
+  }
+  return { cells, cellDeg: CELL_DEG };
+}
+
+const isIndex = (x) => !!x && x.cells instanceof Map;
+
+/** Every comp in the grid cells overlapping a radius around a point. */
+function candidatesNear(index, lat, lng, radiusKm) {
+  const { cells, cellDeg } = index;
+  // Longitude degrees shrink toward the poles, so widen the lng ring by 1/cos.
+  const cosLat = Math.max(0.05, Math.cos((lat * Math.PI) / 180));
+  const latRing = Math.ceil(radiusKm / KM_PER_DEG / cellDeg);
+  const lngRing = Math.ceil(radiusKm / (KM_PER_DEG * cosLat) / cellDeg);
+  const li = Math.floor(lat / cellDeg);
+  const gi = Math.floor(lng / cellDeg);
+
+  const out = [];
+  for (let a = li - latRing; a <= li + latRing; a++) {
+    for (let b = gi - lngRing; b <= gi + lngRing; b++) {
+      const bucket = cells.get(`${a}:${b}`);
+      if (bucket) out.push(...bucket);
+    }
+  }
+  return out;
+}
+
 /**
  * Comps for a target: entire-home Airbnbs within `radiusKm` whose bedroom
  * count is within 1 of the target's (long-term-stay listings excluded).
  * The radius widens once if too few matches are found.
  *
  * `target` needs { lat, lng, beds } - for a build deal that's the lot's
- * coordinates and the planned bedroom count.
+ * coordinates and the planned bedroom count. `comps` may be a raw array or a
+ * prebuilt index from buildCompIndex(); ranking builds the index once and
+ * reuses it across every listing.
  */
-export function findComps(target, airbnb, { radiusKm = 3, minComps = 5 } = {}) {
+export function findComps(target, comps, { radiusKm = 3, minComps = 5 } = {}) {
+  const index = isIndex(comps) ? comps : buildCompIndex(comps);
   const beds = target.beds;
-  const eligible = airbnb.filter(
-    (c) =>
-      c.room_type === 'Entire home/apt' &&
-      c.minimum_nights <= 7 &&
-      c.price > 0 &&
-      Math.abs((c.bedrooms ?? 1) - beds) <= 1
-  );
-  const withDist = eligible
-    .map((c) => ({
-      ...c,
-      distanceKm: distanceKm(target.lat, target.lng, c.latitude, c.longitude),
-    }))
-    .sort((a, b) => a.distanceKm - b.distanceKm);
 
-  let comps = withDist.filter((c) => c.distanceKm <= radiusKm);
-  if (comps.length < minComps) comps = withDist.filter((c) => c.distanceKm <= radiusKm * 2);
-  return comps.slice(0, 25);
+  // Gather once at the widened radius so the fallback needs no second pass.
+  const pool = candidatesNear(index, target.lat, target.lng, radiusKm * 2);
+
+  // Two-field records keep this allocation-light; only the survivors get
+  // copied with their distance attached.
+  const scored = [];
+  for (const c of pool) {
+    if (Math.abs((c.bedrooms ?? 1) - beds) > 1) continue;
+    scored.push({ c, d: distanceKm(target.lat, target.lng, c.latitude, c.longitude) });
+  }
+  scored.sort((a, b) => a.d - b.d);
+
+  let cut = 0;
+  while (cut < scored.length && scored[cut].d <= radiusKm) cut++;
+  if (cut < minComps) {
+    while (cut < scored.length && scored[cut].d <= radiusKm * 2) cut++;
+  }
+  return scored.slice(0, Math.min(cut, 25)).map(({ c, d }) => ({ ...c, distanceKm: d }));
 }
 
 /**
@@ -198,13 +247,14 @@ export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
     comps.length >= 12 ? 'High' : comps.length >= 6 ? 'Medium' : 'Low';
 
   // Composite 0-100 score: cash-on-cash return does most of the work, cap
-  // rate and comp confidence temper it. Scaled so strong real-world deals
-  // (~35% CoC, ~14% cap) land in the low 90s rather than pinning at 100 —
-  // a cap that's easy to hit would flatten the ranking across the top deals.
+  // rate and comp confidence temper it. Scaled so the strongest deals in the
+  // dataset (~37% CoC, ~17% cap) land in the high 80s rather than crowding
+  // the cap — several deals sharing a score of 99 flattens the top of the
+  // ranking, which is exactly where precision matters most.
   const confFactor = { High: 1, Medium: 0.9, Low: 0.75 }[confidence];
   const score = Math.max(
     0,
-    Math.min(100, (cashOnCash * 180 + capRate * 200) * confFactor)
+    Math.min(100, (cashOnCash * 160 + capRate * 175) * confFactor)
   );
 
   return {
@@ -233,8 +283,10 @@ export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
 
 /** Underwrite every listing and rank best-first. */
 export function rankOpportunities(listings, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
+  // Index once, not once per listing.
+  const index = isIndex(airbnb) ? airbnb : buildCompIndex(airbnb);
   return listings
-    .map((l) => underwrite(l, airbnb, assumptions))
+    .map((l) => underwrite(l, index, assumptions))
     .filter(Boolean)
     .sort((x, y) => y.score - x.score);
 }
