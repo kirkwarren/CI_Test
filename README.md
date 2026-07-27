@@ -3,7 +3,7 @@
 A site that ties into MLS listing data and Airbnb market data to surface the
 most valuable short-term-rental investment opportunities.
 
-For every active for-sale listing it:
+For every for-sale listing — and every vacant lot — it:
 
 1. finds comparable Airbnb rentals nearby (entire-home, ±1 bedroom, closest
    first, radius widening automatically when comps are thin),
@@ -11,6 +11,24 @@ For every active for-sale listing it:
 3. underwrites the deal — revenue, operating expenses, financing — and
 4. ranks everything by **cap rate, cash-on-cash return, and a composite
    score**, with an interactive dashboard to explore the results.
+
+Two deal types are underwritten:
+
+- **Existing home** — buy it and rent it out.
+- **Land + build** — buy the lot, build a spec house on it (default 4 bd / 2 ba
+  at $350,000 all-in, editable), then rent it. Cost basis becomes land price +
+  build cost, and comps are matched to the *planned* bedroom count rather than
+  the empty lot.
+
+### Market selection dominates everything
+
+The single largest driver of whether a short-term rental cash-flows is which
+market it's in — mostly property tax rate and the nightly-rate-to-price ratio.
+Under the default assumptions a deal needs roughly a **13% gross yield**
+(revenue ÷ cost) to break even at Texas property tax rates, but only about
+**11%** in Tennessee. The dashboard leads with a per-market rollup for exactly
+this reason: dense high-tax urban markets (Houston at 2.2%, Austin at 1.9%)
+essentially never pencil as STRs, while low-tax vacation markets routinely do.
 
 Click any dot or table row to open the full underwriting for that property:
 where the money goes, cash flow across an occupancy sweep with the breakeven
@@ -82,9 +100,10 @@ header badge.
 
 Comps ship as `src/data/airbnbComps.json` in the
 [Inside Airbnb](https://insideairbnb.com/get-the-data/) schema. The bundled
-file is a **synthetic but realistic Houston sample** (Inside Airbnb does not
-publish Houston). To use real market data, download `listings.csv` for your
-city from Inside Airbnb and run:
+file is **synthetic sample data** (1,900 comps across the same ten markets),
+calibrated to realistic nightly-rate, occupancy and price relationships rather
+than copied from any real scrape. To use real market data, download
+`listings.csv` for your city from Inside Airbnb and run:
 
 ```bash
 npm run import-airbnb -- path/to/listings.csv
@@ -111,10 +130,12 @@ npm run generate-sample-data
   exact-bedroom comps get double weight.
 - **Revenue** — weighted-median nightly rate × estimated occupancy × 365,
   less a platform fee.
-- **Expenses** — property tax, STR insurance, full-service management,
-  utilities, maintenance, supplies, and HOA dues from the listing itself.
+- **Expenses** — property tax (at the listing's own market rate when the feed
+  supplies one, otherwise a flat fallback), STR insurance, full-service
+  management, utilities, maintenance, supplies, and HOA dues.
 - **Financing** — standard amortized loan; cash invested = down payment +
-  closing costs + furnishing budget.
+  closing costs + furnishing budget. For a build, the loan and all percentage
+  costs are taken against land + build cost.
 - **Outputs** — gross yield, cap rate, annual cash flow, cash-on-cash return,
   breakeven occupancy, comp-count confidence, and a 0–100 composite score
   used for the default ranking.
@@ -124,6 +145,14 @@ Every default lives in `DEFAULT_ASSUMPTIONS` and is editable in the UI.
 ## Disclaimer
 
 Projections are estimates built from comparable-listing data and user-set
-assumptions — not appraisals, not financial advice. Verify local short-term-
-rental regulations, taxes, HOA rules, and real market performance before
-investing.
+assumptions — not appraisals, not financial advice. The bundled listings and
+comps are synthetic samples, not real inventory.
+
+Two caveats worth stressing on the build path: a single flat build cost is
+applied to every market, which flatters cheap-to-build ones (a 4 bd cabin in
+Gatlinburg realistically runs well above $350k), and the model ignores
+construction timeline, carrying cost during the build, and permitting risk
+entirely. Raise the build cost per market to test it honestly.
+
+Verify local short-term-rental regulations, permitting, taxes, HOA rules, and
+real market performance before investing.

@@ -5,13 +5,19 @@
  * achievable nightly rate + occupancy from them, then underwrites the deal
  * (revenue, operating expenses, financing) and scores it so the best
  * opportunities rank first.
+ *
+ * Two deal types are supported:
+ *   'existing' - buy a standing home and rent it out
+ *   'build'    - buy a vacant lot and build a spec house on it, then rent it.
+ *                Cost basis is land price + build cost, and comps are matched
+ *                against the planned bedroom count rather than the lot.
  */
 
 export const DEFAULT_ASSUMPTIONS = {
-  downPaymentPct: 0.20,      // of purchase price
+  downPaymentPct: 0.20,      // of cost basis
   interestRate: 0.065,       // 30-year fixed APR
   loanYears: 30,
-  closingCostPct: 0.03,      // of purchase price
+  closingCostPct: 0.03,      // of cost basis
   furnishingPerBedroom: 5000, // one-time setup cost per bedroom (plus base)
   furnishingBase: 6000,
   managementPct: 0.20,       // of gross revenue (full-service STR management)
@@ -21,8 +27,13 @@ export const DEFAULT_ASSUMPTIONS = {
   utilitiesMonthlyBase: 220, // scaled up with bedrooms
   utilitiesPerBedroom: 60,
   insurancePctOfPrice: 0.008, // STR policy, annual
-  propertyTaxPct: 0.022,     // annual, of purchase price (Harris County ~2.2%)
+  propertyTaxPct: 0.022,     // fallback when a listing carries no market rate
+  useMarketTaxRate: true,    // prefer the listing's own market tax rate
   occupancyHaircut: 0.05,    // shave comp-implied occupancy for conservatism
+  // Build-to-rent spec, used for vacant-land deals.
+  buildCost: 350000,         // all-in construction cost
+  buildBeds: 4,
+  buildBaths: 2,
 };
 
 const EARTH_KM = 6371;
@@ -43,23 +54,63 @@ function median(nums) {
   return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
 }
 
+export function isLand(listing) {
+  return listing.propertyType === 'Land';
+}
+
+/** Effective property tax rate for a listing under the given assumptions. */
+export function taxRateFor(listing, a) {
+  if (a.useMarketTaxRate && listing.taxRate != null) return listing.taxRate;
+  return a.propertyTaxPct;
+}
+
 /**
- * Comps for a listing: entire-home Airbnbs within `radiusKm` whose bedroom
- * count is within 1 of the listing's (long-term-stay listings excluded).
- * The radius widens once if too few matches are found.
+ * Resolves what is actually being underwritten: an existing home, or a lot
+ * plus a planned build. Returns the bedroom count to comp against and the
+ * total cost basis.
  */
-export function findComps(listing, airbnb, { radiusKm = 3, minComps = 5 } = {}) {
+export function dealBasis(listing, a = DEFAULT_ASSUMPTIONS) {
+  if (isLand(listing)) {
+    return {
+      dealType: 'build',
+      beds: a.buildBeds,
+      baths: a.buildBaths,
+      landPrice: listing.price,
+      buildCost: a.buildCost,
+      basis: listing.price + a.buildCost,
+    };
+  }
+  return {
+    dealType: 'existing',
+    beds: listing.beds,
+    baths: listing.baths,
+    landPrice: null,
+    buildCost: 0,
+    basis: listing.price,
+  };
+}
+
+/**
+ * Comps for a target: entire-home Airbnbs within `radiusKm` whose bedroom
+ * count is within 1 of the target's (long-term-stay listings excluded).
+ * The radius widens once if too few matches are found.
+ *
+ * `target` needs { lat, lng, beds } - for a build deal that's the lot's
+ * coordinates and the planned bedroom count.
+ */
+export function findComps(target, airbnb, { radiusKm = 3, minComps = 5 } = {}) {
+  const beds = target.beds;
   const eligible = airbnb.filter(
     (c) =>
       c.room_type === 'Entire home/apt' &&
       c.minimum_nights <= 7 &&
       c.price > 0 &&
-      Math.abs((c.bedrooms ?? 1) - listing.beds) <= 1
+      Math.abs((c.bedrooms ?? 1) - beds) <= 1
   );
   const withDist = eligible
     .map((c) => ({
       ...c,
-      distanceKm: distanceKm(listing.lat, listing.lng, c.latitude, c.longitude),
+      distanceKm: distanceKm(target.lat, target.lng, c.latitude, c.longitude),
     }))
     .sort((a, b) => a.distanceKm - b.distanceKm);
 
@@ -74,19 +125,18 @@ export function findComps(listing, airbnb, { radiusKm = 3, minComps = 5 } = {}) 
  * (occupied share = 1 - availability_365/365), which for Inside Airbnb data
  * is an upper-ish bound - hence the configurable haircut.
  */
-export function estimateRevenue(listing, comps, assumptions) {
+export function estimateRevenue(beds, comps, assumptions) {
   if (comps.length === 0) return null;
   const weighted = [];
   for (const c of comps) {
-    const weight = (c.bedrooms === listing.beds ? 2 : 1);
+    const weight = c.bedrooms === beds ? 2 : 1;
     for (let i = 0; i < weight; i++) weighted.push(c);
   }
   const adr = median(weighted.map((c) => c.price));
   const rawOcc = median(weighted.map((c) => 1 - c.availability_365 / 365));
   const occupancy = Math.max(0.2, Math.min(0.95, rawOcc - assumptions.occupancyHaircut));
   const nightsBooked = Math.round(occupancy * 365);
-  const grossRevenue = adr * nightsBooked;
-  return { adr, occupancy, nightsBooked, grossRevenue };
+  return { adr, occupancy, nightsBooked, grossRevenue: adr * nightsBooked };
 }
 
 export function monthlyMortgagePayment(principal, annualRate, years) {
@@ -98,19 +148,22 @@ export function monthlyMortgagePayment(principal, annualRate, years) {
 
 /** Full underwriting for one listing. Returns null when no comps exist. */
 export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
-  const comps = findComps(listing, airbnb);
-  const rev = estimateRevenue(listing, comps, assumptions);
+  const a = assumptions;
+  const basisInfo = dealBasis(listing, a);
+  const { beds, basis } = basisInfo;
+  if (!beds || !basis) return null;
+
+  const comps = findComps({ lat: listing.lat, lng: listing.lng, beds }, airbnb);
+  const rev = estimateRevenue(beds, comps, a);
   if (!rev) return null;
 
-  const a = assumptions;
-  const price = listing.price;
-
+  const taxRate = taxRateFor(listing, a);
   const effectiveRevenue = rev.grossRevenue * (1 - a.platformFeePct);
   const expenses = {
-    'Property tax': price * a.propertyTaxPct,
-    Insurance: price * a.insurancePctOfPrice,
+    'Property tax': basis * taxRate,
+    Insurance: basis * a.insurancePctOfPrice,
     Management: rev.grossRevenue * a.managementPct,
-    Utilities: (a.utilitiesMonthlyBase + a.utilitiesPerBedroom * listing.beds) * 12,
+    Utilities: (a.utilitiesMonthlyBase + a.utilitiesPerBedroom * beds) * 12,
     Maintenance: rev.grossRevenue * a.maintenancePct,
     Supplies: rev.grossRevenue * a.suppliesPct,
     HOA: (listing.hoaMonthly || 0) * 12,
@@ -118,17 +171,17 @@ export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
   const operatingExpenses = Object.values(expenses).reduce((s, v) => s + v, 0);
   const noi = effectiveRevenue - operatingExpenses;
 
-  const downPayment = price * a.downPaymentPct;
-  const loanAmount = price - downPayment;
+  const downPayment = basis * a.downPaymentPct;
+  const loanAmount = basis - downPayment;
   const annualDebtService =
     monthlyMortgagePayment(loanAmount, a.interestRate, a.loanYears) * 12;
-  const setupCost = a.furnishingBase + a.furnishingPerBedroom * listing.beds;
-  const cashInvested = downPayment + price * a.closingCostPct + setupCost;
+  const setupCost = a.furnishingBase + a.furnishingPerBedroom * beds;
+  const cashInvested = downPayment + basis * a.closingCostPct + setupCost;
 
   const cashFlow = noi - annualDebtService;
-  const capRate = noi / price;
+  const capRate = noi / basis;
   const cashOnCash = cashFlow / cashInvested;
-  const grossYield = rev.grossRevenue / price;
+  const grossYield = rev.grossRevenue / basis;
 
   // Occupancy at which cash flow is exactly zero, holding ADR constant.
   const fixedCosts =
@@ -145,17 +198,21 @@ export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
     comps.length >= 12 ? 'High' : comps.length >= 6 ? 'Medium' : 'Low';
 
   // Composite 0-100 score: cash-on-cash return does most of the work, cap
-  // rate and comp confidence temper it. Tuned so ~15% CoC + 8% cap ≈ 90.
+  // rate and comp confidence temper it. Scaled so strong real-world deals
+  // (~35% CoC, ~14% cap) land in the low 90s rather than pinning at 100 —
+  // a cap that's easy to hit would flatten the ranking across the top deals.
   const confFactor = { High: 1, Medium: 0.9, Low: 0.75 }[confidence];
   const score = Math.max(
     0,
-    Math.min(100, (cashOnCash * 420 + capRate * 480) * confFactor)
+    Math.min(100, (cashOnCash * 180 + capRate * 200) * confFactor)
   );
 
   return {
     listing,
     comps,
+    ...basisInfo,
     ...rev,
+    taxRate,
     effectiveRevenue,
     expenses,
     operatingExpenses,
@@ -188,7 +245,8 @@ export function occupancySensitivity(deal, assumptions = DEFAULT_ASSUMPTIONS) {
   const points = [];
   for (let occ = 0.3; occ <= 0.901; occ += 0.05) {
     const gross = deal.adr * 365 * occ;
-    const variable = gross * (a.platformFeePct + a.managementPct + a.maintenancePct + a.suppliesPct);
+    const variable =
+      gross * (a.platformFeePct + a.managementPct + a.maintenancePct + a.suppliesPct);
     const fixed =
       deal.expenses['Property tax'] + deal.expenses.Insurance +
       deal.expenses.Utilities + deal.expenses.HOA;
@@ -198,4 +256,25 @@ export function occupancySensitivity(deal, assumptions = DEFAULT_ASSUMPTIONS) {
     });
   }
   return points;
+}
+
+/** Per-market rollup, so the weakest and strongest markets are obvious. */
+export function marketSummary(deals) {
+  const byMarket = new Map();
+  for (const d of deals) {
+    const key = d.listing.market || d.listing.city || 'Unknown';
+    if (!byMarket.has(key)) byMarket.set(key, []);
+    byMarket.get(key).push(d);
+  }
+  return [...byMarket.entries()]
+    .map(([market, ds]) => ({
+      market,
+      count: ds.length,
+      positive: ds.filter((d) => d.cashFlow > 0).length,
+      medianCapRate: median(ds.map((d) => d.capRate)),
+      medianCashOnCash: median(ds.map((d) => d.cashOnCash)),
+      medianGrossYield: median(ds.map((d) => d.grossYield)),
+      taxRate: ds[0].taxRate,
+    }))
+    .sort((a, b) => b.medianCashOnCash - a.medianCashOnCash);
 }

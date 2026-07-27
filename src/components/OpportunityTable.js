@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, Hammer } from 'lucide-react';
 import { money, pct } from '../lib/format';
 
 const COLUMNS = [
   { key: 'rank', label: '#', sortable: false },
   { key: 'address', label: 'Property', sortable: false },
-  { key: 'price', label: 'Price', get: (d) => d.listing.price, fmt: (d) => money(d.listing.price) },
-  { key: 'beds', label: 'Bd/Ba', get: (d) => d.listing.beds, fmt: (d) => `${d.listing.beds}/${d.listing.baths ?? '—'}` },
+  { key: 'basis', label: 'All-in', get: (d) => d.basis, fmt: (d) => money(d.basis) },
+  {
+    key: 'beds',
+    label: 'Bd/Ba',
+    get: (d) => d.beds,
+    fmt: (d) => `${d.beds}/${d.baths ?? '—'}`,
+  },
   { key: 'adr', label: 'Est. nightly', get: (d) => d.adr, fmt: (d) => money(d.adr) },
   { key: 'occupancy', label: 'Occupancy', get: (d) => d.occupancy, fmt: (d) => pct(d.occupancy, 0) },
-  { key: 'grossRevenue', label: 'Revenue /yr', get: (d) => d.grossRevenue, fmt: (d) => money(d.grossRevenue) },
+  { key: 'grossYield', label: 'Gross yield', get: (d) => d.grossYield, fmt: (d) => pct(d.grossYield) },
   { key: 'capRate', label: 'Cap rate', get: (d) => d.capRate, fmt: (d) => pct(d.capRate) },
   { key: 'cashOnCash', label: 'Cash-on-cash', get: (d) => d.cashOnCash, fmt: (d) => pct(d.cashOnCash) },
   { key: 'cashFlow', label: 'Cash flow /yr', get: (d) => d.cashFlow, fmt: (d) => money(d.cashFlow) },
@@ -19,10 +24,12 @@ const COLUMNS = [
 /** Ranked deals. This table is also the accessible twin of the charts. */
 export default function OpportunityTable({ deals, selectedId, onSelect }) {
   const [sort, setSort] = useState({ key: 'score', dir: -1 });
+  const [limit, setLimit] = useState(50);
 
   const sorted = [...deals];
   const col = COLUMNS.find((c) => c.key === sort.key);
   if (col?.get) sorted.sort((a, b) => (col.get(a) - col.get(b)) * sort.dir);
+  const shown = sorted.slice(0, limit);
 
   const toggleSort = (key) =>
     setSort((s) => ({ key, dir: s.key === key ? -s.dir : -1 }));
@@ -46,10 +53,7 @@ export default function OpportunityTable({ deals, selectedId, onSelect }) {
                     title={`Sort by ${c.label}`}
                   >
                     {c.label}
-                    <ArrowUpDown
-                      size={11}
-                      style={{ opacity: sort.key === c.key ? 1 : 0.35 }}
-                    />
+                    <ArrowUpDown size={11} style={{ opacity: sort.key === c.key ? 1 : 0.35 }} />
                   </button>
                 )}
               </th>
@@ -57,9 +61,10 @@ export default function OpportunityTable({ deals, selectedId, onSelect }) {
           </tr>
         </thead>
         <tbody>
-          {sorted.map((d) => {
-            const rank = deals.indexOf(d) + 1;
+          {shown.map((d) => {
+            const rank = sorted.indexOf(d) + 1;
             const selected = d.listing.id === selectedId;
+            const isBuild = d.dealType === 'build';
             return (
               <tr
                 key={d.listing.id}
@@ -76,10 +81,17 @@ export default function OpportunityTable({ deals, selectedId, onSelect }) {
                   {rank}
                 </td>
                 <td className="px-3 py-2">
-                  <div className="font-medium">{d.listing.address}</div>
+                  <div className="font-medium flex items-center gap-1.5">
+                    {isBuild && (
+                      <Hammer size={11} style={{ color: 'var(--series-2)' }} aria-label="Land + build" />
+                    )}
+                    {d.listing.address}
+                  </div>
                   <div style={{ color: 'var(--text-muted)' }}>
-                    {d.listing.neighborhood || d.listing.city} · {d.listing.zip} ·{' '}
-                    {d.listing.propertyType}
+                    {d.listing.market} ·{' '}
+                    {isBuild
+                      ? `${d.listing.lotAcres ?? '—'} ac land ${money(d.landPrice, { compact: true })} + build ${money(d.buildCost, { compact: true })}`
+                      : d.listing.propertyType}
                   </div>
                 </td>
                 {COLUMNS.slice(2).map((c) => (
@@ -100,9 +112,21 @@ export default function OpportunityTable({ deals, selectedId, onSelect }) {
           })}
         </tbody>
       </table>
+
       {deals.length === 0 && (
         <div className="p-6 text-sm text-center" style={{ color: 'var(--text-muted)' }}>
           No listings match the current filters.
+        </div>
+      )}
+      {deals.length > limit && (
+        <div className="p-3 text-center">
+          <button
+            className="text-xs px-3 py-1.5 rounded-lg hover:opacity-70"
+            style={{ border: '1px solid var(--baseline)', color: 'var(--text-secondary)' }}
+            onClick={() => setLimit((l) => l + 100)}
+          >
+            Show more — {deals.length - limit} of {deals.length} not shown
+          </button>
         </div>
       )}
     </div>

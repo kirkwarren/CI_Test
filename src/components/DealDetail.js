@@ -1,5 +1,5 @@
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, Hammer } from 'lucide-react';
 import { money, pct, num } from '../lib/format';
 import { occupancySensitivity } from '../lib/analysis';
 import ChartTooltip from './ChartTooltip';
@@ -14,6 +14,15 @@ function Section({ title, children }) {
       {children}
     </div>
   );
+}
+
+// Market names already carry their state ("Gatlinburg, TN"), so only append
+// the state when it isn't there already.
+function locationLine(l) {
+  const base = l.market || l.city || '';
+  const hasState = l.state && new RegExp(`,\\s*${l.state}$`).test(base);
+  const head = hasState ? base : [base, l.state].filter(Boolean).join(', ');
+  return [head, l.zip].filter(Boolean).join(' ');
 }
 
 function Row({ label, value, strong, color }) {
@@ -35,6 +44,7 @@ function Row({ label, value, strong, color }) {
 /** Full underwriting view for one selected deal. */
 export default function DealDetail({ deal, assumptions, onClose }) {
   const { listing } = deal;
+  const isBuild = deal.dealType === 'build';
 
   const costRows = [
     ...Object.entries(deal.expenses)
@@ -52,7 +62,7 @@ export default function DealDetail({ deal, assumptions, onClose }) {
     id: c.id,
     x: +c.distanceKm.toFixed(2),
     y: c.price,
-    fill: c.bedrooms === listing.beds ? 'var(--series-1)' : 'var(--de-emphasis)',
+    fill: c.bedrooms === deal.beds ? 'var(--series-1)' : 'var(--de-emphasis)',
     r: 4.5,
     data: c,
   }));
@@ -61,13 +71,25 @@ export default function DealDetail({ deal, assumptions, onClose }) {
     <div className="card p-4 md:p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold">{listing.address}</h2>
+          <h2 className="text-base font-semibold flex items-center gap-2">
+            {isBuild && <Hammer size={15} style={{ color: 'var(--series-2)' }} />}
+            {listing.address}
+          </h2>
           <div className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
-            {listing.neighborhood || listing.city}, {listing.state} {listing.zip} ·{' '}
-            {listing.beds} bd / {listing.baths ?? '—'} ba ·{' '}
-            {listing.sqft ? `${num(listing.sqft)} sqft · ` : ''}
-            {listing.propertyType}
-            {listing.yearBuilt ? ` · built ${listing.yearBuilt}` : ''}
+            {locationLine(listing)} ·{' '}
+            {isBuild ? (
+              <>
+                {listing.lotAcres ?? '—'} acre lot · planned build {deal.beds} bd /{' '}
+                {deal.baths} ba
+              </>
+            ) : (
+              <>
+                {listing.beds} bd / {listing.baths ?? '—'} ba ·{' '}
+                {listing.sqft ? `${num(listing.sqft)} sqft · ` : ''}
+                {listing.propertyType}
+                {listing.yearBuilt ? ` · built ${listing.yearBuilt}` : ''}
+              </>
+            )}
           </div>
         </div>
         <button
@@ -82,7 +104,15 @@ export default function DealDetail({ deal, assumptions, onClose }) {
 
       <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4">
         <Section title="The deal, in numbers">
-          <Row label="List price" value={money(listing.price)} />
+          {isBuild ? (
+            <>
+              <Row label="Land price" value={money(deal.landPrice)} />
+              <Row label={`Build cost (${deal.beds} bd / ${deal.baths} ba)`} value={money(deal.buildCost)} />
+              <Row label="All-in cost basis" value={money(deal.basis)} strong />
+            </>
+          ) : (
+            <Row label="List price" value={money(listing.price)} />
+          )}
           <Row label={`Down payment (${pct(assumptions.downPaymentPct, 0)})`} value={money(deal.downPayment)} />
           <Row label="Furnishing & setup" value={money(deal.setupCost)} />
           <Row label="Total cash invested" value={money(deal.cashInvested)} strong />
@@ -101,6 +131,7 @@ export default function DealDetail({ deal, assumptions, onClose }) {
           <Row label="Cap rate" value={pct(deal.capRate)} />
           <Row label="Cash-on-cash return" value={pct(deal.cashOnCash)} strong />
           <Row label="Breakeven occupancy" value={pct(deal.breakevenOccupancy, 0)} />
+          <Row label="Property tax rate" value={pct(deal.taxRate, 2)} />
           <Row label="Comp confidence" value={`${deal.confidence} (${deal.comps.length} comps)`} />
         </Section>
 
@@ -153,7 +184,7 @@ export default function DealDetail({ deal, assumptions, onClose }) {
           <div className="flex gap-4 text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
             <span className="flex items-center gap-1.5">
               <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: 'var(--series-1)' }} />
-              Same bedrooms ({listing.beds})
+              Same bedrooms ({deal.beds})
             </span>
             <span className="flex items-center gap-1.5">
               <span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: 'var(--de-emphasis)' }} />

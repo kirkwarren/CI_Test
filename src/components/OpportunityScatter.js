@@ -3,42 +3,41 @@ import { money, pct } from '../lib/format';
 import ChartTooltip from './ChartTooltip';
 import ScatterPlot from './charts/ScatterPlot';
 
-const TOP_N = 10;
-
 /**
- * Purchase price vs projected annual Airbnb revenue for every deal that
- * passed the filters. Emphasis form: the top-scored deals wear the accent
- * hue, the rest recede to gray. Clicking a dot selects the deal.
+ * All-in cost vs projected annual Airbnb revenue for every deal that passed
+ * the filters, colored by whether it's an existing home or a land + build.
+ * Two categorical series (palette slots 1 and 2); clicking a dot selects
+ * the deal.
  */
 export default function OpportunityScatter({ deals, selectedId, onSelect }) {
-  const points = deals.map((d, i) => ({
+  const points = deals.map((d) => ({
     id: d.listing.id,
-    x: d.listing.price,
+    x: Math.round(d.basis),
     y: Math.round(d.grossRevenue),
-    fill: i < TOP_N ? 'var(--series-1)' : 'var(--de-emphasis)',
+    fill: d.dealType === 'build' ? 'var(--series-2)' : 'var(--series-1)',
     data: d,
   }));
+
+  const builds = deals.filter((d) => d.dealType === 'build').length;
 
   return (
     <div className="card p-4">
       <div className="flex items-baseline justify-between flex-wrap gap-2 mb-1">
-        <h2 className="text-sm font-semibold">
-          Price vs. projected Airbnb revenue
-        </h2>
+        <h2 className="text-sm font-semibold">All-in cost vs. projected Airbnb revenue</h2>
         <div className="flex gap-4 text-xs" style={{ color: 'var(--text-secondary)' }}>
           <span className="flex items-center gap-1.5">
             <span
               className="inline-block w-2.5 h-2.5 rounded-full"
               style={{ background: 'var(--series-1)' }}
             />
-            Top {Math.min(TOP_N, points.length)} by score
+            Existing home ({deals.length - builds})
           </span>
           <span className="flex items-center gap-1.5">
             <span
               className="inline-block w-2.5 h-2.5 rounded-full"
-              style={{ background: 'var(--de-emphasis)' }}
+              style={{ background: 'var(--series-2)' }}
             />
-            Other listings
+            Land + build ({builds})
           </span>
         </div>
       </div>
@@ -47,14 +46,15 @@ export default function OpportunityScatter({ deals, selectedId, onSelect }) {
         points={points}
         xFormat={(v) => money(v, { compact: true })}
         yFormat={(v) => money(v, { compact: true })}
-        xLabel="List price"
+        xLabel="All-in cost (purchase, or land + build)"
         selectedId={selectedId}
         onPointClick={(p) => onSelect(p.data)}
         renderTooltip={(p) => (
           <ChartTooltip
             title={p.data.listing.address}
             rows={[
-              ['List price', money(p.data.listing.price)],
+              [p.data.dealType === 'build' ? 'Land + build' : 'Purchase price', money(p.data.basis)],
+              ['Market', p.data.listing.market],
               ['Projected revenue', money(p.data.grossRevenue)],
               ['Cap rate', pct(p.data.capRate)],
               ['Cash-on-cash', pct(p.data.cashOnCash)],
@@ -63,8 +63,8 @@ export default function OpportunityScatter({ deals, selectedId, onSelect }) {
         )}
       />
       <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
-        Every value shown here is also in the table below. Click a dot to open
-        the full underwriting for that property.
+        Points above the pack for their cost are the opportunities. Every value
+        here is also in the table below — click a dot for full underwriting.
       </p>
     </div>
   );

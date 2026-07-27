@@ -6,9 +6,19 @@
  *   src/data/sampleListings.json  - for-sale listings in SimplyRETS (RESO) shape
  *   src/data/airbnbComps.json     - short-term-rental comps in Inside Airbnb shape
  *
- * The data is synthetic but realistic for the Houston, TX market (the same
- * market the SimplyRETS demo MLS feed covers), and is generated with a fixed
- * seed so re-running the script is a no-op unless the generator changes.
+ * Covers ten US markets chosen to span the range that actually matters for
+ * short-term-rental underwriting: low-tax vacation/cabin markets where nightly
+ * rates run high relative to purchase price, through high-tax urban markets
+ * where they don't. Property tax rates are per-market and roughly reflect real
+ * effective rates, because tax is one of the largest single drivers of whether
+ * an STR cash-flows at all.
+ *
+ * Both for-sale homes and vacant land parcels are generated; land is
+ * underwritten in the app as a build-to-rent deal.
+ *
+ * Data is synthetic but calibrated to realistic price/ADR/occupancy
+ * relationships, and generated from a fixed seed so re-running is a no-op
+ * unless the generator changes.
  *
  * Usage: node scripts/generate-sample-data.js
  */
@@ -28,133 +38,237 @@ function mulberry32(seed) {
   };
 }
 
-const rand = mulberry32(20260725);
+const rand = mulberry32(20260727);
 const pick = (arr) => arr[Math.floor(rand() * arr.length)];
 const between = (lo, hi) => lo + rand() * (hi - lo);
 const jitter = (deg) => (rand() - 0.5) * deg;
+const round = (n, to) => Math.round(n / to) * to;
 
-// Houston neighborhoods: [name, lat, lng, zip, salePriceMult, adrMult, occBase]
-const HOODS = [
-  ['The Heights', 29.7905, -95.3979, '77008', 1.35, 1.30, 0.66],
-  ['Montrose', 29.7425, -95.3905, '77006', 1.30, 1.35, 0.70],
-  ['Midtown', 29.7373, -95.3770, '77004', 1.10, 1.20, 0.68],
-  ['EaDo', 29.7488, -95.3466, '77003', 1.00, 1.15, 0.64],
-  ['Museum District', 29.7250, -95.3880, '77005', 1.40, 1.25, 0.65],
-  ['Rice Military', 29.7690, -95.4090, '77007', 1.25, 1.20, 0.62],
-  ['Downtown', 29.7570, -95.3620, '77002', 1.05, 1.10, 0.60],
-  ['East End', 29.7350, -95.3250, '77011', 0.75, 0.95, 0.55],
-  ['Third Ward', 29.7230, -95.3600, '77004', 0.70, 0.90, 0.52],
-  ['Oak Forest', 29.8250, -95.4330, '77018', 1.00, 1.00, 0.55],
-  ['Garden Oaks', 29.8180, -95.4160, '77018', 1.05, 1.00, 0.54],
-  ['Spring Branch', 29.8030, -95.5030, '77055', 0.85, 0.90, 0.50],
-  ['Meyerland', 29.6870, -95.4640, '77096', 0.85, 0.85, 0.48],
-  ['Medical Center', 29.7070, -95.4010, '77030', 0.95, 1.15, 0.72],
+// Nightly-rate profiles by bedroom count. Cabin/beach markets command far
+// higher rates per bedroom than urban ones, which is the whole reason
+// vacation markets pencil for STR and dense urban markets often don't.
+const ADR_PROFILE = {
+  cabin: { 1: 145, 2: 215, 3: 305, 4: 415, 5: 545, 6: 690 },
+  beach: { 1: 135, 2: 205, 3: 290, 4: 390, 5: 510, 6: 640 },
+  urban: { 1: 95, 2: 132, 3: 178, 4: 235, 5: 300, 6: 360 },
+};
+
+/**
+ * Markets. taxRate is the effective annual property tax rate; ppsf is a
+ * baseline price per square foot; occ is a baseline annual occupancy;
+ * landPerAcre / acres describe typical vacant parcels; urbanLot marks markets
+ * where land sells by the lot rather than by acreage.
+ */
+const MARKETS = [
+  {
+    name: 'Sevierville, TN', city: 'Sevierville', state: 'TN', zips: ['37862', '37876'],
+    lat: 35.868, lng: -83.562, taxRate: 0.0056, ppsf: 285, adrMult: 1.00, profile: 'cabin', occ: 0.62,
+    landPerAcre: 78000, acres: [0.4, 2.5], streets: ['Wears Valley Rd', 'Pittman Center Rd', 'Boyds Creek Hwy', 'Douglas Dam Rd'],
+  },
+  {
+    name: 'Gatlinburg, TN', city: 'Gatlinburg', state: 'TN', zips: ['37738'],
+    lat: 35.714, lng: -83.511, taxRate: 0.0056, ppsf: 320, adrMult: 1.08, profile: 'cabin', occ: 0.64,
+    landPerAcre: 105000, acres: [0.3, 1.6], streets: ['Ski Mountain Rd', 'Glades Rd', 'Baskins Creek Rd', 'Roaring Fork Rd'],
+  },
+  {
+    name: 'Pigeon Forge, TN', city: 'Pigeon Forge', state: 'TN', zips: ['37863'],
+    lat: 35.788, lng: -83.554, taxRate: 0.0056, ppsf: 300, adrMult: 1.03, profile: 'cabin', occ: 0.63,
+    landPerAcre: 92000, acres: [0.3, 1.8], streets: ['Waldens Creek Rd', 'Bluff Mountain Rd', 'Dollywood Ln', 'Henderson Chapel Rd'],
+  },
+  {
+    name: 'Broken Bow, OK', city: 'Broken Bow', state: 'OK', zips: ['74728'],
+    lat: 34.163, lng: -94.690, taxRate: 0.0090, ppsf: 245, adrMult: 0.95, profile: 'cabin', occ: 0.58,
+    landPerAcre: 21000, acres: [1.0, 6.0], streets: ['Stevens Gap Rd', 'Hochatown Rd', 'Lukfata Trail', 'Cedar Creek Rd'],
+  },
+  {
+    name: 'Blue Ridge, GA', city: 'Blue Ridge', state: 'GA', zips: ['30513'],
+    lat: 34.864, lng: -84.324, taxRate: 0.0092, ppsf: 300, adrMult: 0.92, profile: 'cabin', occ: 0.57,
+    landPerAcre: 32000, acres: [0.8, 5.0], streets: ['Aska Rd', 'Old Toccoa Rd', 'Windy Ridge Rd', 'Deep Gap Rd'],
+  },
+  {
+    name: 'Branson, MO', city: 'Branson', state: 'MO', zips: ['65616'],
+    lat: 36.644, lng: -93.219, taxRate: 0.0091, ppsf: 205, adrMult: 0.72, profile: 'cabin', occ: 0.55,
+    landPerAcre: 24000, acres: [0.5, 4.0], streets: ['Fall Creek Rd', 'Gretna Rd', 'Bee Creek Rd', 'Roark Valley Rd'],
+  },
+  {
+    name: 'Lake Ariel, PA', city: 'Lake Ariel', state: 'PA', zips: ['18436'],
+    lat: 41.463, lng: -75.353, taxRate: 0.0155, ppsf: 205, adrMult: 0.74, profile: 'cabin', occ: 0.54,
+    landPerAcre: 19000, acres: [0.5, 3.5], streets: ['Hamlin Hwy', 'Easton Turnpike', 'Ledgedale Rd', 'Goose Pond Rd'],
+  },
+  {
+    name: 'Panama City Beach, FL', city: 'Panama City Beach', state: 'FL', zips: ['32413', '32407'],
+    lat: 30.176, lng: -85.805, taxRate: 0.0105, ppsf: 340, adrMult: 0.98, profile: 'beach', occ: 0.60,
+    landPerAcre: 240000, acres: [0.15, 0.8], streets: ['Front Beach Rd', 'Thomas Dr', 'Hutchison Blvd', 'Beckrich Rd'],
+  },
+  {
+    name: 'Houston, TX', city: 'Houston', state: 'TX', zips: ['77008', '77006', '77004', '77007'],
+    lat: 29.760, lng: -95.369, taxRate: 0.0220, ppsf: 196, adrMult: 1.00, profile: 'urban', occ: 0.62,
+    landPerAcre: 900000, acres: [0.1, 0.3], urbanLot: true,
+    streets: ['Yale St', 'Heights Blvd', 'Westheimer Rd', 'Dunlavy St', 'Washington Ave'],
+  },
+  {
+    name: 'Austin, TX', city: 'Austin', state: 'TX', zips: ['78702', '78704', '78745'],
+    lat: 30.267, lng: -97.743, taxRate: 0.0190, ppsf: 312, adrMult: 1.05, profile: 'urban', occ: 0.65,
+    landPerAcre: 1400000, acres: [0.1, 0.28], urbanLot: true,
+    streets: ['E 6th St', 'S Congress Ave', 'Manor Rd', 'S 1st St', 'Airport Blvd'],
+  },
 ];
-
-const STREETS = [
-  'Yale St', 'Heights Blvd', 'Studewood St', 'Westheimer Rd', 'Fairview St',
-  'Emancipation Ave', 'Polk St', 'Dunlavy St', 'Binz St', 'Bagby St',
-  'Washington Ave', 'Harrisburg Blvd', 'Lawndale St', 'Ella Blvd',
-  'W 34th St', 'Wirt Rd', 'Chimney Rock Rd', 'Almeda Rd', 'Leeland St',
-  'Sabine St', 'Oxford St', 'Cortlandt St', 'Rutland St', 'Columbia St',
-];
-
-// Base ADR (nightly rate) by bedroom count for an average Houston neighborhood.
-const BASE_ADR = { 1: 92, 2: 128, 3: 172, 4: 228, 5: 295 };
 
 // ---------------------------------------------------------------- listings --
-const PROPERTY_TYPES = ['RES', 'RES', 'RES', 'CND', 'RES'];
 const listings = [];
-for (let i = 0; i < 64; i++) {
-  const hood = pick(HOODS);
-  const [name, lat, lng, zip, priceMult] = hood;
-  const beds = pick([1, 2, 2, 3, 3, 3, 4, 4, 5]);
-  const bathsFull = Math.max(1, beds - pick([0, 1, 1, 2]));
-  const bathsHalf = pick([0, 0, 1]);
-  const area = Math.round((650 + beds * between(380, 620)) / 10) * 10;
-  const type = beds <= 2 && rand() < 0.4 ? 'CND' : pick(PROPERTY_TYPES);
-  const yearBuilt = Math.round(between(1948, 2024));
-  const pricePerSqft = between(155, 235) * priceMult * (yearBuilt > 2005 ? 1.08 : 1);
-  const listPrice = Math.round((area * pricePerSqft) / 1000) * 1000;
-  const streetNum = Math.round(between(100, 9800));
-  const street = pick(STREETS);
-  const daysOnMarket = Math.round(between(3, 120));
-  const listDate = new Date(Date.UTC(2026, 6, 25) - daysOnMarket * 86400000)
-    .toISOString();
+let mlsId = 1000000;
 
-  listings.push({
-    mlsId: 1000000 + i,
-    listPrice,
-    listDate,
-    remarks:
-      `${beds} bed ${type === 'CND' ? 'condo' : 'single-family home'} in ` +
-      `${name}. Sample listing generated for demo purposes.`,
-    property: {
-      type,
-      bedrooms: beds,
-      bathsFull,
-      bathsHalf,
-      area,
-      yearBuilt,
-      subdivision: name.toUpperCase(),
-    },
-    address: {
-      full: `${streetNum} ${street}`,
-      city: 'Houston',
-      state: 'TX',
-      postalCode: zip,
-      country: 'United States',
-    },
-    geo: { lat: +(lat + jitter(0.012)).toFixed(6), lng: +(lng + jitter(0.012)).toFixed(6) },
-    association: { fee: type === 'CND' ? Math.round(between(180, 520)) : 0 },
-    mls: { status: 'Active', daysOnMarket, area: 'Houston' },
-    sampleData: true,
-  });
+for (const m of MARKETS) {
+  const homeCount = m.profile === 'urban' ? 46 : 52;
+  const landCount = m.profile === 'urban' ? 8 : 16;
+
+  for (let i = 0; i < homeCount; i++) {
+    const isCabinMkt = m.profile !== 'urban';
+    const beds = isCabinMkt
+      ? pick([1, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 6])
+      : pick([1, 2, 2, 3, 3, 3, 4, 4, 5]);
+    const bathsFull = Math.max(1, Math.min(beds, Math.round(beds * between(0.6, 1.0))));
+    const bathsHalf = pick([0, 0, 1]);
+    // Cabins run smaller per bedroom than suburban homes.
+    const area = round(
+      (isCabinMkt ? 560 + beds * between(300, 430) : 660 + beds * between(380, 600)),
+      10
+    );
+    const type = !isCabinMkt && beds <= 2 && rand() < 0.35 ? 'CND' : 'RES';
+    const yearBuilt = Math.round(between(1972, 2025));
+    const ppsf = m.ppsf * between(0.82, 1.2) * (yearBuilt > 2010 ? 1.07 : 1);
+    const listPrice = round(area * ppsf, 1000);
+    const daysOnMarket = Math.round(between(2, 165));
+    const zip = pick(m.zips);
+
+    listings.push({
+      mlsId: mlsId++,
+      listPrice,
+      listDate: new Date(Date.UTC(2026, 6, 27) - daysOnMarket * 86400000).toISOString(),
+      remarks:
+        `${beds} bed / ${bathsFull} bath ${isCabinMkt ? 'cabin' : type === 'CND' ? 'condo' : 'home'} ` +
+        `in ${m.city}, ${m.state}. Sample listing generated for demo purposes.`,
+      property: {
+        type,
+        bedrooms: beds,
+        bathsFull,
+        bathsHalf,
+        area,
+        yearBuilt,
+        subdivision: m.name,
+      },
+      address: {
+        full: `${Math.round(between(100, 9800))} ${pick(m.streets)}`,
+        city: m.city,
+        state: m.state,
+        postalCode: zip,
+        country: 'United States',
+      },
+      geo: {
+        lat: +(m.lat + jitter(m.profile === 'urban' ? 0.05 : 0.09)).toFixed(6),
+        lng: +(m.lng + jitter(m.profile === 'urban' ? 0.05 : 0.09)).toFixed(6),
+      },
+      association: { fee: type === 'CND' ? Math.round(between(180, 520)) : 0 },
+      taxRate: m.taxRate,
+      mls: { status: 'Active', daysOnMarket, area: m.name },
+      sampleData: true,
+    });
+  }
+
+  // Vacant land parcels - underwritten in the app as build-to-rent deals.
+  for (let i = 0; i < landCount; i++) {
+    const acres = +between(m.acres[0], m.acres[1]).toFixed(2);
+    const listPrice = round(
+      m.landPerAcre * acres * between(0.72, 1.35) * (m.urbanLot ? 1 : 1),
+      1000
+    );
+    const daysOnMarket = Math.round(between(5, 300));
+    listings.push({
+      mlsId: mlsId++,
+      listPrice,
+      listDate: new Date(Date.UTC(2026, 6, 27) - daysOnMarket * 86400000).toISOString(),
+      remarks:
+        `${acres} acre buildable lot in ${m.city}, ${m.state}. ` +
+        `Sample listing generated for demo purposes.`,
+      property: {
+        type: 'LND',
+        bedrooms: null,
+        bathsFull: null,
+        bathsHalf: null,
+        area: null,
+        lotSizeAcres: acres,
+        yearBuilt: null,
+        subdivision: m.name,
+      },
+      address: {
+        full: `${Math.round(between(100, 9800))} ${pick(m.streets)}`,
+        city: m.city,
+        state: m.state,
+        postalCode: pick(m.zips),
+        country: 'United States',
+      },
+      geo: {
+        lat: +(m.lat + jitter(m.profile === 'urban' ? 0.05 : 0.11)).toFixed(6),
+        lng: +(m.lng + jitter(m.profile === 'urban' ? 0.05 : 0.11)).toFixed(6),
+      },
+      association: { fee: 0 },
+      taxRate: m.taxRate,
+      mls: { status: 'Active', daysOnMarket, area: m.name },
+      sampleData: true,
+    });
+  }
 }
 
 // ------------------------------------------------------------------- comps --
-const ROOM_TYPES = ['Entire home/apt', 'Entire home/apt', 'Entire home/apt', 'Private room'];
+const ROOM_TYPES = ['Entire home/apt', 'Entire home/apt', 'Entire home/apt', 'Entire home/apt', 'Private room'];
 const comps = [];
-for (let i = 0; i < 360; i++) {
-  const hood = pick(HOODS);
-  const [name, lat, lng, , , adrMult, occBase] = hood;
-  const roomType = pick(ROOM_TYPES);
-  const beds = roomType === 'Private room' ? 1 : pick([1, 2, 2, 3, 3, 4, 5]);
-  const adrBase = BASE_ADR[beds] * (roomType === 'Private room' ? 0.55 : 1);
-  const price = Math.round(adrBase * adrMult * between(0.78, 1.28));
-  const occupancy = Math.min(0.92, Math.max(0.25, occBase + between(-0.14, 0.14)));
-  // Inside Airbnb publishes availability, not occupancy; encode consistently.
-  const availability365 = Math.round(365 * (1 - occupancy));
-  const reviewsPerMonth = +(occupancy * between(1.2, 3.4)).toFixed(2);
-  const monthsActive = between(6, 60);
-  const numberOfReviews = Math.round(reviewsPerMonth * monthsActive);
+let compId = 50000000;
 
-  comps.push({
-    id: 50000000 + i,
-    name: `${roomType === 'Private room' ? 'Room' : `${beds}BR`} in ${name}`,
-    neighbourhood: name,
-    latitude: +(lat + jitter(0.014)).toFixed(6),
-    longitude: +(lng + jitter(0.014)).toFixed(6),
-    room_type: roomType,
-    bedrooms: beds,
-    accommodates: beds * 2 + pick([0, 1, 2]),
-    price,
-    minimum_nights: pick([1, 2, 2, 3, 30]),
-    availability_365: availability365,
-    number_of_reviews: numberOfReviews,
-    reviews_per_month: reviewsPerMonth,
-    review_scores_rating: +between(4.2, 5.0).toFixed(2),
-  });
+for (const m of MARKETS) {
+  const base = ADR_PROFILE[m.profile];
+  for (let i = 0; i < 190; i++) {
+    const roomType = pick(ROOM_TYPES);
+    const isCabinMkt = m.profile !== 'urban';
+    const beds =
+      roomType === 'Private room'
+        ? 1
+        : isCabinMkt
+          ? pick([1, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 6])
+          : pick([1, 2, 2, 3, 3, 4, 5]);
+    const adrBase = base[beds] * m.adrMult * (roomType === 'Private room' ? 0.5 : 1);
+    const price = Math.round(adrBase * between(0.82, 1.24));
+    const occupancy = Math.min(0.93, Math.max(0.22, m.occ + between(-0.13, 0.13)));
+    // Inside Airbnb publishes availability, not occupancy; encode consistently.
+    const availability365 = Math.round(365 * (1 - occupancy));
+    const reviewsPerMonth = +(occupancy * between(1.1, 3.6)).toFixed(2);
+
+    comps.push({
+      id: compId++,
+      name: `${roomType === 'Private room' ? 'Room' : `${beds}BR`} in ${m.city}`,
+      neighbourhood: m.name,
+      latitude: +(m.lat + jitter(m.profile === 'urban' ? 0.06 : 0.13)).toFixed(6),
+      longitude: +(m.lng + jitter(m.profile === 'urban' ? 0.06 : 0.13)).toFixed(6),
+      room_type: roomType,
+      bedrooms: beds,
+      accommodates: beds * 2 + pick([0, 1, 2]),
+      price,
+      minimum_nights: pick([1, 2, 2, 2, 3, 30]),
+      availability_365: availability365,
+      number_of_reviews: Math.round(reviewsPerMonth * between(6, 62)),
+      reviews_per_month: reviewsPerMonth,
+      review_scores_rating: +between(4.2, 5.0).toFixed(2),
+    });
+  }
 }
 
 const outDir = path.join(__dirname, '..', 'src', 'data');
 fs.mkdirSync(outDir, { recursive: true });
-fs.writeFileSync(
-  path.join(outDir, 'sampleListings.json'),
-  JSON.stringify(listings, null, 2) + '\n'
+// Compact JSON - these are generated artifacts and the files are large.
+fs.writeFileSync(path.join(outDir, 'sampleListings.json'), JSON.stringify(listings) + '\n');
+fs.writeFileSync(path.join(outDir, 'airbnbComps.json'), JSON.stringify(comps) + '\n');
+
+const landCount = listings.filter((l) => l.property.type === 'LND').length;
+console.log(
+  `Wrote ${listings.length} listings (${listings.length - landCount} homes, ${landCount} land) ` +
+  `and ${comps.length} Airbnb comps across ${MARKETS.length} markets`
 );
-fs.writeFileSync(
-  path.join(outDir, 'airbnbComps.json'),
-  JSON.stringify(comps, null, 2) + '\n'
-);
-console.log(`Wrote ${listings.length} listings and ${comps.length} Airbnb comps to src/data/`);

@@ -10,11 +10,28 @@ function Field({ label, children }) {
 }
 
 /** One filter row; everything below it (charts + table) renders the same slice. */
-export default function Filters({ filters, onChange, neighborhoods }) {
+export default function Filters({ filters, onChange, markets }) {
   const set = (k, v) => onChange({ ...filters, [k]: v });
   return (
-    <div className="card px-4 py-3 grid grid-cols-2 md:grid-cols-5 gap-3 items-end">
-      <Field label="Max price">
+    <div className="card px-4 py-3 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 items-end">
+      <Field label="Market">
+        <select value={filters.market} onChange={(e) => set('market', e.target.value)}>
+          <option value="">All markets</option>
+          {markets.map((m) => (
+            <option key={m} value={m}>
+              {m}
+            </option>
+          ))}
+        </select>
+      </Field>
+      <Field label="Deal type">
+        <select value={filters.dealType} onChange={(e) => set('dealType', e.target.value)}>
+          <option value="">Buy or build</option>
+          <option value="existing">Existing homes</option>
+          <option value="build">Land + build</option>
+        </select>
+      </Field>
+      <Field label="Max all-in cost">
         <input
           type="number"
           step={50000}
@@ -25,26 +42,10 @@ export default function Filters({ filters, onChange, neighborhoods }) {
         />
       </Field>
       <Field label="Min bedrooms">
-        <select
-          value={filters.minBeds}
-          onChange={(e) => set('minBeds', +e.target.value)}
-        >
+        <select value={filters.minBeds} onChange={(e) => set('minBeds', +e.target.value)}>
           {[0, 1, 2, 3, 4, 5].map((n) => (
             <option key={n} value={n}>
               {n === 0 ? 'Any' : `${n}+`}
-            </option>
-          ))}
-        </select>
-      </Field>
-      <Field label="Neighborhood">
-        <select
-          value={filters.neighborhood}
-          onChange={(e) => set('neighborhood', e.target.value)}
-        >
-          <option value="">All</option>
-          {neighborhoods.map((n) => (
-            <option key={n} value={n}>
-              {n}
             </option>
           ))}
         </select>

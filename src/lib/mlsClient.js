@@ -20,12 +20,24 @@ const API_URL =
 const API_USER = process.env.REACT_APP_MLS_API_USER || 'simplyrets';
 const API_PASS = process.env.REACT_APP_MLS_API_PASS || 'simplyrets';
 
+const TYPE_LABELS = { CND: 'Condo', LND: 'Land', RES: 'Single family' };
+
+// Real RESO feeds tend to shout field values in all-caps; sample data doesn't.
+function tidyName(s) {
+  const str = String(s || '');
+  if (!str) return '';
+  return str === str.toUpperCase()
+    ? str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())
+    : str;
+}
+
 // Normalize a SimplyRETS/RESO property record into the shape the app uses.
 function normalize(raw) {
   const p = raw.property || {};
   const addr = raw.address || {};
   const geo = raw.geo || {};
-  const baths = (p.bathsFull || 0) + 0.5 * (p.bathsHalf || 0);
+  const baths =
+    p.bathsFull != null ? (p.bathsFull || 0) + 0.5 * (p.bathsHalf || 0) : null;
   return {
     id: String(raw.mlsId ?? raw.listingId ?? addr.full ?? Math.random()),
     price: raw.listPrice || 0,
@@ -33,13 +45,18 @@ function normalize(raw) {
     city: addr.city || '',
     state: addr.state || '',
     zip: addr.postalCode || '',
-    neighborhood: toTitleCase(p.subdivision || raw.mls?.area || ''),
+    market: tidyName(raw.mls?.area || p.subdivision || addr.city || ''),
+    neighborhood: tidyName(p.subdivision || raw.mls?.area || ''),
     beds: p.bedrooms ?? null,
     baths: baths || null,
     sqft: p.area || null,
+    lotAcres: p.lotSizeAcres ?? null,
     yearBuilt: p.yearBuilt || null,
-    propertyType: p.type === 'CND' ? 'Condo' : 'Single family',
+    propertyType: TYPE_LABELS[p.type] || 'Single family',
     hoaMonthly: raw.association?.fee || 0,
+    // Per-market effective property tax rate when the feed supplies one;
+    // the analysis engine falls back to its own assumption otherwise.
+    taxRate: raw.taxRate ?? null,
     daysOnMarket: raw.mls?.daysOnMarket ?? null,
     lat: geo.lat ?? null,
     lng: geo.lng ?? null,
@@ -47,17 +64,13 @@ function normalize(raw) {
   };
 }
 
-function toTitleCase(s) {
-  return String(s)
-    .toLowerCase()
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 function usable(l) {
-  return l.price > 0 && l.lat !== null && l.lng !== null && l.beds !== null;
+  if (!(l.price > 0) || l.lat == null || l.lng == null) return false;
+  // Land has no bedroom count — the build spec supplies one downstream.
+  return l.propertyType === 'Land' || l.beds != null;
 }
 
-export async function fetchListings({ limit = 100 } = {}) {
+export async function fetchListings({ limit = 500 } = {}) {
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 8000);
