@@ -80,9 +80,17 @@ falls back to the bundled sample data if that's unreachable.
 
 ### MLS listings
 
-On load the app fetches active listings from the **SimplyRETS demo API** — a
-public, RESO-standard MLS test feed (Houston, TX). To point it at a real MLS
-feed, create `.env.local`:
+By default the app uses the **bundled dataset** and does not call any MLS API.
+A live feed is opt-in: set real credentials in `.env.local` and the app will
+prefer the feed, falling back to the bundled data if it errors or returns
+fewer than 10 usable listings.
+
+> The SimplyRETS *demo* feed (`simplyrets`/`simplyrets`) returns only a
+> handful of records. It used to be tried first whenever it was reachable,
+> which silently replaced the full dataset with ~3 listings for anyone on an
+> unrestricted network. It is now behind `REACT_APP_USE_DEMO_MLS=true`.
+
+To point it at a real MLS feed, create `.env.local`:
 
 ```bash
 REACT_APP_MLS_API_URL=https://api.simplyrets.com/properties
@@ -93,8 +101,8 @@ REACT_APP_MLS_API_PASS=your_vendor_secret
 Any RESO Web API–compatible provider that returns SimplyRETS-shaped JSON works
 out of the box; other providers only need a tweak to `normalize()` in
 `src/lib/mlsClient.js`. If the feed is unreachable (offline, CORS, bad
-credentials) the app falls back to a bundled sample dataset and says so in the
-header badge.
+credentials) the app falls back to the bundled dataset and says so in the
+header badge, which always names the source actually in use.
 
 ### Airbnb comps
 

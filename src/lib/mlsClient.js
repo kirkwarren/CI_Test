@@ -15,10 +15,32 @@
  * the JS bundle.
  */
 
-const API_URL =
-  process.env.REACT_APP_MLS_API_URL || 'https://api.simplyrets.com/properties';
-const API_USER = process.env.REACT_APP_MLS_API_USER || 'simplyrets';
-const API_PASS = process.env.REACT_APP_MLS_API_PASS || 'simplyrets';
+const DEMO_URL = 'https://api.simplyrets.com/properties';
+const DEMO_CRED = 'simplyrets';
+
+const API_URL = process.env.REACT_APP_MLS_API_URL || DEMO_URL;
+const API_USER = process.env.REACT_APP_MLS_API_USER || DEMO_CRED;
+const API_PASS = process.env.REACT_APP_MLS_API_PASS || DEMO_CRED;
+
+/**
+ * A live feed is only consulted when it has actually been configured.
+ *
+ * The SimplyRETS demo feed is a toy: it answers with a handful of records.
+ * Preferring it whenever it happened to be reachable silently replaced the
+ * full bundled dataset with ~3 listings for anyone on an unrestricted
+ * network. Defaults now mean "use the bundled dataset"; a real feed is opt-in
+ * via credentials, and the demo feed via REACT_APP_USE_DEMO_MLS=true.
+ */
+export const LIVE_CONFIGURED =
+  process.env.REACT_APP_USE_DEMO_MLS === 'true' ||
+  API_URL !== DEMO_URL ||
+  API_USER !== DEMO_CRED ||
+  API_PASS !== DEMO_CRED;
+
+// A configured feed answering with almost nothing is far more likely to be a
+// misconfiguration than a market with two houses for sale, so treat it as a
+// failure and keep the bundled data rather than emptying the dashboard.
+export const MIN_LIVE_LISTINGS = 10;
 
 export const SAMPLE_LISTINGS_URL = `${process.env.PUBLIC_URL || ''}/data/listings.json`;
 
@@ -79,22 +101,29 @@ async function fetchSample() {
 }
 
 export async function fetchListings({ limit = 500 } = {}) {
-  let liveError;
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 8000);
-    const res = await fetch(`${API_URL}?limit=${limit}&status=Active`, {
-      headers: { Authorization: 'Basic ' + btoa(`${API_USER}:${API_PASS}`) },
-      signal: controller.signal,
-    });
-    clearTimeout(timer);
-    if (!res.ok) throw new Error(`MLS feed responded ${res.status}`);
-    const data = await res.json();
-    const listings = data.map(normalize).filter(usable);
-    if (!listings.length) throw new Error('MLS feed returned no usable listings');
-    return { listings, source: 'live' };
-  } catch (err) {
-    liveError = err.message;
+  let liveError = LIVE_CONFIGURED ? null : 'No MLS feed configured';
+
+  if (LIVE_CONFIGURED) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 8000);
+      const res = await fetch(`${API_URL}?limit=${limit}&status=Active`, {
+        headers: { Authorization: 'Basic ' + btoa(`${API_USER}:${API_PASS}`) },
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error(`MLS feed responded ${res.status}`);
+      const data = await res.json();
+      const listings = data.map(normalize).filter(usable);
+      if (listings.length < MIN_LIVE_LISTINGS) {
+        throw new Error(
+          `MLS feed returned only ${listings.length} usable listings (need ${MIN_LIVE_LISTINGS})`
+        );
+      }
+      return { listings, source: 'live' };
+    } catch (err) {
+      liveError = err.message;
+    }
   }
 
   try {
