@@ -73,8 +73,8 @@ Either:
 To have the deployed site use a real MLS feed, add
 `REACT_APP_MLS_API_URL` / `REACT_APP_MLS_API_USER` / `REACT_APP_MLS_API_PASS`
 as environment variables in the Vercel project settings (they are inlined at
-build time). Without them the site uses the public SimplyRETS demo feed and
-falls back to the bundled sample data if that's unreachable.
+build time). Without them the site uses the bundled dataset and makes no MLS
+request at all.
 
 ## Data sources
 
@@ -106,18 +106,20 @@ header badge, which always names the source actually in use.
 
 ### Airbnb comps
 
-Comps ship as `src/data/airbnbComps.json` in the
+Comps ship as `public/data/airbnb-comps.json` in the
 [Inside Airbnb](https://insideairbnb.com/get-the-data/) schema. The bundled
-file is **synthetic sample data** (1,900 comps across the same ten markets),
+file is **synthetic sample data** (14,060 comps across the same 37 markets),
 calibrated to realistic nightly-rate, occupancy and price relationships rather
-than copied from any real scrape. To use real market data, download
+than copied from any real scrape. Both datasets live in `public/` and are
+fetched at runtime rather than bundled — at ~7 MB raw (0.55 MB gzipped) they
+would otherwise dominate the JS bundle. To use real market data, download
 `listings.csv` for your city from Inside Airbnb and run:
 
 ```bash
 npm run import-airbnb -- path/to/listings.csv
 ```
 
-which regenerates `airbnbComps.json` from the real scrape. AirDNA or other
+which regenerates `public/data/airbnb-comps.json` from the real scrape. AirDNA or other
 exports work too if mapped to the same fields. Occupancy is inferred from
 calendar availability (`1 − availability_365/365`), which overstates true
 occupancy — that's what the configurable *occupancy haircut* assumption is

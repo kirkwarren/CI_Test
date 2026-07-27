@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Converts a real Inside Airbnb "listings.csv" export into the comp dataset
- * the app consumes (src/data/airbnbComps.json), replacing the bundled sample.
+ * the app consumes (public/data/airbnb-comps.json), replacing the bundled
+ * sample. The app fetches this file at runtime; it is never bundled.
  *
  * Inside Airbnb (https://insideairbnb.com/get-the-data/) publishes quarterly
  * scrapes of Airbnb listings for many cities. Download listings.csv (either
@@ -100,6 +101,8 @@ for (const r of rows) {
   });
 }
 
-const out = path.join(__dirname, '..', 'src', 'data', 'airbnbComps.json');
+const outDir = path.join(__dirname, '..', 'public', 'data');
+fs.mkdirSync(outDir, { recursive: true });
+const out = path.join(outDir, 'airbnb-comps.json');
 fs.writeFileSync(out, JSON.stringify(comps, null, 2) + '\n');
 console.log(`Imported ${comps.length} comps from ${file} -> ${out}`);
