@@ -27,6 +27,21 @@ npm test           # smoke tests
 npm run build      # production bundle in build/
 ```
 
+## Live site
+
+Deployed to GitHub Pages: **https://kirkwarren.github.io/CI_Test/**
+
+The `homepage` field in `package.json` makes Create React App emit assets under
+the `/CI_Test/` subpath that Pages serves from. To publish an update:
+
+```bash
+npm run build
+git worktree add /tmp/ghp gh-pages
+cd /tmp/ghp && git rm -rq . && cp -r <repo>/build/. . && touch .nojekyll
+git add -A && git commit -m "Deploy" && git push origin gh-pages
+git worktree remove /tmp/ghp
+```
+
 ## Deploying to Vercel
 
 The repo is Vercel-ready (`vercel.json` pins the Create React App build).
