@@ -1,22 +1,22 @@
 # Weekly Model Allocation (rules-based)
 
-*As of equities 2026-07-17 / crypto 2026-07-19. Rules-based model portfolio for research/education. Not financial advice, not a prediction. Every weight traces to a measured, cited rule; the rules are tilts and risk controls, not knowledge of the future.*
+*As of equities 2026-07-27 / crypto 2026-07-27. Rules-based model portfolio for research/education. Not financial advice, not a prediction. Every weight traces to a measured, cited rule; the rules are tilts and risk controls, not knowledge of the future.*
 
 | Weight | Asset | Sleeve | Rule (auditable) |
 |---|---|---|---|
-| 11.5% | **TLT** | diversifier | low measured STRESS-day correlation to equities (study 4) |
-| 9.9% | **SPY** | core | inverse-vol core (12m vol 15%), cap 20% |
-| 9.8% | **EFA** | core | inverse-vol core (12m vol 15%), cap 20% |
-| 7.8% | **EEM** | core | inverse-vol core (12m vol 20%), cap 20% |
-| 7.7% | **GLD** | diversifier | low measured STRESS-day correlation to equities (study 4) |
-| 7.5% | **QQQ** | core | inverse-vol core (12m vol 20%), cap 20% |
-| 7.2% | **IWM** | core | inverse-vol core (12m vol 21%), cap 20% |
-| 2.6% | **GOOGL** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
-| 2.6% | **XLK** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
-| 2.6% | **AAPL** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
-| 31.0% | **CASH** | reserve | cash floor + vol-target overlay overflow + closed crypto gate |
+| 12.0% | **TLT** | diversifier | low measured STRESS-day correlation to equities (study 4) |
+| 10.3% | **SPY** | core | inverse-vol core (12m vol 15%), cap 20% |
+| 10.2% | **EFA** | core | inverse-vol core (12m vol 16%), cap 20% |
+| 8.1% | **EEM** | core | inverse-vol core (12m vol 20%), cap 20% |
+| 7.9% | **GLD** | diversifier | low measured STRESS-day correlation to equities (study 4) |
+| 7.8% | **QQQ** | core | inverse-vol core (12m vol 20%), cap 20% |
+| 7.5% | **IWM** | core | inverse-vol core (12m vol 21%), cap 20% |
+| 2.7% | **AAPL** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
+| 2.7% | **JPM** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
+| 2.7% | **XLK** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
+| 28.4% | **CASH** | reserve | cash floor + vol-target overlay overflow + closed crypto gate |
 
-Portfolio vol overlay: realized 15.6% vs target 12% → scale 0.77.
+Portfolio vol overlay: realized 15.1% vs target 12% → scale 0.80.
 
 ## Why these rules and not "better" ones
 
