@@ -82,11 +82,43 @@ Leaders were then attacked by two independent verifier lenses, each told to refu
 - **Crowding lens** — try to prove the space is already served, searching practitioner jargon rather than the candidate's marketing name. An incumbent who could ship this as a feature next quarter counts against it.
 - **Demand lens** — try to prove the `why_now` is fiction. Verify the trigger exists, has not slipped or been repealed, and actually binds the named party. Check that the sufferer is also the payer.
 
-Refuted by both lenses = disqualified.
+The intended rule was *refuted by both lenses = disqualified*. **That rule was not applied**, because the verifiers ran with no live search instrument — see limitation 0 below. The verification stage as executed produced objections worth chasing, not verdicts worth trusting.
 
 ## Coverage limitations — read this
 
 These are real constraints on the study, not disclaimers.
+
+### 0. The search budget ran out mid-study — this is the big one
+
+The session carries a hard cap of 200 WebSearch calls. **It was exhausted partway through**, and everything downstream of that point ran without a live research instrument.
+
+Measured from the run transcripts:
+
+| Stage | Live searches available? |
+| --- | --- |
+| Scouts (8 heavy searchers) | Yes — 41–84 searches each |
+| Later scouts / re-runs | No — budget already gone |
+| Screening round 1 | Partial |
+| Screening round 2, batches 1–6 | Yes — 26–36 searches each |
+| Screening round 2, batches 7–9 | **No** |
+| **Adversarial verification (all 10 agents)** | **No — zero searches** |
+
+The consequence is specific and serious: **the adversarial verification stage, which this study's credibility most depends on, ran entirely on model recall.** Not one verifier executed a live competitor search. Every one of them said so unprompted, in a `METHOD NOTE` at the top of its evidence field — for example:
+
+> "WebSearch was exhausted (200/200) before I issued a single query and WebFetch is hard-blocked, so I ran zero live competitor searches on the grid-equipment space."
+
+That honesty is the only reason this is documentable. But it means the verification verdicts are **expert-recall objections, not verified findings**.
+
+#### Why the refutation rate must not be read as signal
+
+The verifiers refuted roughly 90% of what they examined. That number is an artifact, not a result. Two instructions combined badly with the tooling state:
+
+1. Verifiers were told to *"default to refuted=true when the evidence is thin."*
+2. The evidence was **maximally** thin for every candidate, because no searching was possible.
+
+Under those conditions a verifier refutes nearly everything regardless of merit, so the verdicts do not discriminate between strong and weak opportunities. **The planned "refuted by both lenses = disqualified" rule was therefore abandoned** — applying it would have deleted the pool on the strength of a measurement that couldn't measure.
+
+What the objections *are* still good for: several name real, checkable incumbents from recall (SimpleClosure and Sunset for business wind-down; Synagro and Denali for biosolids; Reconomy, Ecoveritas and Lorax EPI for packaging EPR). Those are exactly the right first calls in diligence. They are carried alongside each opportunity as **open questions to resolve**, not as settled verdicts.
 
 ### 1. WebFetch was hard-blocked for the entire study
 
@@ -120,7 +152,9 @@ A hard diversity constraint was therefore imposed on the final selection: no mor
 
 ## What "overlooked" means here
 
-It does not mean nobody has ever thought of it. It means that at the time of research, live searches did not surface a set of well-funded companies executing the specific wedge described. That is a statement about search results in August 2026, not a guarantee of an empty market. Competitors that are quiet, pre-launch, non-English, or operating as consulting practices are systematically under-detected by this method.
+It does not mean nobody has ever thought of it. At best it means that at the time of research, live searches did not surface a set of well-funded companies executing the specific wedge described — a statement about search results in August 2026, not a guarantee of an empty market. Competitors that are quiet, pre-launch, non-English, or operating as consulting practices are systematically under-detected by this method.
+
+And for a substantial share of these findings it means less than that, because the search budget was gone by the time they were assessed (limitation 0). For those, "overlooked" rests on model recall about who exists in a market. **Treat every `overlooked` score as a hypothesis to disprove in your first hour of diligence, not as a finding.** The single highest-value next step for this entire study is to re-run the crowding checks in a session with a fresh search budget.
 
 ## Reproduction
 
