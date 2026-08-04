@@ -179,6 +179,9 @@ for nm, desc in [
     ('Screening Scores', 'Every screening score, competitor check and kill risk'),
     ('Verification', 'Adversarial objections - open questions, not verdicts'),
     ('Honorable Mentions', 'The 12 that just missed the cut'),
+    ('Projections', 'Bottom-up 5-year revenue build per opportunity - blue cells are editable inputs'),
+    ('Projection Basis', 'Where every projection number came from, and how much the analyst trusted it'),
+    ('Bear Case', 'The most optimistic assumption in each model, and year 5 after a haircut'),
 ]:
     ws.cell(row=r, column=1, value=nm).font = Font(name=FONT, size=10, bold=True)
     ws.cell(row=r, column=2, value=desc).font = Font(name=FONT, size=10)
@@ -403,6 +406,166 @@ ws.cell(row=row, column=2, value=sel['diversity_note'])
 ws.cell(row=row, column=2).alignment = Alignment(wrap_text=True, vertical='top')
 ws.cell(row=row, column=2).font = Font(name=FONT, size=10)
 ws.row_dimensions[row].height = 300
+
+# =====================================================================
+# Sheets 7-9 — Projections, Projection Basis, Bear Case
+# =====================================================================
+PJ_PATH = '/home/user/CI_Test/research/projections.json'
+if os.path.exists(PJ_PATH):
+    pj = json.load(open(PJ_PATH))
+    projections, challenges = pj['projections'], pj['challenges']
+    ordered = [x for x in sel['final_25'] if x['id'] in projections]
+
+    MONEY = '$#,##0;($#,##0);-'
+    PCT = '0.0%'
+    INPUT_FONT = Font(name=FONT, size=10, color='0000FF')
+
+    # ---------- Projections ----------
+    ws = wb.create_sheet('Projections')
+    ws.sheet_view.showGridLines = False
+    ws['A1'] = ('BOTTOM-UP ESTIMATES, NOT FORECASTS. Built with no web access - the search budget was exhausted '
+                'before this stage - so every figure comes from the opportunity record (quoted) or from analyst '
+                'judgement (labelled). See the Projection Basis sheet for where each number came from and how much '
+                'the analyst trusted it. Blue cells are inputs: change one and the whole build recomputes. '
+                'Confidence tops out at 5/10 across all 25 - treat these as arguable starting points, not answers.')
+    ws['A1'].font = Font(name=FONT, size=10, bold=True, color='9C0006')
+    ws['A1'].alignment = Alignment(wrap_text=True, vertical='top')
+    ws.merge_cells('A1:Y1')
+    ws.row_dimensions[1].height = 56
+
+    cols = ['Rank', 'Opportunity', 'Buyers in universe', 'ACV ($)', 'Gross margin', 'Revenue quality',
+            'Cust Y1', 'Cust Y2', 'Cust Y3', 'Cust Y4', 'Cust Y5',
+            'Revenue Y1', 'Revenue Y2', 'Revenue Y3', 'Revenue Y4', 'Revenue Y5',
+            'Y5 gross profit', 'Y5 penetration', 'Capital to 1st revenue', 'Months to 1st revenue',
+            'Team at Y1', 'Confidence', 'Bear-case Y5', 'Bear vs base', 'ID']
+    for i, h in enumerate(cols, start=1):
+        ws.cell(row=3, column=i, value=h)
+    style_header(ws, 3, len(cols))
+    widths(ws, {'A': 6, 'B': 44, 'C': 15, 'D': 12, 'E': 12, 'F': 17,
+                'G': 9, 'H': 9, 'I': 9, 'J': 9, 'K': 9,
+                'L': 14, 'M': 14, 'N': 14, 'O': 14, 'P': 14,
+                'Q': 15, 'R': 14, 'S': 18, 'T': 18, 'U': 11, 'V': 11, 'W': 15, 'X': 12, 'Y': 34})
+    row = 4
+    FIRST = row
+    for x in ordered:
+        p = projections[x['id']]
+        ws.cell(row=row, column=1, value=x['rank'])
+        ws.cell(row=row, column=2, value=x['name'])
+        for col, key, fmt in [(3, 'buyer_universe', '#,##0'), (4, 'acv_usd', MONEY),
+                              (5, 'gross_margin_pct', PCT)]:
+            c = ws.cell(row=row, column=col, value=p[key])
+            c.font, c.fill, c.number_format = INPUT_FONT, YELLOW, fmt
+        ws.cell(row=row, column=6, value=p['revenue_quality'])
+        for i, key in enumerate(['customers_y1', 'customers_y2', 'customers_y3',
+                                 'customers_y4', 'customers_y5']):
+            c = ws.cell(row=row, column=7 + i, value=p[key])
+            c.font, c.fill, c.number_format = INPUT_FONT, YELLOW, '#,##0'
+        for i in range(5):  # revenue = customers * ACV
+            cust = get_column_letter(7 + i)
+            c = ws.cell(row=row, column=12 + i, value=f'={cust}{row}*$D{row}')
+            c.number_format = MONEY
+        gp = ws.cell(row=row, column=17, value=f'=P{row}*$E{row}')
+        gp.number_format = MONEY
+        gp.font = Font(name=FONT, size=10, bold=True)
+        pen = ws.cell(row=row, column=18, value=f'=IF($C{row}=0,"",K{row}/$C{row})')
+        pen.number_format = PCT
+        cap = ws.cell(row=row, column=19, value=p['capital_to_first_revenue_usd'])
+        cap.number_format, cap.font, cap.fill = MONEY, INPUT_FONT, YELLOW
+        ws.cell(row=row, column=20, value=p['months_to_first_revenue'])
+        ws.cell(row=row, column=21, value=p['team_at_y1'])
+        cf = ws.cell(row=row, column=22, value=p['confidence'])
+        cf.font = Font(name=FONT, size=10, bold=True,
+                       color='9C0006' if p['confidence'] <= 3 else '9C6500')
+        bc = ws.cell(row=row, column=23,
+                     value=f"=IFERROR(INDEX('Bear Case'!$F:$F,MATCH($Y{row},'Bear Case'!$A:$A,0)),\"\")")
+        bc.number_format = MONEY
+        dv = ws.cell(row=row, column=24, value=f'=IFERROR(W{row}/P{row}-1,"")')
+        dv.number_format = '0.0%;[Red]-0.0%'
+        ws.cell(row=row, column=25, value=x['id'])
+        row += 1
+    LAST = row - 1
+    ws.cell(row=row, column=2, value=f'Portfolio total ({len(ordered)} opportunities)').font = Font(
+        name=FONT, size=10, bold=True)
+    for col in range(12, 18):
+        L = get_column_letter(col)
+        t = ws.cell(row=row, column=col, value=f'=SUM({L}{FIRST}:{L}{LAST})')
+        t.number_format, t.font = MONEY, Font(name=FONT, size=10, bold=True)
+    for col in [19, 23]:
+        L = get_column_letter(col)
+        t = ws.cell(row=row, column=col, value=f'=SUM({L}{FIRST}:{L}{LAST})')
+        t.number_format, t.font = MONEY, Font(name=FONT, size=10, bold=True)
+    avg = ws.cell(row=row, column=22, value=f'=ROUND(AVERAGE(V{FIRST}:V{LAST}),1)')
+    avg.font = Font(name=FONT, size=10, bold=True)
+    body(ws, FIRST, row, len(cols), wrap_cols=('B',))
+    ws.freeze_panes = 'C4'
+    ws.auto_filter.ref = f'A3:{get_column_letter(len(cols))}{LAST}'
+    warn = row + 2
+    ws.cell(row=warn, column=2, value=(
+        'The portfolio total is an arithmetic sum, NOT an expected value. It assumes all 25 businesses are '
+        'built simultaneously and every one hits plan - which will not happen. Read it as the ceiling of the '
+        'set, and read the Bear-case column as what each looks like after the investment committee gets hold '
+        'of the most optimistic assumption.')).font = Font(name=FONT, size=9, italic=True, color='9C0006')
+    ws.cell(row=warn, column=2).alignment = Alignment(wrap_text=True, vertical='top')
+    ws.merge_cells(start_row=warn, start_column=2, end_row=warn + 2, end_column=12)
+
+    # ---------- Projection Basis ----------
+    ws = wb.create_sheet('Projection Basis')
+    ws.sheet_view.showGridLines = False
+    cols = ['Rank', 'Opportunity', 'Who actually signs the cheque', 'How the buyer universe was derived',
+            'How the ACV was set', 'Pricing model', 'Why this ramp', 'Margin basis',
+            'Key sensitivity', 'Bear case', 'Confidence', 'What the confidence means', 'ID']
+    for i, h in enumerate(cols, start=1):
+        ws.cell(row=1, column=i, value=h)
+    style_header(ws, 1, len(cols))
+    widths(ws, {'A': 6, 'B': 40, 'C': 60, 'D': 90, 'E': 80, 'F': 50, 'G': 90,
+                'H': 70, 'I': 70, 'J': 80, 'K': 11, 'L': 80, 'M': 34})
+    row = 2
+    for x in ordered:
+        p = projections[x['id']]
+        vals = [x['rank'], x['name'], p['buyer'], p['buyer_universe_basis'], p['acv_basis'],
+                p['pricing_model'], p['ramp_rationale'], p['gross_margin_basis'], p['key_sensitivity'],
+                p['downside_note'], p['confidence'], p['confidence_note'], x['id']]
+        for i, v in enumerate(vals, start=1):
+            ws.cell(row=row, column=i, value=v)
+        ws.row_dimensions[row].height = 76
+        row += 1
+    body(ws, 2, row - 1, len(cols), wrap_cols=('B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L'))
+    ws.freeze_panes = 'C2'
+    ws.auto_filter.ref = f'A1:{get_column_letter(len(cols))}{row-1}'
+
+    # ---------- Bear Case ----------
+    ws = wb.create_sheet('Bear Case')
+    ws.sheet_view.showGridLines = False
+    ws['A1'] = ('An independent skeptic was given each model and asked to find the single assumption doing too '
+                'much work, then to state a specific haircut and recompute year 5. This is the number to argue '
+                'with first.')
+    ws['A1'].font = Font(name=FONT, size=10, bold=True, color=NAVY)
+    ws['A1'].alignment = Alignment(wrap_text=True, vertical='top')
+    ws.merge_cells('A1:F1')
+    ws.row_dimensions[1].height = 32
+    cols = ['ID', 'Opportunity', 'Most optimistic assumption', 'Why it is optimistic',
+            'Suggested haircut', 'Y5 revenue after haircut']
+    for i, h in enumerate(cols, start=1):
+        ws.cell(row=3, column=i, value=h)
+    style_header(ws, 3, len(cols))
+    widths(ws, {'A': 34, 'B': 40, 'C': 70, 'D': 85, 'E': 85, 'F': 20})
+    row = 4
+    for x in ordered:
+        ch = challenges.get(x['id'])
+        if not ch:
+            continue
+        ws.cell(row=row, column=1, value=x['id'])
+        ws.cell(row=row, column=2, value=x['name'])
+        ws.cell(row=row, column=3, value=ch['most_optimistic_assumption'])
+        ws.cell(row=row, column=4, value=ch['why_it_is_optimistic'])
+        ws.cell(row=row, column=5, value=ch['suggested_haircut'])
+        c = ws.cell(row=row, column=6, value=ch['y5_revenue_if_haircut_applied_usd'])
+        c.number_format = MONEY
+        ws.row_dimensions[row].height = 72
+        row += 1
+    body(ws, 4, row - 1, len(cols), wrap_cols=('B', 'C', 'D', 'E'))
+    ws.freeze_panes = 'C4'
+    ws.auto_filter.ref = f'A3:{get_column_letter(len(cols))}{row-1}'
 
 # LibreOffice cannot run in this sandbox, so openpyxl's formulas ship without cached
 # values. Force Excel / Sheets / Numbers to compute them the moment the file opens.
