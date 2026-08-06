@@ -1,6 +1,6 @@
 # Real-Data Quant Screen & Strategy Analysis
 
-*Generated 2026-08-05 · crypto through 2026-08-04 (completed UTC days), equities through 2026-08-04 (last close) · 38 assets (16 crypto via Coinbase, 22 equities/ETFs via Nasdaq)*
+*Generated 2026-08-06 · crypto through 2026-08-05 (completed UTC days), equities through 2026-08-05 (last close) · 38 assets (16 crypto via Coinbase, 22 equities/ETFs via Nasdaq)*
 
 > **This report describes the past.** Every number below is a historical
 > measurement on real market data — none of it is a prediction, and
@@ -11,7 +11,7 @@
 
 Crypto closes were cross-validated across two independent venues (Coinbase vs Kraken):
 
-- BTC-USD: median divergence 0.016% over 720 overlapping days
+- BTC-USD: median divergence 0.015% over 720 overlapping days
 - ETH-USD: median divergence 0.016% over 720 overlapping days
 - SOL-USD: median divergence 0.016% over 720 overlapping days
 
@@ -23,18 +23,18 @@ Ranked on three transparent, equally-weighted pillars: 12-1 & 6-month momentum, 
 
 | # | Asset | Class | Composite | 12-1 Mom | 6M | Sharpe | Ann.Vol | MaxDD | vs 200d |
 |---|-------|-------|-----------|----------|----|--------|---------|-------|---------|
-| 1 | **GOOGL** | stock | 0.95 | +93.8% | +9.9% | 1.32 | +30% | -30% | +15.3% |
-| 2 | **XLK** | etf | 0.93 | +42.8% | +28.7% | 1.17 | +25% | -26% | +20.0% |
-| 3 | **JPM** | stock | 0.86 | +16.7% | +16.0% | 1.31 | +23% | -25% | +14.5% |
-| 4 | **QQQ** | etf | 0.84 | +30.5% | +15.6% | 1.18 | +21% | -23% | +12.0% |
-| 5 | **AAPL** | stock | 0.79 | +54.5% | +14.6% | 0.82 | +27% | -33% | +11.1% |
-| 6 | **IWM** | etf | 0.79 | +39.1% | +15.1% | 0.80 | +21% | -28% | +13.3% |
-| 7 | **AMZN** | stock | 0.78 | +13.7% | +14.2% | 0.86 | +32% | -31% | +17.7% |
-| 8 | **SPY** | etf | 0.78 | +20.8% | +10.9% | 1.25 | +15% | -19% | +10.0% |
-| 9 | **NVDA** | stock | 0.77 | +12.6% | +14.2% | 1.33 | +47% | -37% | +9.6% |
-| 10 | **EEM** | etf | 0.75 | +40.2% | +11.3% | 0.93 | +20% | -19% | +9.3% |
+| 1 | **XLK** | etf | 0.91 | +36.6% | +30.8% | 1.16 | +25% | -26% | +19.1% |
+| 2 | **GOOGL** | stock | 0.87 | +88.2% | +6.7% | 1.27 | +31% | -30% | +10.5% |
+| 3 | **NVDA** | stock | 0.87 | +9.4% | +21.6% | 1.36 | +47% | -37% | +13.2% |
+| 4 | **JPM** | stock | 0.83 | +15.3% | +14.1% | 1.32 | +23% | -25% | +14.9% |
+| 5 | **QQQ** | etf | 0.82 | +25.8% | +16.3% | 1.16 | +21% | -23% | +10.9% |
+| 6 | **AAPL** | stock | 0.80 | +52.8% | +15.4% | 0.82 | +27% | -33% | +11.5% |
+| 7 | **AMZN** | stock | 0.79 | +16.2% | +14.3% | 0.84 | +32% | -31% | +15.6% |
+| 8 | **IWM** | etf | 0.77 | +34.8% | +14.1% | 0.79 | +21% | -28% | +12.4% |
+| 9 | **EEM** | etf | 0.76 | +34.9% | +10.3% | 0.92 | +20% | -19% | +8.7% |
+| 10 | **SPY** | etf | 0.76 | +18.5% | +11.6% | 1.24 | +15% | -19% | +9.7% |
 
-Bottom of the screen: ADA-USD (0.14), AVAX-USD (0.11), BCH-USD (0.09), ATOM-USD (0.08), DOT-USD (0.02).
+Bottom of the screen: ADA-USD (0.14), AVAX-USD (0.11), BCH-USD (0.08), ATOM-USD (0.06), DOT-USD (0.02).
 
 ## "On sale" — furthest below 52-week high (informational only)
 
@@ -42,38 +42,38 @@ A big drawdown is **not** evidence of undervaluation — falling knives dominate
 
 | Asset | Below 52w high | 12-1 Mom | Trend |
 |-------|----------------|----------|-------|
-| DOT-USD | -81.1% | -76.3% | below 200d |
-| AVAX-USD | -81.0% | -70.1% | below 200d |
-| ADA-USD | -80.0% | -74.9% | below 200d |
-| DOGE-USD | -75.8% | -63.0% | below 200d |
-| AAVE-USD | -74.7% | -66.8% | below 200d |
-| ATOM-USD | -71.9% | -63.0% | below 200d |
-| SOL-USD | -70.2% | -51.9% | below 200d |
-| LINK-USD | -69.6% | -52.9% | below 200d |
+| DOT-USD | -81.4% | -75.6% | below 200d |
+| AVAX-USD | -81.1% | -68.4% | below 200d |
+| ADA-USD | -80.1% | -74.6% | below 200d |
+| DOGE-USD | -75.8% | -61.7% | below 200d |
+| AAVE-USD | -74.9% | -63.1% | below 200d |
+| ATOM-USD | -72.3% | -62.1% | below 200d |
+| SOL-USD | -70.1% | -50.1% | below 200d |
+| LINK-USD | -69.5% | -51.0% | below 200d |
 
 ## Strategy vs buy-and-hold (the honest test)
 
 The trend strategy (EMA cross + RSI/vol filter, ATR stops, fractional-Kelly sizing, 10bps round-trip cost) was run on all 38 real series and compared to simply holding the asset:
 
-- Strategy beat buy-and-hold on **10 of 38** assets — and 9 of those 10 "wins" were on assets that lost money to hold (crash-dodging, not out-earning)
-- Median strategy return: **-0.4%** vs median buy-and-hold: **+40.5%**
-- Median walk-forward degradation: **+120%** of the in-sample edge lost out-of-sample (over the 19 assets with a meaningful in-sample edge; the ratio is undefined near zero)
+- Strategy beat buy-and-hold on **11 of 38** assets — and 10 of those 11 "wins" were on assets that lost money to hold (crash-dodging, not out-earning)
+- Median strategy return: **-0.3%** vs median buy-and-hold: **+39.9%**
+- Median walk-forward degradation: **+118%** of the in-sample edge lost out-of-sample (over the 19 assets with a meaningful in-sample edge; the ratio is undefined near zero)
 - Median in-sample→out-of-sample gap across all 32 assets: **+2.7%** in absolute return
-- Median per-asset average out-of-sample fold return (cross-asset median): **-1.6%**
+- Median per-asset average out-of-sample fold return (cross-asset median): **-1.4%**
 
-*Note: equity buy-and-hold returns exclude dividends (prices are split- but not dividend-adjusted), which biases this comparison IN THE STRATEGY'S FAVOR on dividend payers — the honest count is, if anything, worse than 10/38.*
+*Note: equity buy-and-hold returns exclude dividends (prices are split- but not dividend-adjusted), which biases this comparison IN THE STRATEGY'S FAVOR on dividend payers — the honest count is, if anything, worse than 11/38.*
 
 Selected rows (top-3 screened assets + benchmarks):
 
 | Asset | Strategy | Buy & Hold | WF out-of-sample | WF degradation | Paper trades |
 |-------|----------|------------|------------------|----------------|--------------|
-| GOOGL | -5.4% | +187.1% | -2.3% | +184% | 20 |
-| XLK | +0.5% | +117.8% | -2.9% | n/a | 20 |
-| JPM | +6.1% | +128.1% | -1.8% | +166% | 28 |
-| BTC-USD | +19.7% | +120.6% | -1.6% | +121% | 36 |
-| ETH-USD | +3.7% | +2.2% | +2.9% | +54% | 32 |
-| SPY | -2.5% | +71.1% | -0.5% | +118% | 23 |
-| QQQ | -5.8% | +92.9% | -3.0% | +481% | 20 |
+| XLK | +0.5% | +116.6% | -2.9% | n/a | 20 |
+| GOOGL | -5.4% | +175.5% | -2.3% | +184% | 20 |
+| NVDA | +16.8% | +382.7% | -1.8% | +114% | 34 |
+| BTC-USD | +21.6% | +121.4% | -1.3% | +116% | 38 |
+| ETH-USD | +11.1% | +4.4% | +2.8% | +63% | 31 |
+| SPY | -2.5% | +70.8% | -0.5% | +118% | 23 |
+| QQQ | -5.8% | +91.2% | -3.0% | +481% | 20 |
 
 ## What this actually says
 
@@ -82,4 +82,4 @@ Selected rows (top-3 screened assets + benchmarks):
 3. **Walk-forward degradation is the key number.** In-sample results overstate what you would actually have earned; the out-of-sample column is the realistic one.
 4. **Paper trading is the correct next step** for anything here — not real capital.
 
-*Data: Coinbase Exchange & Nasdaq public APIs, fetched 2026-08-05. Full per-asset numbers in src/data/realAnalysis.json. Engine + tests in src/engine/.*
+*Data: Coinbase Exchange & Nasdaq public APIs, fetched 2026-08-06. Full per-asset numbers in src/data/realAnalysis.json. Engine + tests in src/engine/.*
