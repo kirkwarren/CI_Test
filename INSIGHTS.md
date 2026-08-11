@@ -8,7 +8,7 @@
 |---|---|---|---|---|
 | BTC-USD | 3.47 | -14.0% | 16 | 3.0 |
 | SPY | 20.28 | -5.9% | 7 | 2.0 |
-| NVDA | 4.82 | -17.0% | 8 | 2.0 |
+| NVDA | 4.83 | -17.0% | 8 | 2.0 |
 
 **What it means:** every asset shows positive excess kurtosis — extreme days happen far more often than bell-curve math allows. Any risk model (or position size) calibrated to "normal" volatility will be blindsided by the tails. This is why the engine sizes positions off a hard risk cap, not off average volatility.
 
@@ -16,11 +16,11 @@
 
 | Asset | Full-period return | Missing the 10 BEST days | Missing the 10 WORST days | Best days within ±5d of a worst day |
 |---|---|---|---|---|
-| BTC-USD | +120.6% | -14.3% | +408.5% | 50% |
-| ETH-USD | +3.4% | -73.5% | +248.8% | 50% |
-| SPY | +73.4% | +25.8% | +144.4% | 40% |
-| QQQ | +96.2% | +30.8% | +199.8% | 40% |
-| NVDA | +428.4% | +96.0% | +1257.2% | 30% |
+| BTC-USD | +117.3% | -15.6% | +400.8% | 50% |
+| ETH-USD | +1.2% | -74.1% | +241.5% | 50% |
+| SPY | +73.5% | +25.8% | +144.4% | 40% |
+| QQQ | +96.8% | +31.3% | +200.8% | 40% |
+| NVDA | +432.5% | +97.5% | +1267.8% | 30% |
 
 **What it means:** missing just the 10 best days destroys most (sometimes all) of the return. Missing the 10 worst days would of course be even better — but the last column is why you can't have one without the other: it MEASURES how often the best days land within a week of the worst ones. Where that clustering is high, "getting out until things calm down" mechanically forfeits the rebound days too. Perfect foresight of bad days is not on the menu; being absent for the good ones is the realistic cost of trying.
 
@@ -53,10 +53,10 @@ Classic 12-1 momentum (the 11-month return ending one month before entry), month
 
 | Universe | Top-quartile (past winners) | Bottom-quartile (past losers) | Equal-weight all | Months top beat bottom |
 |---|---|---|---|---|
-| 16 crypto | -49.4% | -23.6% | -19.7% | 52% |
-| 22 equities/ETFs | +51.9% | +56.7% | +39.7% | 55% |
+| 16 crypto | -46.0% | -41.1% | -22.2% | 57% |
+| 22 equities/ETFs | +51.1% | +55.9% | +39.3% | 55% |
 
-**What it means:** this is the honest test of the dashboard screen's core premise on our own data, and the result cuts however it cuts: in crypto, past winners LAGGED past losers (-49.4% vs -23.6%); in equities, past winners LAGGED past losers (+51.9% vs +56.7%). Factor premia are noisy and episodic, and three years is a short sample — which is precisely why a screen built on momentum must be treated as a tilt, not a truth. The equal-weight column shows how much of everything is just market beta. Where our own screen's premise fails on our own data, we say so.
+**What it means:** this is the honest test of the dashboard screen's core premise on our own data, and the result cuts however it cuts: in crypto, past winners LAGGED past losers (-46.0% vs -41.1%); in equities, past winners LAGGED past losers (+51.1% vs +55.9%). Factor premia are noisy and episodic, and three years is a short sample — which is precisely why a screen built on momentum must be treated as a tilt, not a truth. The equal-weight column shows how much of everything is just market beta. Where our own screen's premise fails on our own data, we say so.
 
 ## 6 · Is the strategy distinguishable from luck? (usually: no)
 
@@ -64,8 +64,8 @@ Classic 12-1 momentum (the 11-month return ending one month before entry), month
 
 | Asset | Trend strategy, unit-notional replay (actual sized backtest) | Random-trader median | Random 95th percentile | Strategy's percentile among random |
 |---|---|---|---|---|
-| BTC-USD | +40.8% (+19.3%) | -36.0% | +169.4% | 81st |
-| SPY | +13.9% (-2.9%) | -8.2% | +32.4% | 83rd |
+| BTC-USD | +42.2% (+17.3%) | -35.5% | +176.2% | 81st |
+| SPY | +14.9% (+2.2%) | -9.6% | +30.1% | 86th |
 
 **What it means:** a strategy below the ~95th percentile of random traders is statistically indistinguishable from luck. This is the test every "look at my bot's returns" screenshot silently fails — with enough random traders, some always look brilliant. Survivors post; the rest delete their accounts.
 
