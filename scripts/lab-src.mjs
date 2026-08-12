@@ -170,7 +170,7 @@ async function main() {
   if (dsrSurvivors.length === 0) {
     L.push(`**0 of ${assets.length} assets** produced a best-variant that survives deflation (DSR > 0.95). After correcting for selection across variants, no variant on any asset shows statistically credible positive true Sharpe. This is the normal, honest result — and the one the hype dashboards never compute.`);
   } else {
-    L.push(`**${dsrSurvivors.length} of ${assets.length} assets** produced a best-variant with DSR > 0.95: ${dsrSurvivors.map((s) => `${s.symbol} (${s.best}, ${s.dsr.toFixed(3)})`).join(', ')}. Treat survivors with suspicion, not excitement: 3 years of daily data is a short sample, and this correction covers only OUR ${VARIANTS.length} trials — not the millions of variants the industry has collectively tried on the same public signals.`);
+    L.push(`**${dsrSurvivors.length} of ${assets.length} assets** produced a best-variant with DSR > 0.95: ${dsrSurvivors.map((s) => `${s.symbol} (${s.bestVariant}, ${s.deflatedSharpe.toFixed(3)})`).join(', ')}. Treat survivors with suspicion, not excitement: 3 years of daily data is a short sample, and this correction covers only OUR ${VARIANTS.length} trials — not the millions of variants the industry has collectively tried on the same public signals.`);
   }
   L.push('');
   L.push('Which variant most often had the best raw Sharpe per asset (before deflation): ' + Object.entries(bestCounts).sort((a, b) => b[1] - a[1]).map(([k, c]) => `${k} (${c})`).join(', ') + '.');

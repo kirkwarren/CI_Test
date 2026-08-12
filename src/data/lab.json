@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-11T05:37:02.201Z",
+ "generatedAt": "2026-08-12T05:39:07.697Z",
  "variants": [
   "trend",
   "trend+vt",
@@ -12,65 +12,71 @@
   "trend": {
    "beatsHold": 10,
    "medianReturn": -0.0008977660278129407,
-   "medianMaxDrawdown": 0.12732788769860232,
-   "medianCurveVol": 0.004190694028694958,
-   "medianWfOos": -0.01684267990730785,
-   "medianLuckPercentile": 0.53,
+   "medianMaxDrawdown": 0.12732828673982766,
+   "medianCurveVol": 0.004191209485056701,
+   "medianWfOos": -0.013290346844947528,
+   "medianLuckPercentile": 0.535,
    "medianTrades": 20
   },
   "trend+vt": {
    "beatsHold": 11,
-   "medianReturn": -0.0008543474618484814,
-   "medianMaxDrawdown": 0.07567377622323539,
-   "medianCurveVol": 0.0026151960402911976,
-   "medianWfOos": -0.009288432601644858,
-   "medianLuckPercentile": 0.53,
+   "medianReturn": -0.0009154493346566484,
+   "medianMaxDrawdown": 0.07568398689855031,
+   "medianCurveVol": 0.0026194241916280446,
+   "medianWfOos": -0.006173514587872186,
+   "medianLuckPercentile": 0.535,
    "medianTrades": 20
   },
   "meanrev": {
    "beatsHold": 8,
-   "medianReturn": -0.05494990524227533,
-   "medianMaxDrawdown": 0.12058456622134003,
-   "medianCurveVol": 0.004094760799956335,
+   "medianReturn": -0.0549497870799745,
+   "medianMaxDrawdown": 0.12058366306947185,
+   "medianCurveVol": 0.00404966490639146,
    "medianWfOos": 0,
-   "medianLuckPercentile": 0.4,
+   "medianLuckPercentile": 0.40125,
    "medianTrades": 17.5
   },
   "breakout": {
-   "beatsHold": 10,
-   "medianReturn": -0.003970589766609911,
-   "medianMaxDrawdown": 0.0980070374133219,
-   "medianCurveVol": 0.004149849684584405,
-   "medianWfOos": -0.010958673950710965,
-   "medianLuckPercentile": 0.5,
+   "beatsHold": 9,
+   "medianReturn": -0.00397058717014126,
+   "medianMaxDrawdown": 0.09800655677127584,
+   "medianCurveVol": 0.004149574113373309,
+   "medianWfOos": -0.012110356266573677,
+   "medianLuckPercentile": 0.485,
    "medianTrades": 17.5
   },
   "ensemble": {
    "beatsHold": 10,
    "medianReturn": 0,
-   "medianMaxDrawdown": 0.06291249555325953,
-   "medianCurveVol": 0.0024117134274617945,
-   "medianWfOos": 0.003671885266052888,
-   "medianLuckPercentile": 0.395,
+   "medianMaxDrawdown": 0.06291249415842089,
+   "medianCurveVol": 0.0024117043176351593,
+   "medianWfOos": 0.00556937206402025,
+   "medianLuckPercentile": 0.405,
    "medianTrades": 9
   },
   "ensemble+vt": {
    "beatsHold": 10,
    "medianReturn": 0,
-   "medianMaxDrawdown": 0.028386323461049107,
-   "medianCurveVol": 0.0013734867316069982,
-   "medianWfOos": 0.0030623313613340475,
-   "medianLuckPercentile": 0.395,
+   "medianMaxDrawdown": 0.02838632294697971,
+   "medianCurveVol": 0.001373488028624737,
+   "medianWfOos": 0,
+   "medianLuckPercentile": 0.405,
    "medianTrades": 9
   }
  },
- "medianBuyHold": 0.3962376899719683,
- "dsrSurvivors": [],
+ "medianBuyHold": 0.4079510025870522,
+ "dsrSurvivors": [
+  {
+   "symbol": "GLD",
+   "best": "ensemble+vt",
+   "dsr": 0.9706756987278906
+  }
+ ],
  "bestVariantCounts": {
   "ensemble+vt": 4,
-  "meanrev": 12,
+  "meanrev": 11,
   "breakout": 9,
-  "trend+vt": 5,
+  "trend+vt": 6,
   "ensemble": 5,
   "trend": 3
  },
@@ -78,82 +84,82 @@
   "AAPL": {
    "symbol": "AAPL",
    "assetClass": "stock",
-   "buyHold": 0.7338432982732437,
+   "buyHold": 0.6990415691519003,
    "variants": {
     "trend": {
-     "totalReturn": -0.09517905984389197,
-     "maxDrawdown": 0.1586988141282664,
+     "totalReturn": -0.09517903191334676,
+     "maxDrawdown": 0.15869881410182748,
      "trades": 20,
-     "curveVol": 0.004114181906522717,
-     "perPeriodSharpe": -0.030313057027306356,
+     "curveVol": 0.004114178984221772,
+     "perPeriodSharpe": -0.030313071508319953,
      "beatsHold": false,
-     "wfOos": -0.00526430691949667,
-     "wfGap": 0.02225992485105449,
-     "luckPercentile": 0.46
+     "wfOos": -0.004489530475190406,
+     "wfGap": 0.021919833031325303,
+     "luckPercentile": 0.4675
     },
     "trend+vt": {
-     "totalReturn": -0.06884853745132236,
-     "maxDrawdown": 0.10715078765480868,
+     "totalReturn": -0.06884851388537483,
+     "maxDrawdown": 0.10715078765478844,
      "trades": 20,
-     "curveVol": 0.0027774825150083966,
-     "perPeriodSharpe": -0.03280737982777914,
+     "curveVol": 0.0027774791769050976,
+     "perPeriodSharpe": -0.03280741047979225,
      "beatsHold": false,
-     "wfOos": -0.006339875345480528,
-     "wfGap": 0.009242333409003933,
-     "luckPercentile": 0.46
+     "wfOos": -0.004637085692044407,
+     "wfGap": 0.008583409380080925,
+     "luckPercentile": 0.4675
     },
     "meanrev": {
-     "totalReturn": -0.056242059207799344,
-     "maxDrawdown": 0.1311710471584655,
+     "totalReturn": -0.05624184130915577,
+     "maxDrawdown": 0.13117101539344672,
      "trades": 20,
-     "curveVol": 0.004318298547239478,
-     "perPeriodSharpe": -0.015693127902687527,
+     "curveVol": 0.0043182519745892465,
+     "perPeriodSharpe": -0.01569327252996971,
      "beatsHold": false,
-     "wfOos": -0.009328420554066297,
-     "wfGap": 0.07365488603705977,
-     "luckPercentile": 0.3425
+     "wfOos": -0.02480579791541046,
+     "wfGap": 0.06577183361013197,
+     "luckPercentile": 0.355
     },
     "breakout": {
-     "totalReturn": 0.023007780568639724,
-     "maxDrawdown": 0.10259483197776278,
+     "totalReturn": 0.023007988703452442,
+     "maxDrawdown": 0.1025887373322163,
      "trades": 19,
-     "curveVol": 0.0045972906272174425,
-     "perPeriodSharpe": 0.008885034738668456,
+     "curveVol": 0.004597219004483918,
+     "perPeriodSharpe": 0.00888516062235329,
      "beatsHold": false,
-     "wfOos": 0.018095597104801908,
-     "wfGap": 0.01153770459110412,
-     "luckPercentile": 0.695
+     "wfOos": 0.016403550013894735,
+     "wfGap": 0.00030331825827425996,
+     "luckPercentile": 0.7125
     },
     "ensemble": {
-     "totalReturn": 0.07185314845848345,
-     "maxDrawdown": 0.05409792778216896,
+     "totalReturn": 0.0718531487241525,
+     "maxDrawdown": 0.054097927782168785,
      "trades": 11,
-     "curveVol": 0.0036318047553107248,
-     "perPeriodSharpe": 0.027260397694876974,
+     "curveVol": 0.003631804754246812,
+     "perPeriodSharpe": 0.02726039779257452,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.7225
+     "luckPercentile": 0.7275
     },
     "ensemble+vt": {
-     "totalReturn": 0.06542292884441459,
-     "maxDrawdown": 0.034386428301445414,
+     "totalReturn": 0.06542292901924451,
+     "maxDrawdown": 0.03438642830144565,
      "trades": 11,
-     "curveVol": 0.0021366112755765365,
-     "perPeriodSharpe": 0.04056229293224805,
+     "curveVol": 0.002136611274575186,
+     "perPeriodSharpe": 0.040562293052490664,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.7225
+     "luckPercentile": 0.7275
     }
    },
    "bestVariant": "ensemble+vt",
-   "deflatedSharpe": 0.5072679720967853
+   "deflatedSharpe": 0.5072675281547563
   },
   "AAVE-USD": {
    "symbol": "AAVE-USD",
    "assetClass": "crypto",
-   "buyHold": 0.3481481481481481,
+   "buyHold": 0.34400243865264457,
    "variants": {
     "trend": {
      "totalReturn": 0,
@@ -178,11 +184,11 @@
      "luckPercentile": null
     },
     "meanrev": {
-     "totalReturn": 0.018703420716248642,
-     "maxDrawdown": 0.050626296135018324,
+     "totalReturn": 0.018703461412116873,
+     "maxDrawdown": 0.050534017043268514,
      "trades": 2,
-     "curveVol": 0.001362914072655299,
-     "perPeriodSharpe": 0.013100885961993628,
+     "curveVol": 0.001356769957033191,
+     "perPeriodSharpe": 0.013154142046799861,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
@@ -223,56 +229,56 @@
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.5778219673846791
+   "deflatedSharpe": 0.5780459257893142
   },
   "ADA-USD": {
    "symbol": "ADA-USD",
    "assetClass": "crypto",
-   "buyHold": -0.34669407331277835,
+   "buyHold": -0.35354548599100666,
    "variants": {
     "trend": {
-     "totalReturn": -0.026286859500271542,
-     "maxDrawdown": 0.13746831767646162,
+     "totalReturn": -0.02628685673972886,
+     "maxDrawdown": 0.13746831767641526,
      "trades": 11,
-     "curveVol": 0.0022107485139256414,
-     "perPeriodSharpe": -0.009900333818076689,
+     "curveVol": 0.002210748720333754,
+     "perPeriodSharpe": -0.009900331520456397,
      "beatsHold": true,
-     "wfOos": -0.005552613990075117,
-     "wfGap": 0.039045487189070305,
-     "luckPercentile": 0.565
+     "wfOos": -0.005591617714574948,
+     "wfGap": 0.03904473992802271,
+     "luckPercentile": 0.5725
     },
     "trend+vt": {
-     "totalReturn": -0.01262832446500195,
-     "maxDrawdown": 0.04659301775054963,
+     "totalReturn": -0.012628323788524187,
+     "maxDrawdown": 0.04659301775053308,
      "trades": 11,
-     "curveVol": 0.0007108858484541465,
-     "perPeriodSharpe": -0.015971165217657738,
+     "curveVol": 0.0007108858891604781,
+     "perPeriodSharpe": -0.015971163382503203,
      "beatsHold": true,
-     "wfOos": -0.0007513326948310195,
-     "wfGap": 0.010459671809591897,
-     "luckPercentile": 0.565
+     "wfOos": -0.0007612126682201015,
+     "wfGap": 0.010459605986460063,
+     "luckPercentile": 0.5725
     },
     "meanrev": {
-     "totalReturn": -0.12148754125315187,
-     "maxDrawdown": 0.15111212338610275,
+     "totalReturn": -0.11736053085849107,
+     "maxDrawdown": 0.15268225583341222,
      "trades": 9,
-     "curveVol": 0.002009891864567688,
-     "perPeriodSharpe": -0.05784233684509617,
+     "curveVol": 0.001966321506098857,
+     "perPeriodSharpe": -0.05699126297731873,
      "beatsHold": true,
      "wfOos": 0,
-     "wfGap": -0.09070036936686665,
-     "luckPercentile": 0.135
+     "wfGap": -0.08632930328706845,
+     "luckPercentile": 0.15
     },
     "breakout": {
-     "totalReturn": 0.14502241850368391,
-     "maxDrawdown": 0.02136210040194528,
+     "totalReturn": 0.14502270310586285,
+     "maxDrawdown": 0.02136210040194553,
      "trades": 5,
-     "curveVol": 0.0015792423544544471,
-     "perPeriodSharpe": 0.07910062391437213,
+     "curveVol": 0.0015791163138607746,
+     "perPeriodSharpe": 0.07910695589471038,
      "beatsHold": true,
-     "wfOos": -0.020275726952625917,
-     "wfGap": 0.2099109165119637,
-     "luckPercentile": 0.9825
+     "wfOos": -0.020275727064064775,
+     "wfGap": 0.20991130348234144,
+     "luckPercentile": 0.985
     },
     "ensemble": {
      "totalReturn": 0.01880906310336794,
@@ -289,8 +295,8 @@
      "totalReturn": 0.01057194942375217,
      "maxDrawdown": 0.00632779345070212,
      "trades": 2,
-     "curveVol": 0.00031200938744128183,
-     "perPeriodSharpe": 0.03093691536531127,
+     "curveVol": 0.0003120093874412819,
+     "perPeriodSharpe": 0.030936915365311266,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
@@ -298,131 +304,131 @@
     }
    },
    "bestVariant": "breakout",
-   "deflatedSharpe": 0.7825246050515804
+   "deflatedSharpe": 0.7864900314060886
   },
   "AMZN": {
    "symbol": "AMZN",
    "assetClass": "stock",
-   "buyHold": 1.0091756375984393,
+   "buyHold": 0.9368997652415167,
    "variants": {
     "trend": {
-     "totalReturn": 0.015084865354551447,
-     "maxDrawdown": 0.1012049277479958,
+     "totalReturn": 0.015084865824559257,
+     "maxDrawdown": 0.10120492778614656,
      "trades": 30,
-     "curveVol": 0.005637056626852286,
-     "perPeriodSharpe": 0.006337635109751457,
+     "curveVol": 0.005637056556956,
+     "perPeriodSharpe": 0.0063376352277571,
      "beatsHold": false,
-     "wfOos": -0.05172256980449083,
-     "wfGap": 0.05934612879239273,
-     "luckPercentile": 0.38
+     "wfOos": -0.04613468097000506,
+     "wfGap": 0.052601728825848904,
+     "luckPercentile": 0.4075
     },
     "trend+vt": {
-     "totalReturn": 0.02487885751812091,
-     "maxDrawdown": 0.06277960203213824,
+     "totalReturn": 0.024878857838619872,
+     "maxDrawdown": 0.06277960199941582,
      "trades": 30,
-     "curveVol": 0.0033489468900443796,
-     "perPeriodSharpe": 0.011436658143196873,
+     "curveVol": 0.003348946841805529,
+     "perPeriodSharpe": 0.011436658384054825,
      "beatsHold": false,
-     "wfOos": -0.024354099484811514,
-     "wfGap": 0.0374912960841928,
-     "luckPercentile": 0.38
+     "wfOos": -0.019735543665632627,
+     "wfGap": 0.0323230635412651,
+     "luckPercentile": 0.4075
     },
     "meanrev": {
-     "totalReturn": 0.0877134973868785,
-     "maxDrawdown": 0.10133251489248031,
+     "totalReturn": 0.09410004509899417,
+     "maxDrawdown": 0.10133251489247885,
      "trades": 17,
-     "curveVol": 0.004046366628989834,
-     "perPeriodSharpe": 0.029689495108046526,
+     "curveVol": 0.0040509256484380475,
+     "perPeriodSharpe": 0.031585207683299095,
      "beatsHold": false,
-     "wfOos": -0.017921562644184708,
-     "wfGap": 0.11094037582480015,
-     "luckPercentile": 0.8725
+     "wfOos": -0.01791814369622674,
+     "wfGap": 0.09861619904589913,
+     "luckPercentile": 0.895
     },
     "breakout": {
-     "totalReturn": 0.07192564116029532,
-     "maxDrawdown": 0.06168135575102189,
+     "totalReturn": 0.06566996610683318,
+     "maxDrawdown": 0.06168135574842705,
      "trades": 15,
-     "curveVol": 0.004658892841227944,
-     "perPeriodSharpe": 0.022175844962957672,
+     "curveVol": 0.004664683216641116,
+     "perPeriodSharpe": 0.020483177706219064,
      "beatsHold": false,
-     "wfOos": -0.04050150432126165,
-     "wfGap": 0.024581992081889437,
-     "luckPercentile": 0.7725
+     "wfOos": -0.04050143491259617,
+     "wfGap": 0.024660741801180164,
+     "luckPercentile": 0.745
     },
     "ensemble": {
-     "totalReturn": 0.03205011789730006,
-     "maxDrawdown": 0.09316339100474294,
+     "totalReturn": 0.03205011806614588,
+     "maxDrawdown": 0.09316338968052813,
      "trades": 10,
-     "curveVol": 0.004462332671627937,
-     "perPeriodSharpe": 0.011640422371604214,
+     "curveVol": 0.00446233261352963,
+     "perPeriodSharpe": 0.01164042251399951,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.73
+     "luckPercentile": 0.7225
     },
     "ensemble+vt": {
-     "totalReturn": 0.027931454210894602,
-     "maxDrawdown": 0.04533336526968978,
+     "totalReturn": 0.027931454334499506,
+     "maxDrawdown": 0.045333364663150244,
      "trades": 10,
-     "curveVol": 0.002385480071747927,
-     "perPeriodSharpe": 0.016564497162619506,
+     "curveVol": 0.002385480022323162,
+     "perPeriodSharpe": 0.016564497523627094,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.73
+     "luckPercentile": 0.7225
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.6955089974906008
+   "deflatedSharpe": 0.7081774409731585
   },
   "ATOM-USD": {
    "symbol": "ATOM-USD",
    "assetClass": "crypto",
-   "buyHold": -0.8341648847707294,
+   "buyHold": -0.8285133843212237,
    "variants": {
     "trend": {
-     "totalReturn": 0.07145722440500846,
-     "maxDrawdown": 0.07973841465077455,
+     "totalReturn": 0.06431092396336058,
+     "maxDrawdown": 0.07973841465077468,
      "trades": 18,
-     "curveVol": 0.002955987965285473,
-     "perPeriodSharpe": 0.0227985980100973,
+     "curveVol": 0.0029632156845249263,
+     "perPeriodSharpe": 0.020687661589184093,
      "beatsHold": true,
-     "wfOos": 0.037887823612375526,
-     "wfGap": 0.04948633111002432,
-     "luckPercentile": 0.675
+     "wfOos": 0.03401686092076184,
+     "wfGap": 0.04799603692195398,
+     "luckPercentile": 0.6325
     },
     "trend+vt": {
-     "totalReturn": 0.035421866185679995,
-     "maxDrawdown": 0.01983922511421683,
+     "totalReturn": 0.03349058712378783,
+     "maxDrawdown": 0.01983922511421656,
      "trades": 18,
-     "curveVol": 0.0009555277133791025,
-     "perPeriodSharpe": 0.0337458487294225,
+     "curveVol": 0.0009573010155521781,
+     "perPeriodSharpe": 0.03190402782664,
      "beatsHold": true,
-     "wfOos": 0.011578665966771484,
-     "wfGap": 0.0144207009456635,
-     "luckPercentile": 0.675
+     "wfOos": 0.010543063439169553,
+     "wfGap": 0.014055405622278694,
+     "luckPercentile": 0.6325
     },
     "meanrev": {
-     "totalReturn": 0.010691480714090318,
-     "maxDrawdown": 0.09066756095567692,
+     "totalReturn": 0.017429070073102793,
+     "maxDrawdown": 0.0906675609556768,
      "trades": 10,
-     "curveVol": 0.002286028986110287,
-     "perPeriodSharpe": 0.0053923798253740956,
+     "curveVol": 0.0022931424975490924,
+     "perPeriodSharpe": 0.008028814155361025,
      "beatsHold": true,
      "wfOos": 0,
-     "wfGap": -0.006138472071050116,
-     "luckPercentile": 0.6275
+     "wfGap": -0.007091443356735505,
+     "luckPercentile": 0.685
     },
     "breakout": {
-     "totalReturn": 0.016857556007188634,
-     "maxDrawdown": 0.04355566189970716,
+     "totalReturn": 0.01685764829699643,
+     "maxDrawdown": 0.04355566189970735,
      "trades": 5,
-     "curveVol": 0.0012784417652012858,
-     "perPeriodSharpe": 0.012580769686034284,
+     "curveVol": 0.001278364367411964,
+     "perPeriodSharpe": 0.012581519271413535,
      "beatsHold": true,
      "wfOos": 0,
-     "wfGap": 0.038769793171853806,
-     "luckPercentile": 0.55
+     "wfGap": 0.03877003009654989,
+     "luckPercentile": 0.5375
     },
     "ensemble": {
      "totalReturn": 0.018772701483311893,
@@ -448,44 +454,44 @@
     }
    },
    "bestVariant": "ensemble+vt",
-   "deflatedSharpe": 0.8095558846080178
+   "deflatedSharpe": 0.824391830588071
   },
   "AVAX-USD": {
    "symbol": "AVAX-USD",
    "assetClass": "crypto",
-   "buyHold": -0.4808716707021792,
+   "buyHold": -0.484747145187602,
    "variants": {
     "trend": {
-     "totalReturn": 0.002229054414512266,
+     "totalReturn": 0.005678644114583298,
      "maxDrawdown": 0.0473443511895488,
      "trades": 5,
-     "curveVol": 0.0013751641598385297,
-     "perPeriodSharpe": 0.002164744289972629,
+     "curveVol": 0.0013785844117038483,
+     "perPeriodSharpe": 0.004438969427943628,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.64
+     "luckPercentile": 0.6225
     },
     "trend+vt": {
-     "totalReturn": 0.004065744713781072,
+     "totalReturn": 0.005097593112383114,
      "maxDrawdown": 0.015214250738992095,
      "trades": 5,
-     "curveVol": 0.0004910325829703536,
-     "perPeriodSharpe": 0.007791389025832831,
+     "curveVol": 0.0004918814151775267,
+     "perPeriodSharpe": 0.00968582246128621,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.64
+     "luckPercentile": 0.6225
     },
     "meanrev": {
-     "totalReturn": 0.01876011418961432,
-     "maxDrawdown": 0.041604611687829446,
+     "totalReturn": 0.018748061117037196,
+     "maxDrawdown": 0.033376497886956236,
      "trades": 2,
-     "curveVol": 0.0010589528035081293,
-     "perPeriodSharpe": 0.016556266659246237,
+     "curveVol": 0.001006564466961313,
+     "perPeriodSharpe": 0.01735295489294759,
      "beatsHold": true,
-     "wfOos": 0,
-     "wfGap": 0.01712540867298684,
+     "wfOos": null,
+     "wfGap": null,
      "luckPercentile": null
     },
     "breakout": {
@@ -523,45 +529,45 @@
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.6065972434952664
+   "deflatedSharpe": 0.6128679795237875
   },
   "BCH-USD": {
    "symbol": "BCH-USD",
    "assetClass": "crypto",
-   "buyHold": -0.06774913562956808,
+   "buyHold": -0.06422500657145358,
    "variants": {
     "trend": {
-     "totalReturn": -0.09080312723243245,
-     "maxDrawdown": 0.12562700621651673,
+     "totalReturn": -0.09080310425197391,
+     "maxDrawdown": 0.12562698411625134,
      "trades": 20,
-     "curveVol": 0.003105126635550827,
-     "perPeriodSharpe": -0.026446864704054353,
+     "curveVol": 0.0031051261639904256,
+     "perPeriodSharpe": -0.02644686174194086,
      "beatsHold": false,
-     "wfOos": -0.011228110684656603,
-     "wfGap": -0.012234854208403053,
-     "luckPercentile": 0.235
+     "wfOos": -0.013290346844947528,
+     "wfGap": -0.013308659774632728,
+     "luckPercentile": 0.2425
     },
     "trend+vt": {
-     "totalReturn": -0.026073503779927676,
-     "maxDrawdown": 0.03869439732348601,
+     "totalReturn": -0.026073494036534473,
+     "maxDrawdown": 0.03869438770635516,
      "trades": 20,
-     "curveVol": 0.000875766683280621,
-     "perPeriodSharpe": -0.027112407969408232,
+     "curveVol": 0.0008757671205823139,
+     "perPeriodSharpe": -0.027112383556626565,
      "beatsHold": true,
-     "wfOos": -0.002892350138240888,
-     "wfGap": -0.004472917909131069,
-     "luckPercentile": 0.235
+     "wfOos": -0.0033516982095280388,
+     "wfGap": -0.004712116716857451,
+     "luckPercentile": 0.2425
     },
     "meanrev": {
-     "totalReturn": -0.0784418918145624,
-     "maxDrawdown": 0.09220323979568916,
+     "totalReturn": -0.07844189177486838,
+     "maxDrawdown": 0.09220323739688996,
      "trades": 4,
-     "curveVol": 0.0017765310924948284,
-     "perPeriodSharpe": -0.04110072219122405,
+     "curveVol": 0.0017765310490325812,
+     "perPeriodSharpe": -0.041100723218055524,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.18
+     "luckPercentile": 0.1875
     },
     "breakout": {
      "totalReturn": -0.023776572416998154,
@@ -572,7 +578,7 @@
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.3475
+     "luckPercentile": 0.36
     },
     "ensemble": {
      "totalReturn": -0.041826928699950305,
@@ -583,7 +589,7 @@
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.22
+     "luckPercentile": 0.225
     },
     "ensemble+vt": {
      "totalReturn": -0.008300089618791917,
@@ -594,153 +600,153 @@
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.22
+     "luckPercentile": 0.225
     }
    },
    "bestVariant": "breakout",
-   "deflatedSharpe": 0.20357251388651493
+   "deflatedSharpe": 0.20357252289120198
   },
   "BTC-USD": {
    "symbol": "BTC-USD",
    "assetClass": "crypto",
-   "buyHold": 1.1726201483769905,
+   "buyHold": 1.1701011137473296,
    "variants": {
     "trend": {
-     "totalReturn": 0.1732514213018157,
-     "maxDrawdown": 0.129135291586367,
+     "totalReturn": 0.17498921237145204,
+     "maxDrawdown": 0.12913529158636688,
      "trades": 39,
-     "curveVol": 0.005427762615223309,
-     "perPeriodSharpe": 0.029595946681559376,
+     "curveVol": 0.005430323486232053,
+     "perPeriodSharpe": 0.02983349888290683,
      "beatsHold": false,
-     "wfOos": -0.03353091981112288,
-     "wfGap": 0.10265810664295835,
-     "luckPercentile": 0.805
+     "wfOos": -0.026952786957720243,
+     "wfGap": 0.08022338508514323,
+     "luckPercentile": 0.8175
     },
     "trend+vt": {
-     "totalReturn": 0.06955912885502502,
-     "maxDrawdown": 0.0642908845404762,
+     "totalReturn": 0.07009784825223475,
+     "maxDrawdown": 0.06429088454047657,
      "trades": 39,
-     "curveVol": 0.001986464072588602,
-     "perPeriodSharpe": 0.031908654124682585,
+     "curveVol": 0.0019873185571139024,
+     "perPeriodSharpe": 0.03212720447407205,
      "beatsHold": false,
-     "wfOos": -0.010419391605078904,
-     "wfGap": 0.03487805376659292,
-     "luckPercentile": 0.805
+     "wfOos": -0.00763476745257155,
+     "wfGap": 0.02687896089783534,
+     "luckPercentile": 0.8175
     },
     "meanrev": {
-     "totalReturn": -0.20742324040240623,
-     "maxDrawdown": 0.23763370612886475,
+     "totalReturn": -0.20742328323634462,
+     "maxDrawdown": 0.2376331968972826,
      "trades": 20,
-     "curveVol": 0.00367524191849372,
-     "perPeriodSharpe": -0.055916966509133144,
+     "curveVol": 0.003681850110261057,
+     "perPeriodSharpe": -0.05581018761302738,
      "beatsHold": false,
-     "wfOos": -0.029421633541037856,
-     "wfGap": -0.004643871422912699,
-     "luckPercentile": 0.05
+     "wfOos": -0.041663124225696124,
+     "wfGap": 0.00992830047962795,
+     "luckPercentile": 0.0425
     },
     "breakout": {
-     "totalReturn": 0.43382566510237686,
-     "maxDrawdown": 0.0764667076113822,
+     "totalReturn": 0.43382596285898645,
+     "maxDrawdown": 0.07646670761138201,
      "trades": 23,
-     "curveVol": 0.0045457645192321285,
-     "perPeriodSharpe": 0.07466638847819257,
+     "curveVol": 0.0045457425371882906,
+     "perPeriodSharpe": 0.07466676874303306,
      "beatsHold": false,
-     "wfOos": -0.010958673950710965,
-     "wfGap": 0.10450969280202113,
-     "luckPercentile": 0.995
+     "wfOos": -0.012110356266573677,
+     "wfGap": 0.10514932666708307,
+     "luckPercentile": 0.9925
     },
     "ensemble": {
-     "totalReturn": 0.05458162177309567,
-     "maxDrawdown": 0.05136276186714727,
+     "totalReturn": 0.05458163193684751,
+     "maxDrawdown": 0.05136276186714738,
      "trades": 9,
-     "curveVol": 0.002232468443863878,
-     "perPeriodSharpe": 0.02285166458065252,
+     "curveVol": 0.002232468091136598,
+     "perPeriodSharpe": 0.022851671801020934,
      "beatsHold": false,
-     "wfOos": -0.020373883210821786,
-     "wfGap": 0.01821292357364812,
-     "luckPercentile": 0.7825
+     "wfOos": -0.020373898418036385,
+     "wfGap": 0.018212939558347574,
+     "luckPercentile": 0.7875
     },
     "ensemble+vt": {
-     "totalReturn": 0.01881414201686127,
-     "maxDrawdown": 0.0229182316763703,
+     "totalReturn": 0.018814145082647116,
+     "maxDrawdown": 0.022918231676369985,
      "trades": 9,
-     "curveVol": 0.0008912110969185319,
-     "perPeriodSharpe": 0.019545339989792694,
+     "curveVol": 0.0008912110237818181,
+     "perPeriodSharpe": 0.019545344605686184,
      "beatsHold": false,
-     "wfOos": -0.008282059605325243,
-     "wfGap": 0.007232311202568065,
-     "luckPercentile": 0.7825
+     "wfOos": -0.008282065787114656,
+     "wfGap": 0.007232317638796393,
+     "luckPercentile": 0.7875
     }
    },
    "bestVariant": "breakout",
-   "deflatedSharpe": 0.7496637598495738
+   "deflatedSharpe": 0.7498988194852384
   },
   "DOGE-USD": {
    "symbol": "DOGE-USD",
    "assetClass": "crypto",
-   "buyHold": -0.0916916655797575,
+   "buyHold": -0.03815771857008976,
    "variants": {
     "trend": {
-     "totalReturn": 0.14267344682719507,
-     "maxDrawdown": 0.05637117914964969,
+     "totalReturn": 0.13621311662828295,
+     "maxDrawdown": 0.05637117914964972,
      "trades": 10,
-     "curveVol": 0.0024813602783338934,
-     "perPeriodSharpe": 0.050317200223324594,
+     "curveVol": 0.002487788867292209,
+     "perPeriodSharpe": 0.048112058589237505,
      "beatsHold": true,
-     "wfOos": -0.020189082376164347,
-     "wfGap": 0.12147003804786882,
-     "luckPercentile": 0.81
+     "wfOos": -0.020189082370914213,
+     "wfGap": 0.12147004041704934,
+     "luckPercentile": 0.8025
     },
     "trend+vt": {
-     "totalReturn": 0.05065744121803584,
-     "maxDrawdown": 0.01522637699113955,
+     "totalReturn": 0.048284374512846284,
+     "maxDrawdown": 0.015226376991139485,
      "trades": 10,
-     "curveVol": 0.0008188998324820128,
-     "perPeriodSharpe": 0.05551816241878706,
+     "curveVol": 0.0008219961568160934,
+     "perPeriodSharpe": 0.0527998061721646,
      "beatsHold": true,
-     "wfOos": -0.00493885605618416,
-     "wfGap": 0.037007447406452454,
-     "luckPercentile": 0.81
+     "wfOos": -0.004938856054899743,
+     "wfGap": 0.03700744784435517,
+     "luckPercentile": 0.8025
     },
     "meanrev": {
-     "totalReturn": -0.10071914746216315,
-     "maxDrawdown": 0.12072939141337186,
+     "totalReturn": -0.10071636221428637,
+     "maxDrawdown": 0.12072764688241583,
      "trades": 11,
-     "curveVol": 0.002144558500886771,
-     "perPeriodSharpe": -0.04413156675080871,
+     "curveVol": 0.0021441184454954877,
+     "perPeriodSharpe": -0.04413974324553905,
      "beatsHold": false,
-     "wfOos": -0.020222630983251055,
-     "wfGap": -0.023248317543104635,
-     "luckPercentile": 0.205
+     "wfOos": -0.020222630978862788,
+     "wfGap": -0.023245362577440365,
+     "luckPercentile": 0.21
     },
     "breakout": {
-     "totalReturn": -0.06324875633643623,
-     "maxDrawdown": 0.07520400783129316,
+     "totalReturn": -0.0706226794960676,
+     "maxDrawdown": 0.07520392573934515,
      "trades": 7,
-     "curveVol": 0.002105210574359856,
-     "perPeriodSharpe": -0.027296110183802014,
-     "beatsHold": true,
-     "wfOos": -0.02014242932070809,
-     "wfGap": 0.12059398166037105,
-     "luckPercentile": 0.3125
+     "curveVol": 0.002119057081761769,
+     "perPeriodSharpe": -0.03050958221497797,
+     "beatsHold": false,
+     "wfOos": -0.02014242931719057,
+     "wfGap": 0.12059403509457778,
+     "luckPercentile": 0.285
     },
     "ensemble": {
-     "totalReturn": -0.002207055039685879,
+     "totalReturn": -0.01006157444562683,
      "maxDrawdown": 0.01494134888502049,
      "trades": 1,
-     "curveVol": 0.0005434729637170445,
-     "perPeriodSharpe": -0.00344159032077874,
+     "curveVol": 0.0005956088047277036,
+     "perPeriodSharpe": -0.015207852022757816,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
      "luckPercentile": null
     },
     "ensemble+vt": {
-     "totalReturn": -0.0009474827040943934,
+     "totalReturn": -0.004319406445136287,
      "maxDrawdown": 0.0064142802919912355,
      "trades": 1,
-     "curveVol": 0.00023231040693380862,
-     "perPeriodSharpe": -0.0036104423290370074,
+     "curveVol": 0.00025473113541088423,
+     "perPeriodSharpe": -0.015391853772151538,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
@@ -748,56 +754,56 @@
     }
    },
    "bestVariant": "trend+vt",
-   "deflatedSharpe": 0.5433122780313501
+   "deflatedSharpe": 0.4903420388211743
   },
   "DOT-USD": {
    "symbol": "DOT-USD",
    "assetClass": "crypto",
-   "buyHold": -0.8402540690750298,
+   "buyHold": -0.8415613084487257,
    "variants": {
     "trend": {
-     "totalReturn": -0.08234708427500592,
-     "maxDrawdown": 0.16133195522328256,
+     "totalReturn": -0.07910686293577529,
+     "maxDrawdown": 0.1613319552232822,
      "trades": 12,
-     "curveVol": 0.0024696742404058634,
-     "perPeriodSharpe": -0.030543295065775456,
+     "curveVol": 0.0024717344721057652,
+     "perPeriodSharpe": -0.029213569368296676,
      "beatsHold": true,
-     "wfOos": -0.023170544435898444,
-     "wfGap": 0.012830657287373481,
-     "luckPercentile": 0.26
+     "wfOos": -0.020539728989390438,
+     "wfGap": 0.01019983913945638,
+     "luckPercentile": 0.2775
     },
     "trend+vt": {
-     "totalReturn": -0.018887912846162203,
-     "maxDrawdown": 0.04578266515567941,
+     "totalReturn": -0.017781059644339625,
+     "maxDrawdown": 0.04578266515567934,
      "trades": 12,
-     "curveVol": 0.0006624002578791847,
-     "perPeriodSharpe": -0.02595850586614264,
+     "curveVol": 0.000663173624265743,
+     "perPeriodSharpe": -0.024374796891711226,
      "beatsHold": true,
-     "wfOos": -0.005486501624941742,
-     "wfGap": 0.0013604647419251936,
-     "luckPercentile": 0.26
+     "wfOos": -0.004667751402094689,
+     "wfGap": 0.0005417138860672188,
+     "luckPercentile": 0.2775
     },
     "meanrev": {
-     "totalReturn": -0.0238946226471759,
-     "maxDrawdown": 0.06979286074700222,
+     "totalReturn": -0.023950317888335904,
+     "maxDrawdown": 0.07073701353738218,
      "trades": 7,
-     "curveVol": 0.0017884692861828454,
-     "perPeriodSharpe": -0.011454873680229367,
+     "curveVol": 0.0018545333134326993,
+     "perPeriodSharpe": -0.011009905536748852,
      "beatsHold": true,
      "wfOos": 0,
-     "wfGap": 0.0020956104822915655,
-     "luckPercentile": 0.51
+     "wfGap": 0.006908400706531426,
+     "luckPercentile": 0.4925
     },
     "breakout": {
-     "totalReturn": -0.022115024223230306,
-     "maxDrawdown": 0.056888838639604374,
+     "totalReturn": -0.022114182611003397,
+     "maxDrawdown": 0.05688883863960444,
      "trades": 4,
-     "curveVol": 0.0017526814072588253,
-     "perPeriodSharpe": -0.010777149804093685,
+     "curveVol": 0.0017521922857713377,
+     "perPeriodSharpe": -0.01078019997386375,
      "beatsHold": true,
      "wfOos": 0,
-     "wfGap": 0.03865607624725609,
-     "luckPercentile": 0.2525
+     "wfGap": 0.038657270041364766,
+     "luckPercentile": 0.2475
     },
     "ensemble": {
      "totalReturn": 0,
@@ -828,532 +834,532 @@
   "EEM": {
    "symbol": "EEM",
    "assetClass": "etf",
-   "buyHold": 0.64737108190091,
+   "buyHold": 0.661925323850648,
    "variants": {
     "trend": {
-     "totalReturn": -0.16838945377217218,
-     "maxDrawdown": 0.2042638470063142,
+     "totalReturn": -0.18058324899697276,
+     "maxDrawdown": 0.20059252939618252,
      "trades": 20,
-     "curveVol": 0.0036728607103541267,
-     "perPeriodSharpe": -0.0650032799565952,
+     "curveVol": 0.003908213129691101,
+     "perPeriodSharpe": -0.06589060797958018,
      "beatsHold": false,
-     "wfOos": -0.03586065238173014,
-     "wfGap": 0.01678948347776507,
-     "luckPercentile": 0.08
+     "wfOos": -0.031246896796132212,
+     "wfGap": 0.023223649109425537,
+     "luckPercentile": 0.0975
     },
     "trend+vt": {
-     "totalReturn": -0.14733131476066463,
-     "maxDrawdown": 0.18207045132329214,
+     "totalReturn": -0.15645699478721997,
+     "maxDrawdown": 0.18027473904822397,
      "trades": 20,
-     "curveVol": 0.0034939408987469983,
-     "perPeriodSharpe": -0.0589878245869558,
+     "curveVol": 0.003629077439788998,
+     "perPeriodSharpe": -0.0606051247107963,
      "beatsHold": false,
-     "wfOos": -0.023249303298251978,
-     "wfGap": 0.012661073658912808,
-     "luckPercentile": 0.08
+     "wfOos": -0.020844009506707034,
+     "wfGap": 0.017821755431085523,
+     "luckPercentile": 0.0975
     },
     "meanrev": {
-     "totalReturn": 0.16274518739361032,
-     "maxDrawdown": 0.09526520314658646,
-     "trades": 21,
-     "curveVol": 0.004764743221473081,
-     "perPeriodSharpe": 0.044513258656259685,
+     "totalReturn": 0.18755264624861367,
+     "maxDrawdown": 0.09526520314658667,
+     "trades": 20,
+     "curveVol": 0.004616762793370658,
+     "perPeriodSharpe": 0.0518798007199311,
      "beatsHold": false,
-     "wfOos": 0.05965898815285705,
-     "wfGap": 0.042056728966420424,
+     "wfOos": 0.029103343289979877,
+     "wfGap": 0.0768519928725327,
      "luckPercentile": 0.9875
     },
     "breakout": {
-     "totalReturn": -0.0060681148285811615,
-     "maxDrawdown": 0.12775957768663773,
+     "totalReturn": -0.006068158046189098,
+     "maxDrawdown": 0.1277596314359172,
      "trades": 21,
-     "curveVol": 0.0052213921155744485,
-     "perPeriodSharpe": 0.0010558431100720026,
+     "curveVol": 0.005221395663705537,
+     "perPeriodSharpe": 0.0010558348701830843,
      "beatsHold": false,
-     "wfOos": -0.04052781407702677,
-     "wfGap": 0.02777878384572116,
-     "luckPercentile": 0.2775
+     "wfOos": -0.039971893088966065,
+     "wfGap": 0.02737946020273349,
+     "luckPercentile": 0.2575
     },
     "ensemble": {
-     "totalReturn": 0.06152038824943662,
-     "maxDrawdown": 0.08343569277585625,
+     "totalReturn": 0.0615203859052722,
+     "maxDrawdown": 0.08343569277585637,
      "trades": 17,
-     "curveVol": 0.004636461302083577,
-     "perPeriodSharpe": 0.01945917466364861,
+     "curveVol": 0.004636462414309508,
+     "perPeriodSharpe": 0.01945917047693647,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.295
+     "luckPercentile": 0.2975
     },
     "ensemble+vt": {
-     "totalReturn": 0.11579025354564831,
-     "maxDrawdown": 0.06606173680603027,
+     "totalReturn": 0.11579025108757413,
+     "maxDrawdown": 0.06606179434982537,
      "trades": 17,
-     "curveVol": 0.0041477424729705155,
-     "perPeriodSharpe": 0.037243272409306485,
+     "curveVol": 0.004147743710640824,
+     "perPeriodSharpe": 0.037243261830202844,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.295
+     "luckPercentile": 0.2975
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.3123507500556853
+   "deflatedSharpe": 0.3581120650822309
   },
   "EFA": {
    "symbol": "EFA",
    "assetClass": "etf",
-   "buyHold": 0.49743518646887575,
+   "buyHold": 0.5052221139117115,
    "variants": {
     "trend": {
-     "totalReturn": -0.1585961589848104,
-     "maxDrawdown": 0.21919209143449883,
+     "totalReturn": -0.15907800335220212,
+     "maxDrawdown": 0.20293145449220973,
      "trades": 20,
-     "curveVol": 0.004665292297013671,
-     "perPeriodSharpe": -0.046947986790996175,
+     "curveVol": 0.00464168036144414,
+     "perPeriodSharpe": -0.04737435676210801,
      "beatsHold": false,
-     "wfOos": -0.029950754914431194,
-     "wfGap": 0.02632348073857818,
-     "luckPercentile": 0.1075
+     "wfOos": -0.028705792589944018,
+     "wfGap": 0.033212506585733576,
+     "luckPercentile": 0.155
     },
     "trend+vt": {
-     "totalReturn": -0.1344478657410797,
-     "maxDrawdown": 0.19678290166860204,
+     "totalReturn": -0.14593381324155053,
+     "maxDrawdown": 0.1904727240330956,
      "trades": 20,
-     "curveVol": 0.004451691350906427,
-     "perPeriodSharpe": -0.04095778528055205,
+     "curveVol": 0.004445563153186406,
+     "perPeriodSharpe": -0.04502043316509241,
      "beatsHold": false,
-     "wfOos": -0.029451297126962983,
-     "wfGap": 0.02764806295580416,
-     "luckPercentile": 0.1075
+     "wfOos": -0.018004136806411608,
+     "wfGap": 0.023214856246682014,
+     "luckPercentile": 0.155
     },
     "meanrev": {
-     "totalReturn": 0.1470892423678416,
-     "maxDrawdown": 0.0699387424462104,
-     "trades": 16,
-     "curveVol": 0.0049540347768523224,
-     "perPeriodSharpe": 0.03934916560245137,
+     "totalReturn": 0.10398310539364353,
+     "maxDrawdown": 0.11161337561048812,
+     "trades": 15,
+     "curveVol": 0.004809008014579477,
+     "perPeriodSharpe": 0.029781958740630277,
      "beatsHold": false,
-     "wfOos": 0.0393307374963745,
-     "wfGap": 0.03222074434816413,
-     "luckPercentile": 0.985
+     "wfOos": 0.03933436886796249,
+     "wfGap": 0.04146471075739,
+     "luckPercentile": 0.955
     },
     "breakout": {
-     "totalReturn": -0.16946957590297296,
-     "maxDrawdown": 0.21400176925318268,
+     "totalReturn": -0.16946980056285388,
+     "maxDrawdown": 0.21400177094687992,
      "trades": 20,
-     "curveVol": 0.0044100431437786945,
-     "perPeriodSharpe": -0.05384901008077247,
+     "curveVol": 0.004410090735025113,
+     "perPeriodSharpe": -0.053848462885140815,
      "beatsHold": false,
-     "wfOos": -0.05321575187389557,
-     "wfGap": 0.014258454095678469,
-     "luckPercentile": 0.11
+     "wfOos": -0.05346594776645974,
+     "wfGap": 0.015383598686926597,
+     "luckPercentile": 0.085
     },
     "ensemble": {
-     "totalReturn": -0.12208216587486642,
-     "maxDrawdown": 0.18652316015350628,
+     "totalReturn": -0.12159413487192905,
+     "maxDrawdown": 0.1865231611031712,
      "trades": 19,
-     "curveVol": 0.003947865094542481,
-     "perPeriodSharpe": -0.04193509891675564,
+     "curveVol": 0.003946863476433824,
+     "perPeriodSharpe": -0.041759285367755666,
      "beatsHold": false,
-     "wfOos": 0.01459605667428665,
-     "wfGap": -0.07615578509143861,
-     "luckPercentile": 0.2375
+     "wfOos": 0.011550865817358424,
+     "wfGap": -0.07311057944276533,
+     "luckPercentile": 0.255
     },
     "ensemble+vt": {
-     "totalReturn": -0.13404071872537915,
-     "maxDrawdown": 0.19703748140666924,
+     "totalReturn": -0.13359141011269404,
+     "maxDrawdown": 0.19703748234401314,
      "trades": 19,
-     "curveVol": 0.00367607559726416,
-     "perPeriodSharpe": -0.050283997249864064,
+     "curveVol": 0.0036751436298544087,
+     "perPeriodSharpe": -0.050109777200138886,
      "beatsHold": false,
-     "wfOos": 0.01361043091931946,
-     "wfGap": -0.07517015933647142,
-     "luckPercentile": 0.2375
+     "wfOos": 0.010770872213893279,
+     "wfGap": -0.07233058583930019,
+     "luckPercentile": 0.255
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.4239357862970478
+   "deflatedSharpe": 0.3720252729711227
   },
   "ETH-USD": {
    "symbol": "ETH-USD",
    "assetClass": "crypto",
-   "buyHold": 0.01208702659145855,
+   "buyHold": 0.022697364843554668,
    "variants": {
     "trend": {
-     "totalReturn": 0.10237014310663328,
-     "maxDrawdown": 0.11336670606668532,
+     "totalReturn": 0.10405558990009833,
+     "maxDrawdown": 0.11336670606636322,
      "trades": 34,
-     "curveVol": 0.004492825229360706,
-     "perPeriodSharpe": 0.022050803289734473,
+     "curveVol": 0.004496811612791223,
+     "perPeriodSharpe": 0.022345498077928294,
      "beatsHold": true,
-     "wfOos": 0.021950043260966983,
-     "wfGap": 0.04356006554197367,
-     "luckPercentile": 0.595
+     "wfOos": 0.01928610937691133,
+     "wfGap": 0.04202145887438543,
+     "luckPercentile": 0.5825
     },
     "trend+vt": {
-     "totalReturn": 0.034559137874300205,
-     "maxDrawdown": 0.03515022544948025,
+     "totalReturn": 0.035238400180731766,
+     "maxDrawdown": 0.03515022544943066,
      "trades": 34,
-     "curveVol": 0.001263126953826791,
-     "perPeriodSharpe": 0.025195116662388953,
+     "curveVol": 0.0012637713408311612,
+     "perPeriodSharpe": 0.025657230648482562,
      "beatsHold": true,
-     "wfOos": 0.005913519364168174,
-     "wfGap": 0.015041638574666377,
-     "luckPercentile": 0.595
+     "wfOos": 0.005470992192285418,
+     "wfGap": 0.014219768608780787,
+     "luckPercentile": 0.5825
     },
     "meanrev": {
-     "totalReturn": -0.20640732358232994,
-     "maxDrawdown": 0.23967157854341403,
+     "totalReturn": -0.15790312030347575,
+     "maxDrawdown": 0.21263752621846616,
      "trades": 20,
-     "curveVol": 0.003633162708901013,
-     "perPeriodSharpe": -0.0562850402004215,
+     "curveVol": 0.003607300406149891,
+     "perPeriodSharpe": -0.04169874261232627,
      "beatsHold": false,
-     "wfOos": -0.006738723775163269,
-     "wfGap": -0.0011293821104927937,
-     "luckPercentile": 0.135
+     "wfOos": -0.01200385628559067,
+     "wfGap": 0.0007153614417629017,
+     "luckPercentile": 0.175
     },
     "breakout": {
-     "totalReturn": 0.18144162926137453,
-     "maxDrawdown": 0.06872900414780471,
+     "totalReturn": 0.18144192887477706,
+     "maxDrawdown": 0.06872900414780476,
      "trades": 18,
-     "curveVol": 0.0036097306154558462,
-     "perPeriodSharpe": 0.04398479675529758,
+     "curveVol": 0.003609734718144499,
+     "perPeriodSharpe": 0.04398481412428328,
      "beatsHold": true,
-     "wfOos": 0.01942340211343213,
-     "wfGap": 0.07207328166372245,
-     "luckPercentile": 0.9175
+     "wfOos": 0.01942311486158399,
+     "wfGap": 0.07207403782972044,
+     "luckPercentile": 0.92
     },
     "ensemble": {
-     "totalReturn": 0.07711198529822227,
-     "maxDrawdown": 0.055335155721562765,
+     "totalReturn": 0.0771119921018455,
+     "maxDrawdown": 0.05533515572156268,
      "trades": 8,
-     "curveVol": 0.002410207675215467,
-     "perPeriodSharpe": 0.02934882598138927,
+     "curveVol": 0.0024101905845854282,
+     "perPeriodSharpe": 0.029349019395897114,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.8125
+     "luckPercentile": 0.81
     },
     "ensemble+vt": {
-     "totalReturn": 0.030287253121126234,
-     "maxDrawdown": 0.011986359452230193,
+     "totalReturn": 0.03028725504897345,
+     "maxDrawdown": 0.0119863594522302,
      "trades": 8,
-     "curveVol": 0.0006831401133255415,
-     "perPeriodSharpe": 0.04022912601481379,
+     "curveVol": 0.0006831348795737468,
+     "perPeriodSharpe": 0.04022943149598615,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.8125
+     "luckPercentile": 0.81
     }
    },
    "bestVariant": "breakout",
-   "deflatedSharpe": 0.44295366146472204
+   "deflatedSharpe": 0.5432210542516958
   },
   "GLD": {
    "symbol": "GLD",
    "assetClass": "etf",
-   "buyHold": 1.2665540540540543,
+   "buyHold": 1.264543092736925,
    "variants": {
     "trend": {
-     "totalReturn": 0.5961774913313542,
-     "maxDrawdown": 0.09972456799801972,
+     "totalReturn": 0.5961196072035513,
+     "maxDrawdown": 0.09972456799793857,
      "trades": 40,
-     "curveVol": 0.006642096261195313,
-     "perPeriodSharpe": 0.09708935098988425,
+     "curveVol": 0.00663634709149361,
+     "perPeriodSharpe": 0.09716033301404396,
      "beatsHold": false,
-     "wfOos": 0.01777951736333691,
-     "wfGap": 0.03400076203983435,
-     "luckPercentile": 0.9775
+     "wfOos": 0.024959371246101703,
+     "wfGap": 0.02887608464414171,
+     "luckPercentile": 0.98
     },
     "trend+vt": {
-     "totalReturn": 0.4886851893792734,
-     "maxDrawdown": 0.09321888168371284,
+     "totalReturn": 0.4886312033700737,
+     "maxDrawdown": 0.09321888168363117,
      "trades": 40,
-     "curveVol": 0.005538752830762115,
-     "perPeriodSharpe": 0.09844765364585777,
+     "curveVol": 0.005531855524356518,
+     "perPeriodSharpe": 0.09855465243332999,
      "beatsHold": false,
-     "wfOos": 0.013314308615313575,
-     "wfGap": 0.03127167086001292,
-     "luckPercentile": 0.9775
+     "wfOos": 0.017756452389343813,
+     "wfGap": 0.028185153044541666,
+     "luckPercentile": 0.98
     },
     "meanrev": {
-     "totalReturn": -0.1699486488399351,
-     "maxDrawdown": 0.19929047952084897,
+     "totalReturn": -0.11846867387740678,
+     "maxDrawdown": 0.19927752113568983,
      "trades": 20,
-     "curveVol": 0.004412170467098812,
-     "perPeriodSharpe": -0.054004862496822084,
+     "curveVol": 0.004458202028585824,
+     "perPeriodSharpe": -0.035434450675205884,
      "beatsHold": false,
-     "wfOos": -0.03970435693533575,
-     "wfGap": 0.028361439424685164,
-     "luckPercentile": 0.2
+     "wfOos": -0.014704637410313776,
+     "wfGap": 0.030452942694049856,
+     "luckPercentile": 0.2875
     },
     "breakout": {
-     "totalReturn": 0.3819628176842238,
-     "maxDrawdown": 0.06555486231597073,
+     "totalReturn": 0.38196305434165434,
+     "maxDrawdown": 0.06555199146562987,
      "trades": 27,
-     "curveVol": 0.005271249534697403,
-     "perPeriodSharpe": 0.08436837189830637,
+     "curveVol": 0.005271212272314731,
+     "perPeriodSharpe": 0.08436897406026735,
      "beatsHold": false,
-     "wfOos": 0.05095036218153687,
-     "wfGap": 0.032006750244064075,
-     "luckPercentile": 0.9925
+     "wfOos": 0.04959351393665601,
+     "wfGap": 0.03431239586358148,
+     "luckPercentile": 0.9825
     },
     "ensemble": {
-     "totalReturn": 0.35968526086125197,
-     "maxDrawdown": 0.028307303829030874,
+     "totalReturn": 0.3596852608613834,
+     "maxDrawdown": 0.02830730382903084,
      "trades": 8,
-     "curveVol": 0.0029553144491299686,
-     "perPeriodSharpe": 0.13993125500517842,
+     "curveVol": 0.002955314449097319,
+     "perPeriodSharpe": 0.13993125500673542,
      "beatsHold": false,
-     "wfOos": 0.05860070849841059,
-     "wfGap": 0.0044618629051169645,
+     "wfOos": 0.00714314843527708,
+     "wfGap": 0.05562473144638225,
      "luckPercentile": 1
     },
     "ensemble+vt": {
-     "totalReturn": 0.311846480107401,
-     "maxDrawdown": 0.022096941674736293,
+     "totalReturn": 0.3118464801075207,
+     "maxDrawdown": 0.022096941674736373,
      "trades": 8,
-     "curveVol": 0.0025796088267691533,
-     "perPeriodSharpe": 0.14141796092049033,
+     "curveVol": 0.002579608826735647,
+     "perPeriodSharpe": 0.14141796092234085,
      "beatsHold": false,
-     "wfOos": 0.04980333200243647,
-     "wfGap": 0.011129414731648302,
+     "wfOos": -0.0012265965709604698,
+     "wfGap": 0.0618652390386808,
      "luckPercentile": 1
     }
    },
    "bestVariant": "ensemble+vt",
-   "deflatedSharpe": 0.9435626125980418
+   "deflatedSharpe": 0.9706756987278906
   },
   "GOOGL": {
    "symbol": "GOOGL",
    "assetClass": "stock",
-   "buyHold": 1.7594936708860756,
+   "buyHold": 1.6178329399223328,
    "variants": {
     "trend": {
-     "totalReturn": -0.05427720706777106,
-     "maxDrawdown": 0.12170459076358531,
+     "totalReturn": -0.05427780445025476,
+     "maxDrawdown": 0.12170459075402629,
      "trades": 20,
-     "curveVol": 0.004575120622006562,
-     "perPeriodSharpe": -0.013950610727804125,
+     "curveVol": 0.0045479603628626655,
+     "perPeriodSharpe": -0.014061233740045668,
      "beatsHold": false,
-     "wfOos": -0.035844227793327965,
-     "wfGap": 0.06030290976922123,
-     "luckPercentile": 0.5825
+     "wfOos": -0.01658623629713485,
+     "wfGap": 0.03456351454903828,
+     "luckPercentile": 0.5675
     },
     "trend+vt": {
-     "totalReturn": -0.04700432251576836,
-     "maxDrawdown": 0.09708317941430969,
+     "totalReturn": -0.03967410496748558,
+     "maxDrawdown": 0.097083052547888,
      "trades": 20,
-     "curveVol": 0.002604396467537616,
-     "perPeriodSharpe": -0.02330906111753814,
+     "curveVol": 0.0026128545097995025,
+     "perPeriodSharpe": -0.019320649724787392,
      "beatsHold": false,
-     "wfOos": -0.008056919598552786,
-     "wfGap": 0.025551397662372577,
-     "luckPercentile": 0.5825
+     "wfOos": -0.001415025905226186,
+     "wfGap": 0.015612582022507843,
+     "luckPercentile": 0.5675
     },
     "meanrev": {
-     "totalReturn": -0.10940631449604843,
-     "maxDrawdown": 0.15033227478960398,
+     "totalReturn": -0.10940630856540923,
+     "maxDrawdown": 0.1503322723277468,
      "trades": 20,
-     "curveVol": 0.0042749697448695115,
-     "perPeriodSharpe": -0.03396130016332662,
+     "curveVol": 0.004274963269541202,
+     "perPeriodSharpe": -0.03396135573289653,
      "beatsHold": false,
-     "wfOos": -0.06055912613617842,
-     "wfGap": 0.0329952417188375,
-     "luckPercentile": 0.19
+     "wfOos": -0.06149606496785439,
+     "wfGap": 0.034335829749322255,
+     "luckPercentile": 0.165
     },
     "breakout": {
-     "totalReturn": 0.08190437269720174,
-     "maxDrawdown": 0.08245746400665935,
+     "totalReturn": 0.08190438140237455,
+     "maxDrawdown": 0.08245746399752286,
      "trades": 25,
-     "curveVol": 0.005245050081710839,
-     "perPeriodSharpe": 0.02260318261575455,
+     "curveVol": 0.005245047109198583,
+     "perPeriodSharpe": 0.022603194433847496,
      "beatsHold": false,
-     "wfOos": 0.00652309420087412,
-     "wfGap": 0.02841058840678053,
-     "luckPercentile": 0.7975
+     "wfOos": 0.0065346384607848735,
+     "wfGap": 0.028399069396474148,
+     "luckPercentile": 0.8025
     },
     "ensemble": {
-     "totalReturn": 0.09232321116131215,
-     "maxDrawdown": 0.0637732389538588,
+     "totalReturn": 0.09232321987303815,
+     "maxDrawdown": 0.06377323885886807,
      "trades": 13,
-     "curveVol": 0.0041845238252926405,
-     "perPeriodSharpe": 0.03018552868570559,
+     "curveVol": 0.0041845201278990374,
+     "perPeriodSharpe": 0.03018555412113967,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.645
+     "luckPercentile": 0.6325
     },
     "ensemble+vt": {
-     "totalReturn": 0.030433385266341872,
-     "maxDrawdown": 0.05769371285793908,
+     "totalReturn": 0.030433392458903086,
+     "maxDrawdown": 0.057693712776409216,
      "trades": 13,
-     "curveVol": 0.0027079216426127623,
-     "perPeriodSharpe": 0.01609763585032058,
+     "curveVol": 0.0027079172040374144,
+     "perPeriodSharpe": 0.0160976611493432,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.645
+     "luckPercentile": 0.6325
     }
    },
    "bestVariant": "ensemble",
-   "deflatedSharpe": 0.44968323950082884
+   "deflatedSharpe": 0.4586804905477482
   },
   "IWM": {
    "symbol": "IWM",
    "assetClass": "etf",
-   "buyHold": 0.5706581496413425,
+   "buyHold": 0.5786740795132699,
    "variants": {
     "trend": {
-     "totalReturn": -0.04997925065000486,
-     "maxDrawdown": 0.16789573348466688,
+     "totalReturn": -0.04997989241502787,
+     "maxDrawdown": 0.17167791587335046,
      "trades": 20,
-     "curveVol": 0.004428836451976499,
-     "perPeriodSharpe": -0.013204966823213756,
+     "curveVol": 0.004447801747488825,
+     "perPeriodSharpe": -0.013129907337670695,
      "beatsHold": false,
-     "wfOos": -0.027804197798639352,
-     "wfGap": 0.024257025612735406,
-     "luckPercentile": 0.2425
+     "wfOos": -0.029275356539065323,
+     "wfGap": 0.027771448626673856,
+     "luckPercentile": 0.23
     },
     "trend+vt": {
-     "totalReturn": -0.023000984186474893,
-     "maxDrawdown": 0.12495829300031557,
+     "totalReturn": -0.02209168590771604,
+     "maxDrawdown": 0.12694623577040182,
      "trades": 20,
-     "curveVol": 0.0033123340727837136,
-     "perPeriodSharpe": -0.007703261163109909,
+     "curveVol": 0.003327610220905346,
+     "perPeriodSharpe": -0.007280412758132253,
      "beatsHold": false,
-     "wfOos": -0.014552363342812624,
-     "wfGap": 0.015940597687034846,
-     "luckPercentile": 0.2425
+     "wfOos": -0.015862412461844277,
+     "wfGap": 0.01879238266436456,
+     "luckPercentile": 0.23
     },
     "meanrev": {
-     "totalReturn": -0.056804307008805344,
-     "maxDrawdown": 0.1333692943782906,
+     "totalReturn": -0.056799686713912556,
+     "maxDrawdown": 0.13336929437828593,
      "trades": 20,
-     "curveVol": 0.005162722718178763,
-     "perPeriodSharpe": -0.012506502131463239,
+     "curveVol": 0.005161938067364295,
+     "perPeriodSharpe": -0.012507928256908914,
      "beatsHold": false,
-     "wfOos": -0.03482085698264009,
-     "wfGap": 0.05020194568626124,
-     "luckPercentile": 0.4375
+     "wfOos": -0.030848330092241916,
+     "wfGap": 0.06399478635102518,
+     "luckPercentile": 0.45
     },
     "breakout": {
-     "totalReturn": 0.008068955593245164,
-     "maxDrawdown": 0.12065731126858893,
+     "totalReturn": 0.00972555997231539,
+     "maxDrawdown": 0.120657311268589,
      "trades": 18,
-     "curveVol": 0.00471509529149375,
-     "perPeriodSharpe": 0.004621904454470904,
+     "curveVol": 0.0047148751137333095,
+     "perPeriodSharpe": 0.005085636176069545,
      "beatsHold": false,
-     "wfOos": 0.011462964412513377,
-     "wfGap": 0.004990833624493263,
-     "luckPercentile": 0.4825
+     "wfOos": 0.011836430904297202,
+     "wfGap": 0.011684190991253136,
+     "luckPercentile": 0.4675
     },
     "ensemble": {
-     "totalReturn": 0.01374864963920075,
-     "maxDrawdown": 0.10211268965161098,
+     "totalReturn": 0.015414517965303132,
+     "maxDrawdown": 0.10211268965161106,
      "trades": 12,
-     "curveVol": 0.003893321006967374,
-     "perPeriodSharpe": 0.0066104435419892015,
+     "curveVol": 0.003893065474250227,
+     "perPeriodSharpe": 0.007172229399406973,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.495
+     "luckPercentile": 0.5225
     },
     "ensemble+vt": {
-     "totalReturn": 0.011444874693265161,
-     "maxDrawdown": 0.08136457919485775,
+     "totalReturn": 0.012456080685776083,
+     "maxDrawdown": 0.08136457919485784,
      "trades": 12,
-     "curveVol": 0.003097070933539023,
-     "perPeriodSharpe": 0.006436234017045814,
+     "curveVol": 0.003096949708828512,
+     "perPeriodSharpe": 0.006866014905510805,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.495
+     "luckPercentile": 0.5225
     }
    },
    "bestVariant": "ensemble",
-   "deflatedSharpe": 0.43678231015696223
+   "deflatedSharpe": 0.4400344742610947
   },
   "JPM": {
    "symbol": "JPM",
    "assetClass": "stock",
-   "buyHold": 1.3294917449012629,
+   "buyHold": 1.33921302578019,
    "variants": {
     "trend": {
-     "totalReturn": 0.06322102771627769,
-     "maxDrawdown": 0.1433367050321201,
+     "totalReturn": 0.06529988968379574,
+     "maxDrawdown": 0.1433367199601521,
      "trades": 32,
-     "curveVol": 0.005966569411229449,
-     "perPeriodSharpe": 0.016664271610318526,
+     "curveVol": 0.005966953141771133,
+     "perPeriodSharpe": 0.01709952498130212,
      "beatsHold": false,
-     "wfOos": -0.010455523612540152,
-     "wfGap": 0.04874431646766658,
-     "luckPercentile": 0.675
+     "wfOos": -0.009590972303109457,
+     "wfGap": 0.05080557444726608,
+     "luckPercentile": 0.695
     },
     "trend+vt": {
-     "totalReturn": 0.08528874112332097,
-     "maxDrawdown": 0.095365453552388,
+     "totalReturn": 0.08666416967714463,
+     "maxDrawdown": 0.09536546395000096,
      "trades": 32,
-     "curveVol": 0.004459416357305212,
-     "perPeriodSharpe": 0.02666992638193678,
+     "curveVol": 0.004459610480931883,
+     "perPeriodSharpe": 0.027047169014296973,
      "beatsHold": false,
-     "wfOos": -0.009288432601644858,
-     "wfGap": 0.050970755182276534,
-     "luckPercentile": 0.675
+     "wfOos": -0.010029943705995997,
+     "wfGap": 0.05583972329415418,
+     "luckPercentile": 0.695
     },
     "meanrev": {
-     "totalReturn": -0.11375335587805424,
-     "maxDrawdown": 0.19405505825251954,
+     "totalReturn": -0.11375042234188526,
+     "maxDrawdown": 0.19405464550174795,
      "trades": 20,
-     "curveVol": 0.004205844848545907,
-     "perPeriodSharpe": -0.03613199527090655,
+     "curveVol": 0.00419806441256181,
+     "perPeriodSharpe": -0.03620569850131056,
      "beatsHold": false,
-     "wfOos": 0.03219072698812084,
-     "wfGap": -0.007465123846819743,
-     "luckPercentile": 0.39
+     "wfOos": 0.054803392548650964,
+     "wfGap": -0.019825366192495197,
+     "luckPercentile": 0.4075
     },
     "breakout": {
-     "totalReturn": -0.16288378283125293,
-     "maxDrawdown": 0.2655040223890678,
+     "totalReturn": -0.16288357361083106,
+     "maxDrawdown": 0.26550400484790393,
      "trades": 20,
-     "curveVol": 0.004457526521700718,
-     "perPeriodSharpe": -0.050863479648799045,
+     "curveVol": 0.004457510078574781,
+     "perPeriodSharpe": -0.05086360899797683,
      "beatsHold": false,
-     "wfOos": -0.019500058216940147,
-     "wfGap": 0.03846895212940818,
-     "luckPercentile": 0.0625
+     "wfOos": -0.017341072734419566,
+     "wfGap": 0.041423909099023215,
+     "luckPercentile": 0.045
     },
     "ensemble": {
-     "totalReturn": -0.1108057438919765,
-     "maxDrawdown": 0.16851445662048042,
+     "totalReturn": -0.10824906010028357,
+     "maxDrawdown": 0.1685144564654745,
      "trades": 13,
-     "curveVol": 0.0035469883606283467,
-     "perPeriodSharpe": -0.042304820918669626,
+     "curveVol": 0.003548708094026795,
+     "perPeriodSharpe": -0.04120544093335352,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.13
+     "luckPercentile": 0.1225
     },
     "ensemble+vt": {
-     "totalReturn": -0.07608516090959039,
-     "maxDrawdown": 0.11909249517377903,
+     "totalReturn": -0.07443674237502618,
+     "maxDrawdown": 0.1190924950098261,
      "trades": 13,
-     "curveVol": 0.002892171714130774,
-     "perPeriodSharpe": -0.03498100515783688,
+     "curveVol": 0.002892990290801891,
+     "perPeriodSharpe": -0.03414990512486483,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.13
+     "luckPercentile": 0.1225
     }
    },
    "bestVariant": "trend+vt",
-   "deflatedSharpe": 0.3289646283535027
+   "deflatedSharpe": 0.3328018107604708
   },
   "LINK-USD": {
    "symbol": "LINK-USD",
    "assetClass": "crypto",
-   "buyHold": 0.11423195807015185,
+   "buyHold": 0.19068946796959807,
    "variants": {
     "trend": {
      "totalReturn": 0.004445348196014942,
@@ -1364,7 +1370,7 @@
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.5175
+     "luckPercentile": 0.5
     },
     "trend+vt": {
      "totalReturn": 0.0034583036166184744,
@@ -1375,29 +1381,29 @@
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.5175
+     "luckPercentile": 0.5
     },
     "meanrev": {
-     "totalReturn": 0.01681060562874892,
-     "maxDrawdown": 0.07849951740903725,
+     "totalReturn": 0.016802719796452648,
+     "maxDrawdown": 0.07847149436848411,
      "trades": 5,
-     "curveVol": 0.0018235374997066997,
-     "perPeriodSharpe": 0.009264785906761512,
+     "curveVol": 0.0018374233466290767,
+     "perPeriodSharpe": 0.00920464073898593,
      "beatsHold": false,
      "wfOos": 0,
-     "wfGap": 0.01772066167084385,
-     "luckPercentile": 0.4575
+     "wfGap": 0.017710007470654876,
+     "luckPercentile": 0.4775
     },
     "breakout": {
-     "totalReturn": -0.0018730647046386606,
-     "maxDrawdown": 0.040034422004160235,
+     "totalReturn": -0.0018730162940934214,
+     "maxDrawdown": 0.040034422004160145,
      "trades": 3,
-     "curveVol": 0.0011995632642201551,
-     "perPeriodSharpe": -0.0008339842042323778,
+     "curveVol": 0.001199453568918372,
+     "perPeriodSharpe": -0.0008341289765859212,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.3275
+     "luckPercentile": 0.3325
     },
     "ensemble": {
      "totalReturn": -0.040034422004160075,
@@ -1414,8 +1420,8 @@
      "totalReturn": -0.013771979521340239,
      "maxDrawdown": 0.01377197952134029,
      "trades": 2,
-     "curveVol": 0.00027467586474973785,
-     "perPeriodSharpe": -0.045969634125013266,
+     "curveVol": 0.0002746758647497378,
+     "perPeriodSharpe": -0.04596963412501327,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
@@ -1423,237 +1429,237 @@
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.1986058683966206
+   "deflatedSharpe": 0.19795186708582846
   },
   "LTC-USD": {
    "symbol": "LTC-USD",
    "assetClass": "crypto",
-   "buyHold": -0.45936226324622387,
+   "buyHold": -0.4444715943799633,
    "variants": {
     "trend": {
-     "totalReturn": 0.07164114988878456,
-     "maxDrawdown": 0.10363824778511967,
+     "totalReturn": 0.06894908176085801,
+     "maxDrawdown": 0.103638247785118,
      "trades": 32,
-     "curveVol": 0.0041798527576544535,
-     "perPeriodSharpe": 0.017202615109646886,
+     "curveVol": 0.004180883884409904,
+     "perPeriodSharpe": 0.016649950072862785,
      "beatsHold": true,
-     "wfOos": -0.013772510061357601,
-     "wfGap": 0.009072792083073395,
-     "luckPercentile": 0.54
+     "wfOos": -0.015434948380459149,
+     "wfGap": 0.013194948703191081,
+     "luckPercentile": 0.5375
     },
     "trend+vt": {
-     "totalReturn": 0.040193954405843835,
-     "maxDrawdown": 0.03268362488665403,
+     "totalReturn": 0.03911783948653991,
+     "maxDrawdown": 0.032683624886653724,
      "trades": 32,
-     "curveVol": 0.0015273874044725144,
-     "perPeriodSharpe": 0.02432451002574696,
+     "curveVol": 0.0015278720768453942,
+     "perPeriodSharpe": 0.023698572851767224,
      "beatsHold": true,
-     "wfOos": -0.0006976536832521788,
-     "wfGap": 0.004046546427316426,
-     "luckPercentile": 0.54
+     "wfOos": -0.000891154862709668,
+     "wfGap": 0.006155015629575915,
+     "luckPercentile": 0.5375
     },
     "meanrev": {
-     "totalReturn": 0.04221063625664656,
-     "maxDrawdown": 0.08773838758145204,
+     "totalReturn": 0.04401775961475174,
+     "maxDrawdown": 0.0877383875813851,
      "trades": 11,
-     "curveVol": 0.0030006526254613927,
-     "perPeriodSharpe": 0.014078505388977942,
+     "curveVol": 0.0029980019009147366,
+     "perPeriodSharpe": 0.014616030905948771,
      "beatsHold": true,
-     "wfOos": -0.0016304506346821457,
-     "wfGap": 0.022597831643454913,
-     "luckPercentile": 0.5025
+     "wfOos": -0.0007500926993935231,
+     "wfGap": 0.02171854958208652,
+     "luckPercentile": 0.5125
     },
     "breakout": {
-     "totalReturn": -0.007580740401670338,
-     "maxDrawdown": 0.10777241724425721,
+     "totalReturn": -0.007580737159986528,
+     "maxDrawdown": 0.10777241724425704,
      "trades": 12,
-     "curveVol": 0.002853132337495933,
-     "perPeriodSharpe": -0.0010137588866995226,
+     "curveVol": 0.00285313235882155,
+     "perPeriodSharpe": -0.0010137578096257743,
      "beatsHold": true,
-     "wfOos": 0.00044881230713145204,
-     "wfGap": 0.008684524738551913,
-     "luckPercentile": 0.37
+     "wfOos": -0.0009402330659494251,
+     "wfGap": 0.008819314883994567,
+     "luckPercentile": 0.3775
     },
     "ensemble": {
-     "totalReturn": -0.08030352458823964,
-     "maxDrawdown": 0.08208344613562003,
+     "totalReturn": -0.08030352159225984,
+     "maxDrawdown": 0.0820834431454381,
      "trades": 7,
-     "curveVol": 0.0015835392176544126,
-     "perPeriodSharpe": -0.04748401705543635,
+     "curveVol": 0.001583539254053601,
+     "perPeriodSharpe": -0.04748401404420483,
      "beatsHold": true,
      "wfOos": 0,
-     "wfGap": -0.011717494369683501,
-     "luckPercentile": 0.0175
+     "wfGap": -0.011717512963415389,
+     "luckPercentile": 0.01
     },
     "ensemble+vt": {
-     "totalReturn": -0.026499280049555818,
-     "maxDrawdown": 0.026499280049555818,
+     "totalReturn": -0.0264992790214168,
+     "maxDrawdown": 0.026499279021416806,
      "trades": 7,
-     "curveVol": 0.00044211309321218705,
-     "perPeriodSharpe": -0.055254379692728346,
+     "curveVol": 0.0004421131085278426,
+     "perPeriodSharpe": -0.05525437558118368,
      "beatsHold": true,
      "wfOos": 0,
-     "wfGap": -0.006785169648191758,
-     "luckPercentile": 0.0175
+     "wfGap": -0.006785174385564474,
+     "luckPercentile": 0.01
     }
    },
    "bestVariant": "trend+vt",
-   "deflatedSharpe": 0.2435763257292186
+   "deflatedSharpe": 0.23881727740268688
   },
   "META": {
    "symbol": "META",
    "assetClass": "stock",
-   "buyHold": 0.9722848428590372,
+   "buyHold": 0.956693556288579,
    "variants": {
     "trend": {
-     "totalReturn": 0.017941500790064957,
-     "maxDrawdown": 0.16216097502111854,
+     "totalReturn": 0.017939711969346073,
+     "maxDrawdown": 0.1621496791051138,
      "trades": 39,
-     "curveVol": 0.005522850105078185,
-     "perPeriodSharpe": 0.007033843013134975,
+     "curveVol": 0.0055288094257702446,
+     "perPeriodSharpe": 0.007031713369721664,
      "beatsHold": false,
-     "wfOos": -0.026115352821679844,
-     "wfGap": 0.08478811455657703,
-     "luckPercentile": 0.2925
+     "wfOos": -0.009724268703280664,
+     "wfGap": 0.06946107882771826,
+     "luckPercentile": 0.2375
     },
     "trend+vt": {
-     "totalReturn": 0.02492161808073945,
-     "maxDrawdown": 0.08381752215375862,
+     "totalReturn": 0.02515014474955124,
+     "maxDrawdown": 0.08381338315101412,
      "trades": 39,
-     "curveVol": 0.003086035859027268,
-     "perPeriodSharpe": 0.012155698894808267,
+     "curveVol": 0.00309134618513575,
+     "perPeriodSharpe": 0.012236108336571119,
      "beatsHold": false,
-     "wfOos": -0.010278436862305645,
-     "wfGap": 0.0388048105280433,
-     "luckPercentile": 0.2925
+     "wfOos": -0.006348689722176781,
+     "wfGap": 0.03474360595870321,
+     "luckPercentile": 0.2375
     },
     "meanrev": {
-     "totalReturn": -0.05365775127675132,
-     "maxDrawdown": 0.14346173636703716,
+     "totalReturn": -0.05365773285079323,
+     "maxDrawdown": 0.14346139854601217,
      "trades": 20,
-     "curveVol": 0.0045167543643843885,
-     "perPeriodSharpe": -0.013990603562038583,
+     "curveVol": 0.004516749988803041,
+     "perPeriodSharpe": -0.01399061578545842,
      "beatsHold": false,
-     "wfOos": 0.04938531897511206,
-     "wfGap": -0.013420254324536529,
-     "luckPercentile": 0.5025
+     "wfOos": 0.04309197458076569,
+     "wfGap": -0.006053640119434683,
+     "luckPercentile": 0.4825
     },
     "breakout": {
-     "totalReturn": 0.06666196845637407,
-     "maxDrawdown": 0.0827374955259014,
+     "totalReturn": 0.06666205019909777,
+     "maxDrawdown": 0.08273749552590116,
      "trades": 20,
-     "curveVol": 0.004186622649714289,
-     "perPeriodSharpe": 0.022610200917762762,
+     "curveVol": 0.004186607808204924,
+     "perPeriodSharpe": 0.022610290639322173,
      "beatsHold": false,
-     "wfOos": 0.006390965127199906,
-     "wfGap": 0.03995605009370754,
-     "luckPercentile": 0.5
+     "wfOos": 0.006005052954058843,
+     "wfGap": 0.044661435732157494,
+     "luckPercentile": 0.485
     },
     "ensemble": {
-     "totalReturn": 0.054403708465324385,
-     "maxDrawdown": 0.040130186349724824,
+     "totalReturn": 0.05440370846532461,
+     "maxDrawdown": 0.04013018634972482,
      "trades": 9,
-     "curveVol": 0.00270278550138636,
-     "perPeriodSharpe": 0.02744232247844392,
+     "curveVol": 0.0027027855013862915,
+     "perPeriodSharpe": 0.02744232247844467,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.71
+     "luckPercentile": 0.69
     },
     "ensemble+vt": {
      "totalReturn": 0.033207921849194966,
-     "maxDrawdown": 0.018090215813968746,
+     "maxDrawdown": 0.018090215813966797,
      "trades": 9,
-     "curveVol": 0.0012177413982309296,
-     "perPeriodSharpe": 0.03632863856978491,
+     "curveVol": 0.0012177413982308834,
+     "perPeriodSharpe": 0.03632863856978605,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.71
+     "luckPercentile": 0.69
     }
    },
    "bestVariant": "ensemble+vt",
-   "deflatedSharpe": 0.651171671885793
+   "deflatedSharpe": 0.6512080313726962
   },
   "MSFT": {
    "symbol": "MSFT",
    "assetClass": "stock",
-   "buyHold": 0.5764617924675244,
+   "buyHold": 0.5547771880014811,
    "variants": {
     "trend": {
-     "totalReturn": -0.08059657744000759,
-     "maxDrawdown": 0.20195712286093273,
+     "totalReturn": -0.08059654245395997,
+     "maxDrawdown": 0.20195712269917926,
      "trades": 20,
-     "curveVol": 0.004374947758715791,
-     "perPeriodSharpe": -0.023384721515281297,
+     "curveVol": 0.004374928114451392,
+     "perPeriodSharpe": -0.023384834540424778,
      "beatsHold": false,
-     "wfOos": -0.015669840077959407,
-     "wfGap": 0.05255456882790763,
-     "luckPercentile": 0.32
+     "wfOos": -0.006646566117057273,
+     "wfGap": 0.04637418382569475,
+     "luckPercentile": 0.3125
     },
     "trend+vt": {
-     "totalReturn": -0.06210904229704972,
-     "maxDrawdown": 0.15750240356150894,
+     "totalReturn": -0.062109006761694174,
+     "maxDrawdown": 0.15750240341861757,
      "trades": 20,
-     "curveVol": 0.0036241415814934315,
-     "perPeriodSharpe": -0.021746041298579856,
+     "curveVol": 0.003624117955377906,
+     "perPeriodSharpe": -0.02174619272234611,
      "beatsHold": false,
-     "wfOos": -0.009933231531816245,
-     "wfGap": 0.04790777840378896,
-     "luckPercentile": 0.32
+     "wfOos": -0.00409454057184977,
+     "wfGap": 0.04022138479073881,
+     "luckPercentile": 0.3125
     },
     "meanrev": {
-     "totalReturn": -0.05753914891593925,
-     "maxDrawdown": 0.11868333527953556,
+     "totalReturn": -0.05753858988594074,
+     "maxDrawdown": 0.11868333527953519,
      "trades": 20,
-     "curveVol": 0.004607771680123229,
-     "perPeriodSharpe": -0.014810598170018658,
+     "curveVol": 0.004607610496752424,
+     "perPeriodSharpe": -0.014811106150385027,
      "beatsHold": false,
-     "wfOos": 0.049819330046813826,
-     "wfGap": -0.0003618037192171797,
-     "luckPercentile": 0.4325
+     "wfOos": 0.021922963477712804,
+     "wfGap": -0.0008682515565517634,
+     "luckPercentile": 0.445
     },
     "breakout": {
-     "totalReturn": -0.0012268113653018942,
-     "maxDrawdown": 0.09896327247102017,
+     "totalReturn": -0.001226472703575343,
+     "maxDrawdown": 0.09896231118692805,
      "trades": 21,
-     "curveVol": 0.0045845887789495955,
-     "perPeriodSharpe": 0.001936392284186595,
+     "curveVol": 0.004584491059167727,
+     "perPeriodSharpe": 0.0019364350885283804,
      "beatsHold": false,
-     "wfOos": 0.00512975944887939,
-     "wfGap": 0.05052984218481216,
-     "luckPercentile": 0.5925
+     "wfOos": 0.009512409036091482,
+     "wfGap": 0.04866262182939166,
+     "luckPercentile": 0.585
     },
     "ensemble": {
-     "totalReturn": 0.07243805107130075,
-     "maxDrawdown": 0.0746194640713645,
+     "totalReturn": 0.07243806980430323,
+     "maxDrawdown": 0.07461946375460178,
      "trades": 11,
-     "curveVol": 0.003994982350005212,
-     "perPeriodSharpe": 0.0253077344832283,
+     "curveVol": 0.003994979388024433,
+     "perPeriodSharpe": 0.02530775612964862,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.8075
+     "luckPercentile": 0.8
     },
     "ensemble+vt": {
-     "totalReturn": 0.031179449398926584,
-     "maxDrawdown": 0.061864835279282764,
+     "totalReturn": 0.031179467254403237,
+     "maxDrawdown": 0.06186483501269778,
      "trades": 11,
-     "curveVol": 0.0026438664896188554,
-     "perPeriodSharpe": 0.016784920208667675,
+     "curveVol": 0.002643862128019208,
+     "perPeriodSharpe": 0.016784952291628918,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.8075
+     "luckPercentile": 0.8
     }
    },
    "bestVariant": "ensemble",
-   "deflatedSharpe": 0.48392869730920424
+   "deflatedSharpe": 0.48392717713189226
   },
   "NEAR-USD": {
    "symbol": "NEAR-USD",
    "assetClass": "crypto",
-   "buyHold": 0.19017125837676851,
+   "buyHold": 0.2056674123788218,
    "variants": {
     "trend": {
      "totalReturn": -0.0017955320556258814,
@@ -1664,7 +1670,7 @@
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.53
+     "luckPercentile": 0.5625
     },
     "trend+vt": {
      "totalReturn": -0.0018948640266506223,
@@ -1675,29 +1681,29 @@
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.53
+     "luckPercentile": 0.5625
     },
     "meanrev": {
-     "totalReturn": -0.0785651135090869,
-     "maxDrawdown": 0.07856511350908695,
+     "totalReturn": -0.07856471357695771,
+     "maxDrawdown": 0.07856471357695773,
      "trades": 4,
-     "curveVol": 0.0012460118823471383,
-     "perPeriodSharpe": -0.059340016865971186,
+     "curveVol": 0.001245906489291392,
+     "perPeriodSharpe": -0.05934482484014266,
      "beatsHold": false,
      "wfOos": 0,
-     "wfGap": -0.05940706883111546,
+     "wfGap": -0.05940674224932918,
      "luckPercentile": 0.04
     },
     "breakout": {
-     "totalReturn": 0.059208861572495275,
-     "maxDrawdown": 0.04739151129048206,
+     "totalReturn": 0.059209165816932474,
+     "maxDrawdown": 0.04738636761038951,
      "trades": 3,
-     "curveVol": 0.0015263555749048037,
-     "perPeriodSharpe": 0.03517521756985667,
+     "curveVol": 0.001526219588856837,
+     "perPeriodSharpe": 0.035178387362504906,
      "beatsHold": false,
      "wfOos": 0,
-     "wfGap": 0.058942085021428836,
-     "luckPercentile": 0.925
+     "wfGap": 0.0589426447907746,
+     "luckPercentile": 0.915
     },
     "ensemble": {
      "totalReturn": 0,
@@ -1723,195 +1729,195 @@
     }
    },
    "bestVariant": "breakout",
-   "deflatedSharpe": 0.4358492264052234
+   "deflatedSharpe": 0.43584391284780394
   },
   "NVDA": {
    "symbol": "NVDA",
    "assetClass": "stock",
-   "buyHold": 4.324929629176356,
+   "buyHold": 3.971087696843645,
    "variants": {
     "trend": {
-     "totalReturn": 0.16150404556383502,
-     "maxDrawdown": 0.19060087026835382,
+     "totalReturn": 0.16142986256420078,
+     "maxDrawdown": 0.19065248678801852,
      "trades": 46,
-     "curveVol": 0.006114402190809857,
-     "perPeriodSharpe": 0.03565451910539268,
+     "curveVol": 0.006113934278352319,
+     "perPeriodSharpe": 0.035642862635460654,
      "beatsHold": false,
-     "wfOos": -0.005915097858000429,
-     "wfGap": 0.10477344993791485,
-     "luckPercentile": 0.76
+     "wfOos": 0.0014068066828147596,
+     "wfGap": 0.10577465278474452,
+     "luckPercentile": 0.7525
     },
     "trend+vt": {
-     "totalReturn": 0.06773575567955503,
-     "maxDrawdown": 0.0810459746522464,
+     "totalReturn": 0.06771197301486676,
+     "maxDrawdown": 0.08106639600295784,
      "trades": 46,
-     "curveVol": 0.002535394565296651,
-     "perPeriodSharpe": 0.03568769709942637,
+     "curveVol": 0.002535260325439713,
+     "perPeriodSharpe": 0.03567775230741133,
      "beatsHold": false,
-     "wfOos": -0.0047486311917207535,
-     "wfGap": 0.042002128835698926,
-     "luckPercentile": 0.76
+     "wfOos": -0.0024044736024431135,
+     "wfGap": 0.043005377069928685,
+     "luckPercentile": 0.7525
     },
     "meanrev": {
-     "totalReturn": -0.20764465203836402,
-     "maxDrawdown": 0.25991767270986327,
+     "totalReturn": -0.2077232604179089,
+     "maxDrawdown": 0.26223844399557605,
      "trades": 20,
-     "curveVol": 0.004408659474582878,
-     "perPeriodSharpe": -0.06807426090880085,
+     "curveVol": 0.004378478196039125,
+     "perPeriodSharpe": -0.06860415709475344,
      "beatsHold": false,
-     "wfOos": -0.027817646946862062,
-     "wfGap": 0.02513784299018414,
-     "luckPercentile": 0.135
+     "wfOos": -0.040965262795733016,
+     "wfGap": 0.021370668437209507,
+     "luckPercentile": 0.07
     },
     "breakout": {
-     "totalReturn": 0.20384224019060504,
-     "maxDrawdown": 0.0863695042791407,
+     "totalReturn": 0.20384168257225932,
+     "maxDrawdown": 0.08636950427914072,
      "trades": 17,
-     "curveVol": 0.005434743793475562,
-     "perPeriodSharpe": 0.04816908024329622,
+     "curveVol": 0.005434770640456464,
+     "perPeriodSharpe": 0.048168755698626775,
      "beatsHold": false,
-     "wfOos": -0.007105767439298749,
-     "wfGap": 0.08843950677462648,
-     "luckPercentile": 0.8425
+     "wfOos": -0.006276444057788599,
+     "wfGap": 0.15102848611126551,
+     "luckPercentile": 0.85
     },
     "ensemble": {
-     "totalReturn": 0.07604889922242575,
-     "maxDrawdown": 0.047792202670379216,
+     "totalReturn": 0.07604885744433676,
+     "maxDrawdown": 0.04779220267099652,
      "trades": 8,
-     "curveVol": 0.0037476554610048254,
-     "perPeriodSharpe": 0.027919951337548897,
+     "curveVol": 0.003747660401056254,
+     "perPeriodSharpe": 0.02791990560102158,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.625
+     "luckPercentile": 0.62
     },
     "ensemble+vt": {
-     "totalReturn": 0.04360875728890057,
-     "maxDrawdown": 0.018312877469358533,
+     "totalReturn": 0.043608738221288856,
+     "maxDrawdown": 0.01831287746935849,
      "trades": 8,
-     "curveVol": 0.0015292320649830666,
-     "perPeriodSharpe": 0.03793211836906125,
+     "curveVol": 0.0015292346590185908,
+     "perPeriodSharpe": 0.03793204068817945,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.625
+     "luckPercentile": 0.62
     }
    },
    "bestVariant": "breakout",
-   "deflatedSharpe": 0.40986370062607924
+   "deflatedSharpe": 0.4069098256602577
   },
   "QQQ": {
    "symbol": "QQQ",
    "assetClass": "etf",
-   "buyHold": 0.9682994757536041,
+   "buyHold": 0.9399216956932632,
    "variants": {
     "trend": {
-     "totalReturn": -0.05768828524951042,
-     "maxDrawdown": 0.13063369825671817,
+     "totalReturn": -0.05768828411591387,
+     "maxDrawdown": 0.13063369825577542,
      "trades": 20,
-     "curveVol": 0.0042015352997354614,
-     "perPeriodSharpe": -0.016727008827334022,
+     "curveVol": 0.004201535085703497,
+     "perPeriodSharpe": -0.01672700951170842,
      "beatsHold": false,
-     "wfOos": -0.032478749429893455,
-     "wfGap": 0.03697838588188751,
-     "luckPercentile": 0.3125
+     "wfOos": -0.04796612692795879,
+     "wfGap": 0.05687331274859045,
+     "luckPercentile": 0.305
     },
     "trend+vt": {
-     "totalReturn": -0.031466757549841295,
-     "maxDrawdown": 0.10440938554436036,
+     "totalReturn": -0.03146675640332175,
+     "maxDrawdown": 0.10440938554340869,
      "trades": 20,
-     "curveVol": 0.003696516287603034,
-     "perPeriodSharpe": -0.009666314047672557,
+     "curveVol": 0.003696516065860695,
+     "perPeriodSharpe": -0.009666314422445952,
      "beatsHold": false,
-     "wfOos": -0.021711555419047623,
-     "wfGap": 0.036860760140778964,
-     "luckPercentile": 0.3125
+     "wfOos": -0.029491087169522034,
+     "wfGap": 0.04926778855291486,
+     "luckPercentile": 0.305
     },
     "meanrev": {
-     "totalReturn": -0.060895644200280596,
-     "maxDrawdown": 0.12043974102930821,
+     "totalReturn": -0.0608956349852402,
+     "maxDrawdown": 0.12043967925652786,
      "trades": 20,
-     "curveVol": 0.004771206484528086,
-     "perPeriodSharpe": -0.015161302953363053,
+     "curveVol": 0.0047712048059055144,
+     "perPeriodSharpe": -0.015161307230123777,
      "beatsHold": false,
-     "wfOos": 0.002766080032309437,
-     "wfGap": 0.029988907907329748,
-     "luckPercentile": 0.41
+     "wfOos": 0.0028309695375735022,
+     "wfGap": 0.02974734945396837,
+     "luckPercentile": 0.395
     },
     "breakout": {
-     "totalReturn": 0.013590486616483544,
-     "maxDrawdown": 0.08125032934953182,
+     "totalReturn": 0.013590487794233441,
+     "maxDrawdown": 0.08125032934946085,
      "trades": 24,
-     "curveVol": 0.0038630859130640797,
-     "perPeriodSharpe": 0.006585864227877244,
+     "curveVol": 0.003863084102956666,
+     "perPeriodSharpe": 0.006585865911421247,
      "beatsHold": false,
-     "wfOos": -0.004787704042785945,
-     "wfGap": 0.013872146462007573,
-     "luckPercentile": 0.5525
+     "wfOos": -0.009284269199341999,
+     "wfGap": 0.014672850663494524,
+     "luckPercentile": 0.56
     },
     "ensemble": {
-     "totalReturn": -0.016276811961004167,
-     "maxDrawdown": 0.09166702318217058,
+     "totalReturn": -0.01627681150048743,
+     "maxDrawdown": 0.09166702318217064,
      "trades": 15,
-     "curveVol": 0.003502132707022916,
-     "perPeriodSharpe": -0.0044800292832765844,
+     "curveVol": 0.003502132553085107,
+     "perPeriodSharpe": -0.0044800294557132804,
      "beatsHold": false,
-     "wfOos": -0.02096078149790448,
-     "wfGap": 0.01648128116873049,
-     "luckPercentile": 0.2575
+     "wfOos": -0.020960781730241962,
+     "wfGap": 0.016481282217497784,
+     "luckPercentile": 0.2775
     },
     "ensemble+vt": {
-     "totalReturn": 0.0003419457437781048,
-     "maxDrawdown": 0.07982904965403524,
+     "totalReturn": 0.0003419462086635683,
+     "maxDrawdown": 0.07982904965403496,
      "trades": 15,
-     "curveVol": 0.0029769528223550965,
-     "perPeriodSharpe": 0.0016438745112221473,
+     "curveVol": 0.002976952641161668,
+     "perPeriodSharpe": 0.0016438746384543894,
      "beatsHold": false,
-     "wfOos": -0.02096078149790448,
-     "wfGap": 0.018071524348227896,
-     "luckPercentile": 0.2575
+     "wfOos": -0.020960781730241962,
+     "wfGap": 0.018071525393879906,
+     "luckPercentile": 0.2775
     }
    },
    "bestVariant": "breakout",
-   "deflatedSharpe": 0.4404425959963424
+   "deflatedSharpe": 0.44044259385254064
   },
   "SOL-USD": {
    "symbol": "SOL-USD",
    "assetClass": "crypto",
-   "buyHold": 2.0477719791248497,
+   "buyHold": 2.148285832300702,
    "variants": {
     "trend": {
-     "totalReturn": 0.07308388879087824,
+     "totalReturn": 0.0719168730560289,
      "maxDrawdown": 0.05962068887434534,
      "trades": 12,
-     "curveVol": 0.002754237364008558,
-     "perPeriodSharpe": 0.02475911826307373,
+     "curveVol": 0.002754653043446758,
+     "perPeriodSharpe": 0.024395029868083392,
      "beatsHold": false,
-     "wfOos": 0.016156119487367615,
-     "wfGap": -0.022410026606011102,
-     "luckPercentile": 0.7425
+     "wfOos": 0.014738677503088438,
+     "wfGap": -0.022581824687943786,
+     "luckPercentile": 0.7225
     },
     "trend+vt": {
-     "totalReturn": 0.012812585255417508,
+     "totalReturn": 0.01232484814736301,
      "maxDrawdown": 0.02034166634503007,
      "trades": 12,
-     "curveVol": 0.0008050895364219951,
-     "perPeriodSharpe": 0.014843426480949138,
+     "curveVol": 0.0008053583910548412,
+     "perPeriodSharpe": 0.014292525564694505,
      "beatsHold": false,
-     "wfOos": 0.005974392313763177,
-     "wfGap": -0.011110949926287805,
-     "luckPercentile": 0.7425
+     "wfOos": 0.005347201241094002,
+     "wfGap": -0.011051067225499867,
+     "luckPercentile": 0.7225
     },
     "meanrev": {
-     "totalReturn": -0.005502703974289425,
-     "maxDrawdown": 0.12787956940823628,
+     "totalReturn": -0.005502109130909094,
+     "maxDrawdown": 0.12782513377009325,
      "trades": 9,
-     "curveVol": 0.002106385995289351,
-     "perPeriodSharpe": -0.00133757269222488,
+     "curveVol": 0.002105536223018219,
+     "perPeriodSharpe": -0.0013387098236783788,
      "beatsHold": false,
-     "wfOos": 0.018745198203955038,
-     "wfGap": 0.04061543261394496,
-     "luckPercentile": 0.4475
+     "wfOos": 0.018745196707874223,
+     "wfGap": 0.04062052778743053,
+     "luckPercentile": 0.4175
     },
     "breakout": {
      "totalReturn": -0.023863794113707648,
@@ -1922,7 +1928,7 @@
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.4925
+     "luckPercentile": 0.485
     },
     "ensemble": {
      "totalReturn": 0.01875316252780057,
@@ -1948,352 +1954,352 @@
     }
    },
    "bestVariant": "trend",
-   "deflatedSharpe": 0.6207811889716609
+   "deflatedSharpe": 0.6182513339529636
   },
   "SPY": {
    "symbol": "SPY",
    "assetClass": "etf",
-   "buyHold": 0.7346123639627511,
+   "buyHold": 0.7195777822409675,
    "variants": {
     "trend": {
-     "totalReturn": 0.021709203522816134,
-     "maxDrawdown": 0.17348783235213086,
+     "totalReturn": 0.020060980494592595,
+     "maxDrawdown": 0.17348783233820472,
      "trades": 36,
-     "curveVol": 0.005758705930295159,
-     "perPeriodSharpe": 0.007847730806338911,
+     "curveVol": 0.005755641357787163,
+     "perPeriodSharpe": 0.007475323343059992,
      "beatsHold": false,
-     "wfOos": -0.015501799368335345,
-     "wfGap": 0.05413436779119099,
-     "luckPercentile": 0.88
+     "wfOos": -0.003922198724938847,
+     "wfGap": 0.041494147484540084,
+     "luckPercentile": 0.89
     },
     "trend+vt": {
-     "totalReturn": 0.0371429052802108,
-     "maxDrawdown": 0.16376323316196262,
+     "totalReturn": 0.035699432142057175,
+     "maxDrawdown": 0.16376323314794092,
      "trades": 36,
-     "curveVol": 0.005523878624593577,
-     "perPeriodSharpe": 0.011555336067833231,
+     "curveVol": 0.005520552335142652,
+     "perPeriodSharpe": 0.011223027955701948,
      "beatsHold": false,
-     "wfOos": -0.011584922168775491,
-     "wfGap": 0.05108816453555412,
-     "luckPercentile": 0.88
+     "wfOos": -0.006173514587872186,
+     "wfGap": 0.044490494066402375,
+     "luckPercentile": 0.89
     },
     "meanrev": {
-     "totalReturn": -0.1717077706991469,
-     "maxDrawdown": 0.20673438893037144,
+     "totalReturn": -0.1717571941191529,
+     "maxDrawdown": 0.19971888561936163,
      "trades": 20,
-     "curveVol": 0.004762200373686615,
-     "perPeriodSharpe": -0.05029878359488228,
+     "curveVol": 0.0047678058230182585,
+     "perPeriodSharpe": -0.05025078086329879,
      "beatsHold": false,
-     "wfOos": -0.01701484936312475,
-     "wfGap": 0.009811452537578758,
-     "luckPercentile": 0.35
+     "wfOos": 0.021161596322537862,
+     "wfGap": -0.011620897776821404,
+     "luckPercentile": 0.3675
     },
     "breakout": {
-     "totalReturn": -0.024388760013038024,
-     "maxDrawdown": 0.15313746375369,
+     "totalReturn": -0.02438835007211726,
+     "maxDrawdown": 0.1531373819437308,
      "trades": 23,
-     "curveVol": 0.004598254542298243,
-     "perPeriodSharpe": -0.004848974034297357,
+     "curveVol": 0.004598192745515199,
+     "perPeriodSharpe": -0.004848978945545591,
      "beatsHold": false,
-     "wfOos": -0.0129042552434121,
-     "wfGap": 0.055828525914530636,
-     "luckPercentile": 0.6625
+     "wfOos": -0.0196064925939147,
+     "wfGap": 0.06426097266949576,
+     "luckPercentile": 0.635
     },
     "ensemble": {
-     "totalReturn": 0.07173099185627074,
-     "maxDrawdown": 0.10894694617487731,
+     "totalReturn": 0.06898420485084511,
+     "maxDrawdown": 0.10894687665401305,
      "trades": 20,
-     "curveVol": 0.00428133650254883,
-     "perPeriodSharpe": 0.023688267867728582,
+     "curveVol": 0.0042830106605482735,
+     "perPeriodSharpe": 0.0228827803088729,
      "beatsHold": false,
-     "wfOos": 0.02898072475188962,
-     "wfGap": 0.0274609908289416,
-     "luckPercentile": 0.9175
+     "wfOos": 0.028980723472976644,
+     "wfGap": 0.03623060212897311,
+     "luckPercentile": 0.8925
     },
     "ensemble+vt": {
-     "totalReturn": 0.057951969934668446,
-     "maxDrawdown": 0.10308776666417484,
+     "totalReturn": 0.055240497797060195,
+     "maxDrawdown": 0.10308769668621014,
      "trades": 20,
-     "curveVol": 0.004155035129271412,
-     "perPeriodSharpe": 0.020134037376832607,
+     "curveVol": 0.004156745566352521,
+     "perPeriodSharpe": 0.01930533813423033,
      "beatsHold": false,
-     "wfOos": 0.02898072475188962,
-     "wfGap": 0.0274609908289416,
-     "luckPercentile": 0.9175
+     "wfOos": 0.028980723472976644,
+     "wfGap": 0.03623060212897311,
+     "luckPercentile": 0.8925
     }
    },
    "bestVariant": "ensemble",
-   "deflatedSharpe": 0.3753376890542664
+   "deflatedSharpe": 0.37111246993327873
   },
   "TLT": {
    "symbol": "TLT",
    "assetClass": "etf",
-   "buyHold": -0.13956170703575554,
+   "buyHold": -0.13629676334594365,
    "variants": {
     "trend": {
-     "totalReturn": -0.11722693625320757,
-     "maxDrawdown": 0.14952556494374786,
+     "totalReturn": -0.11720443065354269,
+     "maxDrawdown": 0.1537665408483298,
      "trades": 20,
-     "curveVol": 0.0038065198960417716,
-     "perPeriodSharpe": -0.0417130509063483,
+     "curveVol": 0.0038035885486590796,
+     "perPeriodSharpe": -0.04173919890672352,
      "beatsHold": true,
-     "wfOos": -0.022156549448464624,
-     "wfGap": 0.006612277179715409,
-     "luckPercentile": 0.1475
+     "wfOos": -0.007776068669247321,
+     "wfGap": -0.006688243448953329,
+     "luckPercentile": 0.125
     },
     "trend+vt": {
-     "totalReturn": -0.12225118165198068,
-     "maxDrawdown": 0.14614356339925488,
+     "totalReturn": -0.12245196820241122,
+     "maxDrawdown": 0.1501477560086073,
      "trades": 20,
-     "curveVol": 0.0037055245766933324,
-     "perPeriodSharpe": -0.04500283797423033,
+     "curveVol": 0.003704493673773971,
+     "perPeriodSharpe": -0.04509859948519508,
      "beatsHold": true,
-     "wfOos": -0.023458339012930457,
-     "wfGap": 0.006570740162956196,
-     "luckPercentile": 0.1475
+     "wfOos": -0.008848675551605345,
+     "wfGap": -0.0071362837122187495,
+     "luckPercentile": 0.125
     },
     "meanrev": {
-     "totalReturn": 0.12784758083104908,
-     "maxDrawdown": 0.09256085087249576,
-     "trades": 14,
-     "curveVol": 0.0036626841117096774,
-     "perPeriodSharpe": 0.045572126312390666,
+     "totalReturn": 0.15174743596160267,
+     "maxDrawdown": 0.07673027270566656,
+     "trades": 13,
+     "curveVol": 0.0036233604862630415,
+     "perPeriodSharpe": 0.053734325729101924,
      "beatsHold": true,
-     "wfOos": 0.026041189763481354,
-     "wfGap": -0.05314209248687651,
-     "luckPercentile": 0.91
+     "wfOos": 0.006961025016865907,
+     "wfGap": -0.013184702391654257,
+     "luckPercentile": 0.9575
     },
     "breakout": {
-     "totalReturn": -0.20622868668914518,
-     "maxDrawdown": 0.24559854913497578,
+     "totalReturn": -0.20787201133965905,
+     "maxDrawdown": 0.2455984968191024,
      "trades": 15,
-     "curveVol": 0.004672744484849019,
-     "perPeriodSharpe": -0.06346788769590828,
+     "curveVol": 0.004678170700164539,
+     "perPeriodSharpe": -0.06397859692907623,
      "beatsHold": false,
-     "wfOos": -0.06283067372898388,
-     "wfGap": 0.07249356557418674,
-     "luckPercentile": 0.0325
+     "wfOos": -0.06283052905718989,
+     "wfGap": 0.07386448650618266,
+     "luckPercentile": 0.0225
     },
     "ensemble": {
-     "totalReturn": -0.17173719582174307,
-     "maxDrawdown": 0.2164004780208166,
+     "totalReturn": -0.1734519283958953,
+     "maxDrawdown": 0.2164004779390155,
      "trades": 13,
-     "curveVol": 0.003995154679316867,
-     "perPeriodSharpe": -0.060792448596405486,
+     "curveVol": 0.004001537837249509,
+     "perPeriodSharpe": -0.061378604308250706,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.0425
+     "luckPercentile": 0.035
     },
     "ensemble+vt": {
-     "totalReturn": -0.17045228871446583,
-     "maxDrawdown": 0.21518485830450065,
+     "totalReturn": -0.17216968140091615,
+     "maxDrawdown": 0.21518485822257247,
      "trades": 13,
-     "curveVol": 0.003977708940918942,
-     "perPeriodSharpe": -0.06055788697500541,
+     "curveVol": 0.003984121419296641,
+     "perPeriodSharpe": -0.06114653517929577,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.0425
+     "luckPercentile": 0.035
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.40631992252741184
+   "deflatedSharpe": 0.4454473455790912
   },
   "TSLA": {
    "symbol": "TSLA",
    "assetClass": "stock",
-   "buyHold": 0.3636101380589325,
+   "buyHold": 0.38809642976309644,
    "variants": {
     "trend": {
-     "totalReturn": 0.09024046886586556,
-     "maxDrawdown": 0.11637400836551214,
+     "totalReturn": 0.08892411566271918,
+     "maxDrawdown": 0.1163740090076871,
      "trades": 26,
-     "curveVol": 0.005694284644908112,
-     "perPeriodSharpe": 0.023049505596500174,
+     "curveVol": 0.005694479150049449,
+     "perPeriodSharpe": 0.022766375788321854,
      "beatsHold": false,
-     "wfOos": -0.027562589037423663,
-     "wfGap": 0.05437696993757938,
-     "luckPercentile": 0.6875
+     "wfOos": -0.02777172450818773,
+     "wfGap": 0.052029225640374044,
+     "luckPercentile": 0.685
     },
     "trend+vt": {
-     "totalReturn": 0.01977565841912754,
-     "maxDrawdown": 0.04194298549320805,
+     "totalReturn": 0.01946882060153765,
+     "maxDrawdown": 0.041942985663707105,
      "trades": 26,
-     "curveVol": 0.0018306676290925374,
-     "perPeriodSharpe": 0.015158591255406242,
+     "curveVol": 0.00183070384537622,
+     "perPeriodSharpe": 0.014939438760659817,
      "beatsHold": false,
-     "wfOos": -0.010219344129853295,
-     "wfGap": 0.021586392609595086,
-     "luckPercentile": 0.6875
+     "wfOos": -0.010326088111440127,
+     "wfGap": 0.020808421397223532,
+     "luckPercentile": 0.685
     },
     "meanrev": {
-     "totalReturn": -0.12058044827568792,
-     "maxDrawdown": 0.15846983288684668,
+     "totalReturn": -0.12058044419321834,
+     "maxDrawdown": 0.15846980854797502,
      "trades": 15,
-     "curveVol": 0.004396677833651615,
-     "perPeriodSharpe": -0.03671744353693581,
+     "curveVol": 0.004396675924504012,
+     "perPeriodSharpe": -0.03671745998104866,
      "beatsHold": false,
-     "wfOos": 0.0030436606204820305,
-     "wfGap": 0.0019997455358152505,
-     "luckPercentile": 0.2525
+     "wfOos": 0.004236409529207119,
+     "wfGap": 0.0020429398861470383,
+     "luckPercentile": 0.245
     },
     "breakout": {
-     "totalReturn": -0.06683199452843613,
-     "maxDrawdown": 0.11057126180170918,
+     "totalReturn": -0.0668319943830118,
+     "maxDrawdown": 0.11057126180170919,
      "trades": 15,
-     "curveVol": 0.004245406564411926,
-     "perPeriodSharpe": -0.019570363515440843,
+     "curveVol": 0.004245406506283852,
+     "perPeriodSharpe": -0.019570363793082506,
      "beatsHold": false,
-     "wfOos": -0.040034286889071735,
-     "wfGap": 0.08899801634273885,
-     "luckPercentile": 0.275
+     "wfOos": -0.04003454517614369,
+     "wfGap": 0.08332912256731206,
+     "luckPercentile": 0.235
     },
     "ensemble": {
-     "totalReturn": -0.005893246232668181,
-     "maxDrawdown": 0.06879175730107844,
+     "totalReturn": -0.005893246078860992,
+     "maxDrawdown": 0.06879175730107814,
      "trades": 9,
-     "curveVol": 0.002969456228583462,
-     "perPeriodSharpe": -0.0011670810100313104,
+     "curveVol": 0.0029694561468075176,
+     "perPeriodSharpe": -0.0011670810551965862,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.395
+     "luckPercentile": 0.405
     },
     "ensemble+vt": {
-     "totalReturn": -0.012579572689468077,
-     "maxDrawdown": 0.030273366872542395,
+     "totalReturn": -0.01257957264100329,
+     "maxDrawdown": 0.030273366872542607,
      "trades": 9,
-     "curveVol": 0.0011275344185185995,
-     "perPeriodSharpe": -0.01438643466788095,
+     "curveVol": 0.0011275343947823749,
+     "perPeriodSharpe": -0.014386434936556312,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.395
+     "luckPercentile": 0.405
     }
    },
    "bestVariant": "trend",
-   "deflatedSharpe": 0.4338831959254018
+   "deflatedSharpe": 0.43241476145163915
   },
   "UNH": {
    "symbol": "UNH",
    "assetClass": "stock",
-   "buyHold": -0.19540953918229953,
+   "buyHold": -0.21282758890650388,
    "variants": {
     "trend": {
-     "totalReturn": -0.036388940791064694,
-     "maxDrawdown": 0.10452626062374394,
+     "totalReturn": -0.03638891010006495,
+     "maxDrawdown": 0.104526260019059,
      "trades": 20,
-     "curveVol": 0.004444062385940101,
-     "perPeriodSharpe": -0.00888959759421804,
+     "curveVol": 0.004444060572809022,
+     "perPeriodSharpe": -0.008889593522773808,
      "beatsHold": true,
-     "wfOos": -0.010467823632094836,
-     "wfGap": -0.005544760470350518,
-     "luckPercentile": 0.5
+     "wfOos": -0.011930773340273287,
+     "wfGap": -0.004428037284036429,
+     "luckPercentile": 0.52
     },
     "trend+vt": {
-     "totalReturn": -0.01600380755293518,
-     "maxDrawdown": 0.06065518970732626,
+     "totalReturn": -0.01600378232996158,
+     "maxDrawdown": 0.06065518931368993,
      "trades": 20,
-     "curveVol": 0.0026259956130447793,
-     "perPeriodSharpe": -0.006871833305370764,
+     "curveVol": 0.002625993873456587,
+     "perPeriodSharpe": -0.006871826626026535,
      "beatsHold": true,
-     "wfOos": -0.00913084624943461,
-     "wfGap": -0.011293497036054118,
-     "luckPercentile": 0.5
+     "wfOos": -0.01030250287414261,
+     "wfGap": -0.01048171503430742,
+     "luckPercentile": 0.52
     },
     "meanrev": {
-     "totalReturn": 0.017294051239471475,
-     "maxDrawdown": 0.14462601877443335,
+     "totalReturn": 0.01729431545237614,
+     "maxDrawdown": 0.14463701639493778,
      "trades": 27,
-     "curveVol": 0.005826767617195875,
-     "perPeriodSharpe": 0.00682737275626201,
+     "curveVol": 0.00581589378308754,
+     "perPeriodSharpe": 0.006829376718888014,
      "beatsHold": true,
-     "wfOos": 0.012901230490140775,
-     "wfGap": 0.11447982694904521,
-     "luckPercentile": 0.515
+     "wfOos": -0.0018641501332004873,
+     "wfGap": 0.10648830124366884,
+     "luckPercentile": 0.5275
     },
     "breakout": {
-     "totalReturn": -0.054085352828550315,
-     "maxDrawdown": 0.1590850669335896,
+     "totalReturn": -0.0540850715000879,
+     "maxDrawdown": 0.15908481683353493,
      "trades": 20,
-     "curveVol": 0.004375440559766429,
-     "perPeriodSharpe": -0.014741239122296147,
+     "curveVol": 0.00437544066554151,
+     "perPeriodSharpe": -0.014741148079853642,
      "beatsHold": true,
-     "wfOos": -0.007199159025306101,
-     "wfGap": -0.00839879228393007,
+     "wfOos": -0.007560163703829688,
+     "wfGap": -0.007612724570587444,
      "luckPercentile": 0.2175
     },
     "ensemble": {
-     "totalReturn": -0.06205175215266023,
-     "maxDrawdown": 0.06205175215266027,
+     "totalReturn": -0.06205174945797376,
+     "maxDrawdown": 0.06205174945797371,
      "trades": 6,
-     "curveVol": 0.0022619814355364152,
-     "perPeriodSharpe": -0.03658187790974585,
+     "curveVol": 0.0022619809210407287,
+     "perPeriodSharpe": -0.03658188505448738,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.1125
+     "luckPercentile": 0.1325
     },
     "ensemble+vt": {
-     "totalReturn": -0.043144060320405186,
-     "maxDrawdown": 0.04314406032040515,
+     "totalReturn": -0.04314405867189475,
+     "maxDrawdown": 0.043144058671894706,
      "trades": 6,
-     "curveVol": 0.0011133791655201918,
-     "perPeriodSharpe": -0.0521872047439318,
+     "curveVol": 0.0011133787865594848,
+     "perPeriodSharpe": -0.052187220825616124,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.1125
+     "luckPercentile": 0.1325
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.2795271030702453
+   "deflatedSharpe": 0.2795423587005386
   },
   "UNI-USD": {
    "symbol": "UNI-USD",
    "assetClass": "crypto",
-   "buyHold": -0.36622186495176845,
+   "buyHold": -0.38419063270336895,
    "variants": {
     "trend": {
-     "totalReturn": 0.037807339813711316,
-     "maxDrawdown": 0.044108662818121216,
+     "totalReturn": 0.03780733984781737,
+     "maxDrawdown": 0.04410866281812106,
      "trades": 4,
-     "curveVol": 0.0018575810062566322,
-     "perPeriodSharpe": 0.019153575939077256,
+     "curveVol": 0.001857580971356376,
+     "perPeriodSharpe": 0.019153576281128768,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.8725
+     "luckPercentile": 0.875
     },
     "trend+vt": {
-     "totalReturn": 0.009977394211806212,
-     "maxDrawdown": 0.012613397467862027,
+     "totalReturn": 0.009977394221260871,
+     "maxDrawdown": 0.012613397467862029,
      "trades": 4,
-     "curveVol": 0.00051226864856972,
-     "perPeriodSharpe": 0.017953657946607533,
+     "curveVol": 0.0005122686389145864,
+     "perPeriodSharpe": 0.017953658292104796,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.8725
+     "luckPercentile": 0.875
     },
     "meanrev": {
-     "totalReturn": -0.04175240959456028,
-     "maxDrawdown": 0.07845276215154136,
+     "totalReturn": -0.04174716633876929,
+     "maxDrawdown": 0.07844771970954643,
      "trades": 5,
-     "curveVol": 0.0015328323146651137,
-     "perPeriodSharpe": -0.024638351886040858,
+     "curveVol": 0.0015303996951028913,
+     "perPeriodSharpe": -0.024676673348696897,
      "beatsHold": true,
      "wfOos": 0,
-     "wfGap": -0.011656844501603647,
-     "luckPercentile": 0.0775
+     "wfGap": -0.05959330545728114,
+     "luckPercentile": 0.08
     },
     "breakout": {
-     "totalReturn": -0.020271637007442278,
-     "maxDrawdown": 0.026828891165234833,
+     "totalReturn": -0.020271230938419316,
+     "maxDrawdown": 0.02681797701423939,
      "trades": 1,
-     "curveVol": 0.0006073084372339623,
-     "perPeriodSharpe": -0.030494004390119796,
+     "curveVol": 0.0006066463845329161,
+     "perPeriodSharpe": -0.03052731478549674,
      "beatsHold": true,
      "wfOos": null,
      "wfGap": null,
@@ -2323,581 +2329,581 @@
     }
    },
    "bestVariant": "trend",
-   "deflatedSharpe": 0.37765641531757294
+   "deflatedSharpe": 0.3773319114923339
   },
   "VNQ": {
    "symbol": "VNQ",
    "assetClass": "etf",
-   "buyHold": 0.1653666146645867,
+   "buyHold": 0.16429089151969078,
    "variants": {
     "trend": {
-     "totalReturn": -0.042848670245553167,
-     "maxDrawdown": 0.10540865482568085,
+     "totalReturn": -0.04285783461360093,
+     "maxDrawdown": 0.10540865482043806,
      "trades": 20,
-     "curveVol": 0.004354496664594486,
-     "perPeriodSharpe": -0.01122223412760719,
+     "curveVol": 0.004383270526847445,
+     "perPeriodSharpe": -0.011123184085089546,
      "beatsHold": false,
-     "wfOos": -0.01684267990730785,
-     "wfGap": 0.02109957694343223,
-     "luckPercentile": 0.4
+     "wfOos": -0.020082190999888765,
+     "wfGap": 0.021276461244419585,
+     "luckPercentile": 0.43
     },
     "trend+vt": {
-     "totalReturn": -0.0017086949236969629,
-     "maxDrawdown": 0.08987026595676917,
+     "totalReturn": -0.0018308986693132967,
+     "maxDrawdown": 0.08987026595188073,
      "trades": 20,
-     "curveVol": 0.0038352667613260802,
-     "perPeriodSharpe": 0.0013152907726031726,
+     "curveVol": 0.0038519830676195304,
+     "perPeriodSharpe": 0.0012837896369051348,
      "beatsHold": false,
-     "wfOos": -0.014713890856159742,
-     "wfGap": 0.01776551365186004,
-     "luckPercentile": 0.4
+     "wfOos": -0.017966382255401703,
+     "wfGap": 0.018033310585065965,
+     "luckPercentile": 0.43
     },
     "meanrev": {
-     "totalReturn": -0.0015989925793550297,
-     "maxDrawdown": 0.08659303257904802,
-     "trades": 20,
-     "curveVol": 0.004143154970922836,
-     "perPeriodSharpe": 0.0015545665648645,
+     "totalReturn": -0.039473693016081945,
+     "maxDrawdown": 0.0921138141333522,
+     "trades": 19,
+     "curveVol": 0.004048404164344873,
+     "perPeriodSharpe": -0.011223990666397503,
      "beatsHold": false,
-     "wfOos": -0.03984296915671167,
-     "wfGap": 0.05028402559737455,
-     "luckPercentile": 0.8375
+     "wfOos": -0.03378397564842076,
+     "wfGap": 0.04423297674652419,
+     "luckPercentile": 0.67
     },
     "breakout": {
-     "totalReturn": -0.16252258414580156,
-     "maxDrawdown": 0.22766444615105913,
+     "totalReturn": -0.1625224895854097,
+     "maxDrawdown": 0.22766444615104894,
      "trades": 17,
-     "curveVol": 0.0036805889545186593,
-     "perPeriodSharpe": -0.06231822385655599,
+     "curveVol": 0.0036805684458917865,
+     "perPeriodSharpe": -0.06231855047004624,
      "beatsHold": false,
-     "wfOos": -0.027042369582553016,
-     "wfGap": 0.07405743894349504,
-     "luckPercentile": 0.0575
+     "wfOos": -0.016769582626566804,
+     "wfGap": 0.05914731924465655,
+     "luckPercentile": 0.07
     },
     "ensemble": {
-     "totalReturn": -0.12110428298014597,
+     "totalReturn": -0.12110428291334319,
      "maxDrawdown": 0.1365299999635924,
      "trades": 9,
-     "curveVol": 0.0022184403334480525,
-     "perPeriodSharpe": -0.07636598804901226,
+     "curveVol": 0.0022184403146453245,
+     "perPeriodSharpe": -0.0763659886693283,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.065
+     "luckPercentile": 0.07
     },
     "ensemble+vt": {
-     "totalReturn": -0.11183747745122996,
-     "maxDrawdown": 0.13167543825843697,
+     "totalReturn": -0.11183747740695837,
+     "maxDrawdown": 0.13167543825843686,
      "trades": 9,
-     "curveVol": 0.002055855629139292,
-     "perPeriodSharpe": -0.07578186585139005,
+     "curveVol": 0.002055855620303093,
+     "perPeriodSharpe": -0.0757818661536189,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.065
+     "luckPercentile": 0.07
     }
    },
-   "bestVariant": "meanrev",
-   "deflatedSharpe": 0.09355134668432352
+   "bestVariant": "trend+vt",
+   "deflatedSharpe": 0.1063668307868747
   },
   "XLE": {
    "symbol": "XLE",
    "assetClass": "etf",
-   "buyHold": 0.3388209121245829,
+   "buyHold": 0.3612600536193029,
    "variants": {
     "trend": {
-     "totalReturn": -0.19252798710394836,
-     "maxDrawdown": 0.2367927659559684,
+     "totalReturn": -0.19252797020771162,
+     "maxDrawdown": 0.2367927654759499,
      "trades": 20,
-     "curveVol": 0.003471874877297353,
-     "perPeriodSharpe": -0.08026634053478622,
+     "curveVol": 0.0034718657259598,
+     "perPeriodSharpe": -0.08026655318789021,
      "beatsHold": false,
-     "wfOos": -0.0641645902869726,
-     "wfGap": 0.04393092136919094,
-     "luckPercentile": 0.0425
+     "wfOos": -0.04704878293223566,
+     "wfGap": 0.031652364286175044,
+     "luckPercentile": 0.04
     },
     "trend+vt": {
-     "totalReturn": -0.15512735185555826,
-     "maxDrawdown": 0.20112747493546682,
+     "totalReturn": -0.15512733770413256,
+     "maxDrawdown": 0.20112747447707904,
      "trades": 20,
-     "curveVol": 0.0029233209943161065,
-     "perPeriodSharpe": -0.07531094888093817,
+     "curveVol": 0.0029233142793057467,
+     "perPeriodSharpe": -0.07531112093392837,
      "beatsHold": false,
-     "wfOos": -0.04450159906458265,
-     "wfGap": 0.03327171556749234,
-     "luckPercentile": 0.0425
+     "wfOos": -0.035592914955813515,
+     "wfGap": 0.026264276160120587,
+     "luckPercentile": 0.04
     },
     "meanrev": {
-     "totalReturn": 0.024150691392514245,
-     "maxDrawdown": 0.16207912001068842,
+     "totalReturn": 0.02415069350950616,
+     "maxDrawdown": 0.16207912001068833,
      "trades": 16,
-     "curveVol": 0.0036615626720294292,
-     "perPeriodSharpe": 0.010502600664308002,
+     "curveVol": 0.0036615624677725305,
+     "perPeriodSharpe": 0.01050260179958094,
      "beatsHold": false,
-     "wfOos": -0.020551149658578516,
-     "wfGap": 0.16394244238837452,
-     "luckPercentile": 0.665
+     "wfOos": -0.020562386122803256,
+     "wfGap": 0.21014659117110712,
+     "luckPercentile": 0.7
     },
     "breakout": {
-     "totalReturn": -0.11148524561278716,
-     "maxDrawdown": 0.20485576054767024,
+     "totalReturn": -0.11148497789498268,
+     "maxDrawdown": 0.20485576023897972,
      "trades": 20,
-     "curveVol": 0.0037660654176988983,
-     "perPeriodSharpe": -0.039904546780679985,
+     "curveVol": 0.0037658860850949493,
+     "perPeriodSharpe": -0.03990651997618785,
      "beatsHold": false,
-     "wfOos": -0.04055848496573389,
-     "wfGap": 0.0099469934532872,
-     "luckPercentile": 0.22
+     "wfOos": -0.0405584940916226,
+     "wfGap": 0.008003269584982597,
+     "luckPercentile": 0.1975
     },
     "ensemble": {
-     "totalReturn": -0.10390868033593581,
-     "maxDrawdown": 0.14598630089152617,
+     "totalReturn": -0.10390866771556662,
+     "maxDrawdown": 0.14598630072063537,
      "trades": 11,
-     "curveVol": 0.0022100563243377612,
-     "perPeriodSharpe": -0.06498989976704833,
+     "curveVol": 0.0022100563712898038,
+     "perPeriodSharpe": -0.06498988984927152,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.0675
+     "luckPercentile": 0.07
     },
     "ensemble+vt": {
-     "totalReturn": -0.08610837600620469,
-     "maxDrawdown": 0.118607598861728,
+     "totalReturn": -0.0861083647529034,
+     "maxDrawdown": 0.11860759871821515,
      "trades": 11,
-     "curveVol": 0.0017762529273936687,
-     "perPeriodSharpe": -0.06660665103564252,
+     "curveVol": 0.001776252899737716,
+     "perPeriodSharpe": -0.06660664286521556,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.0675
+     "luckPercentile": 0.07
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.17702799873380404
+   "deflatedSharpe": 0.17702887110829602
   },
   "XLF": {
    "symbol": "XLF",
    "assetClass": "etf",
-   "buyHold": 0.6554982817869415,
+   "buyHold": 0.6585365853658536,
    "variants": {
     "trend": {
-     "totalReturn": 0.1278306919199459,
-     "maxDrawdown": 0.12902876918068792,
+     "totalReturn": 0.1276992347911836,
+     "maxDrawdown": 0.129029589363404,
      "trades": 29,
-     "curveVol": 0.005590893575889471,
-     "perPeriodSharpe": 0.0314384512485546,
+     "curveVol": 0.005590005351589955,
+     "perPeriodSharpe": 0.031414798097960904,
      "beatsHold": false,
-     "wfOos": 0.014335382503330857,
-     "wfGap": 0.030989565060198593,
+     "wfOos": 0.014771190584804611,
+     "wfGap": 0.02428903515058836,
      "luckPercentile": 0.825
     },
     "trend+vt": {
-     "totalReturn": 0.13670067932876595,
-     "maxDrawdown": 0.10374437205572798,
+     "totalReturn": 0.13656818833635742,
+     "maxDrawdown": 0.10374521604848104,
      "trades": 29,
-     "curveVol": 0.004853831059006148,
-     "perPeriodSharpe": 0.03756940304813195,
+     "curveVol": 0.004852808147453499,
+     "perPeriodSharpe": 0.03754432159950574,
      "beatsHold": false,
-     "wfOos": 0.015066626149192963,
-     "wfGap": 0.024669398567585266,
+     "wfOos": 0.015051728066508008,
+     "wfGap": 0.020028602657460398,
      "luckPercentile": 0.825
     },
     "meanrev": {
-     "totalReturn": -0.11736619690211558,
-     "maxDrawdown": 0.17752315849753228,
+     "totalReturn": -0.11735424531464556,
+     "maxDrawdown": 0.17738708022724872,
      "trades": 20,
-     "curveVol": 0.004304105213233908,
-     "perPeriodSharpe": -0.03646537694404217,
+     "curveVol": 0.004302781118352486,
+     "perPeriodSharpe": -0.036473734420629525,
      "beatsHold": false,
-     "wfOos": 0.05163716584628967,
-     "wfGap": -0.0008231010165286393,
-     "luckPercentile": 0.15
+     "wfOos": 0.06235549967291365,
+     "wfGap": -0.014443159018415863,
+     "luckPercentile": 0.13
     },
     "breakout": {
-     "totalReturn": -0.03623249958995589,
-     "maxDrawdown": 0.1732442486519301,
+     "totalReturn": -0.03636841182389838,
+     "maxDrawdown": 0.17324423909679448,
      "trades": 20,
-     "curveVol": 0.004506996696913433,
-     "perPeriodSharpe": -0.00865356418829513,
+     "curveVol": 0.004507682052082317,
+     "perPeriodSharpe": -0.008693224342686386,
      "beatsHold": false,
-     "wfOos": -0.026676869974266687,
-     "wfGap": 0.05249931063141669,
-     "luckPercentile": 0.5175
+     "wfOos": -0.0223242625533375,
+     "wfGap": 0.046157160748971277,
+     "luckPercentile": 0.535
     },
     "ensemble": {
-     "totalReturn": 0.038915221758221374,
-     "maxDrawdown": 0.08643019146805134,
+     "totalReturn": 0.03876887372722848,
+     "maxDrawdown": 0.08643019146799502,
      "trades": 13,
-     "curveVol": 0.003628986403964799,
-     "perPeriodSharpe": 0.01581482826636368,
+     "curveVol": 0.0036299235451641206,
+     "perPeriodSharpe": 0.015759998969887393,
      "beatsHold": false,
-     "wfOos": 0.00785372934935813,
-     "wfGap": -0.005176656388791279,
-     "luckPercentile": 0.6775
+     "wfOos": 0.00556937206402025,
+     "wfGap": -0.0014313678657135176,
+     "luckPercentile": 0.67
     },
     "ensemble+vt": {
-     "totalReturn": 0.05809365248443066,
-     "maxDrawdown": 0.06662692870424647,
+     "totalReturn": 0.05794460286088765,
+     "maxDrawdown": 0.0666269287042115,
      "trades": 13,
-     "curveVol": 0.0034835366367003597,
-     "perPeriodSharpe": 0.023318556797924456,
+     "curveVol": 0.003484514158000322,
+     "perPeriodSharpe": 0.023259151152353476,
      "beatsHold": false,
-     "wfOos": 0.010072655710952838,
-     "wfGap": -0.007320860848733124,
-     "luckPercentile": 0.6775
+     "wfOos": 0.007769212309328255,
+     "wfGap": -0.003580376674831909,
+     "luckPercentile": 0.67
     }
    },
    "bestVariant": "trend+vt",
-   "deflatedSharpe": 0.5120922722325254
+   "deflatedSharpe": 0.5119241002583714
   },
   "XLK": {
    "symbol": "XLK",
    "assetClass": "etf",
-   "buyHold": 1.232714200119832,
+   "buyHold": 1.1949752300070773,
    "variants": {
     "trend": {
-     "totalReturn": 0.005634095384442039,
-     "maxDrawdown": 0.1409679281030472,
+     "totalReturn": 0.005634046362419598,
+     "maxDrawdown": 0.14096792810352043,
      "trades": 21,
-     "curveVol": 0.004830221170144245,
-     "perPeriodSharpe": 0.0039633223979545365,
+     "curveVol": 0.00483022863814941,
+     "perPeriodSharpe": 0.003963310272423455,
      "beatsHold": false,
-     "wfOos": -0.03223494639794866,
-     "wfGap": 0.03667245109007322,
-     "luckPercentile": 0.2975
+     "wfOos": -0.040815272528350044,
+     "wfGap": 0.047440716171677694,
+     "luckPercentile": 0.2925
     },
     "trend+vt": {
-     "totalReturn": 0.02708455602568005,
-     "maxDrawdown": 0.09144243581413518,
+     "totalReturn": 0.02708450252998662,
+     "maxDrawdown": 0.09144243581435142,
      "trades": 21,
-     "curveVol": 0.003528172077596224,
-     "perPeriodSharpe": 0.011847808714877171,
+     "curveVol": 0.003528178676435638,
+     "perPeriodSharpe": 0.011847773472712961,
      "beatsHold": false,
-     "wfOos": -0.01851091561653645,
-     "wfGap": 0.030257491853060148,
-     "luckPercentile": 0.2975
+     "wfOos": -0.02021290658674635,
+     "wfGap": 0.03316685104271913,
+     "luckPercentile": 0.2925
     },
     "meanrev": {
-     "totalReturn": -0.11258931236885206,
-     "maxDrawdown": 0.1273548022188187,
+     "totalReturn": -0.11258952897382446,
+     "maxDrawdown": 0.12735480221881892,
      "trades": 20,
-     "curveVol": 0.004608938014969538,
-     "perPeriodSharpe": -0.032212914140371356,
+     "curveVol": 0.004608970633005737,
+     "perPeriodSharpe": -0.032212724016068076,
      "beatsHold": false,
-     "wfOos": -0.030889532009987647,
-     "wfGap": 0.04720060119460076,
-     "luckPercentile": 0.3725
+     "wfOos": -0.021192307502549024,
+     "wfGap": 0.04246116533376598,
+     "luckPercentile": 0.3675
     },
     "breakout": {
-     "totalReturn": 0.034044854837972816,
-     "maxDrawdown": 0.10847151654887006,
+     "totalReturn": 0.03404452072698172,
+     "maxDrawdown": 0.1084715184424369,
      "trades": 25,
-     "curveVol": 0.0053464139554413115,
-     "perPeriodSharpe": 0.011018728555567901,
+     "curveVol": 0.005346438978674761,
+     "perPeriodSharpe": 0.01101862142026034,
      "beatsHold": false,
-     "wfOos": 0.0015914495538996154,
-     "wfGap": 0.04090153181646056,
-     "luckPercentile": 0.68
+     "wfOos": 0.0026216208035722555,
+     "wfGap": 0.04074657804933379,
+     "luckPercentile": 0.6525
     },
     "ensemble": {
-     "totalReturn": -0.01326645555027628,
-     "maxDrawdown": 0.08963795555328978,
+     "totalReturn": -0.01326646263145248,
+     "maxDrawdown": 0.08963795748622531,
      "trades": 15,
-     "curveVol": 0.0043433013164224914,
-     "perPeriodSharpe": -0.0019197882487872072,
+     "curveVol": 0.004343302562666054,
+     "perPeriodSharpe": -0.0019197886476640435,
      "beatsHold": false,
-     "wfOos": 0.003671885266052888,
-     "wfGap": -0.00705196247808193,
-     "luckPercentile": 0.5875
+     "wfOos": 0.0062779772790004795,
+     "wfGap": -0.009658061597761836,
+     "luckPercentile": 0.6
     },
     "ensemble+vt": {
-     "totalReturn": -0.007988205198433573,
-     "maxDrawdown": 0.0701925993538696,
+     "totalReturn": -0.00798821142526629,
+     "maxDrawdown": 0.0701926011183155,
      "trades": 15,
-     "curveVol": 0.0035570290317106165,
-     "perPeriodSharpe": -0.0012213008499584893,
+     "curveVol": 0.0035570301667069535,
+     "perPeriodSharpe": -0.0012213016720300082,
      "beatsHold": false,
-     "wfOos": 0.0030623313613340475,
-     "wfGap": -0.006266736268987327,
-     "luckPercentile": 0.5875
+     "wfOos": 0.005235797230639383,
+     "wfGap": -0.008440208353758805,
+     "luckPercentile": 0.6
     }
    },
    "bestVariant": "trend+vt",
-   "deflatedSharpe": 0.40072907600996094
+   "deflatedSharpe": 0.4007300143890534
   },
   "XLM-USD": {
    "symbol": "XLM-USD",
    "assetClass": "crypto",
-   "buyHold": 0.1699953586865084,
+   "buyHold": 0.17477996502659288,
    "variants": {
     "trend": {
-     "totalReturn": -0.10454032431197624,
-     "maxDrawdown": 0.18183517446639097,
+     "totalReturn": -0.10453918735348089,
+     "maxDrawdown": 0.18183517446618402,
      "trades": 20,
-     "curveVol": 0.003238240792897995,
-     "perPeriodSharpe": -0.029515954269171103,
+     "curveVol": 0.0032381980139209177,
+     "perPeriodSharpe": -0.029516029403832203,
      "beatsHold": false,
-     "wfOos": -0.05489331298885932,
-     "wfGap": 0.022671761943119303,
-     "luckPercentile": 0.39
+     "wfOos": -0.05245862042094496,
+     "wfGap": 0.021502516154475626,
+     "luckPercentile": 0.3775
     },
     "trend+vt": {
-     "totalReturn": -0.02946588987808285,
-     "maxDrawdown": 0.07030157779422437,
+     "totalReturn": -0.029465494733888375,
+     "maxDrawdown": 0.07030157779414278,
      "trades": 20,
-     "curveVol": 0.0011806074934344291,
-     "perPeriodSharpe": -0.02254491668900939,
+     "curveVol": 0.0011805931349973947,
+     "perPeriodSharpe": -0.022544890353628753,
      "beatsHold": false,
-     "wfOos": -0.01777221105578734,
-     "wfGap": 0.008865316463204395,
-     "luckPercentile": 0.39
+     "wfOos": -0.017589510723159434,
+     "wfGap": 0.009551869566839327,
+     "luckPercentile": 0.3775
     },
     "meanrev": {
-     "totalReturn": 0.05523803060920174,
-     "maxDrawdown": 0.04581369061122569,
+     "totalReturn": 0.05523903561508736,
+     "maxDrawdown": 0.04581369038003416,
      "trades": 9,
-     "curveVol": 0.0025255087917367847,
-     "perPeriodSharpe": 0.020706933508193304,
+     "curveVol": 0.0025248032098629217,
+     "perPeriodSharpe": 0.02071236311698628,
      "beatsHold": false,
-     "wfOos": 0.013725156345557377,
-     "wfGap": 0.04549652934188453,
-     "luckPercentile": 0.4325
+     "wfOos": 0.02840631669579441,
+     "wfGap": 0.02450712796888843,
+     "luckPercentile": 0.42
     },
     "breakout": {
-     "totalReturn": -0.0950881990631175,
-     "maxDrawdown": 0.10674777632270227,
+     "totalReturn": -0.095791430158924,
+     "maxDrawdown": 0.1067181457535949,
      "trades": 9,
-     "curveVol": 0.002383002789639135,
-     "perPeriodSharpe": -0.03709325629402566,
+     "curveVol": 0.0023829068435634944,
+     "perPeriodSharpe": -0.03739276619238565,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
      "luckPercentile": 0.1575
     },
     "ensemble": {
-     "totalReturn": -0.03597706217818253,
+     "totalReturn": -0.03672721388348532,
      "maxDrawdown": 0.054268634690231424,
      "trades": 3,
-     "curveVol": 0.001239849602626868,
-     "perPeriodSharpe": -0.026364303195641973,
+     "curveVol": 0.0012404631082984913,
+     "perPeriodSharpe": -0.026923735621236473,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.12
+     "luckPercentile": 0.1175
     },
     "ensemble+vt": {
-     "totalReturn": -0.013137364726374612,
+     "totalReturn": -0.013449746066021229,
      "maxDrawdown": 0.020422262308301218,
      "trades": 3,
-     "curveVol": 0.00046186618405360386,
-     "perPeriodSharpe": -0.025917066998180947,
+     "curveVol": 0.00046213934759574703,
+     "perPeriodSharpe": -0.026527086621737844,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.12
+     "luckPercentile": 0.1175
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.42144499751777015
+   "deflatedSharpe": 0.41950315506286295
   },
   "XLV": {
    "symbol": "XLV",
    "assetClass": "etf",
-   "buyHold": 0.24154197685560552,
+   "buyHold": 0.23464138741916507,
    "variants": {
     "trend": {
-     "totalReturn": -0.025511473637357618,
-     "maxDrawdown": 0.08826321280483305,
+     "totalReturn": -0.025506036157560863,
+     "maxDrawdown": 0.0882632128048316,
      "trades": 20,
-     "curveVol": 0.004883412527177264,
-     "perPeriodSharpe": -0.004613476298222271,
+     "curveVol": 0.004882011987497973,
+     "perPeriodSharpe": -0.004614669987031331,
      "beatsHold": false,
-     "wfOos": 0.037376778423028556,
-     "wfGap": 0.008849977924465735,
-     "luckPercentile": 0.5375
+     "wfOos": 0.025219934648987336,
+     "wfGap": 0.019044105969036135,
+     "luckPercentile": 0.535
     },
     "trend+vt": {
-     "totalReturn": -0.025532100976008998,
-     "maxDrawdown": 0.08826321280483293,
+     "totalReturn": -0.02552666361131728,
+     "maxDrawdown": 0.08826321280483136,
      "trades": 20,
-     "curveVol": 0.004641637702333322,
-     "perPeriodSharpe": -0.005106717011165781,
+     "curveVol": 0.004640164188549492,
+     "perPeriodSharpe": -0.005108202101799139,
      "beatsHold": false,
-     "wfOos": 0.015735689185617407,
-     "wfGap": 0.02600363128551314,
-     "luckPercentile": 0.5375
+     "wfOos": 0.02251080991010257,
+     "wfGap": 0.017585177583157308,
+     "luckPercentile": 0.535
     },
     "meanrev": {
-     "totalReturn": 0.012822828770173045,
-     "maxDrawdown": 0.10742758350318983,
+     "totalReturn": 0.012749609850231547,
+     "maxDrawdown": 0.11606472129892406,
      "trades": 23,
-     "curveVol": 0.0052589382882274275,
-     "perPeriodSharpe": 0.005852072434019251,
+     "curveVol": 0.00523358016687041,
+     "perPeriodSharpe": 0.005836464013950875,
      "beatsHold": false,
-     "wfOos": -0.023661463817275935,
-     "wfGap": 0.05392381775553862,
-     "luckPercentile": 0.69
+     "wfOos": -0.02259008574431426,
+     "wfGap": 0.04841794706256908,
+     "luckPercentile": 0.705
     },
     "breakout": {
-     "totalReturn": -0.062037969364087675,
-     "maxDrawdown": 0.18018625619058828,
+     "totalReturn": -0.06203788025817303,
+     "maxDrawdown": 0.1801861890636115,
      "trades": 20,
-     "curveVol": 0.004752558813488052,
-     "perPeriodSharpe": -0.01556778734147159,
+     "curveVol": 0.004752539498189302,
+     "perPeriodSharpe": -0.015567843226032363,
      "beatsHold": false,
-     "wfOos": -0.02307528899872477,
-     "wfGap": 0.05105320729466167,
-     "luckPercentile": 0.53
+     "wfOos": -0.02534275727010804,
+     "wfGap": 0.05227036482944375,
+     "luckPercentile": 0.54
     },
     "ensemble": {
-     "totalReturn": -0.1274234603387937,
-     "maxDrawdown": 0.16894376493133037,
+     "totalReturn": -0.12742346033767282,
+     "maxDrawdown": 0.16894376491663038,
      "trades": 15,
-     "curveVol": 0.003656462047271644,
-     "perPeriodSharpe": -0.04780267989983122,
+     "curveVol": 0.003656462046472515,
+     "perPeriodSharpe": -0.04780267991062005,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.21
+     "luckPercentile": 0.2325
     },
     "ensemble+vt": {
-     "totalReturn": -0.11928960133428246,
-     "maxDrawdown": 0.15766384138925957,
+     "totalReturn": -0.11928960133315192,
+     "maxDrawdown": 0.15766384137436093,
      "trades": 15,
-     "curveVol": 0.003466607521315762,
-     "perPeriodSharpe": -0.04705178607779639,
+     "curveVol": 0.0034666075204732964,
+     "perPeriodSharpe": -0.04705178608959225,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
-     "luckPercentile": 0.21
+     "luckPercentile": 0.2325
     }
    },
    "bestVariant": "meanrev",
-   "deflatedSharpe": 0.25500672802063223
+   "deflatedSharpe": 0.25489944475472864
   },
   "XOM": {
    "symbol": "XOM",
    "assetClass": "stock",
-   "buyHold": 0.4288652418850041,
+   "buyHold": 0.42780557541100794,
    "variants": {
     "trend": {
-     "totalReturn": -0.1371177442903918,
-     "maxDrawdown": 0.18874674918653614,
+     "totalReturn": -0.13711693916349554,
+     "maxDrawdown": 0.18874674860778035,
      "trades": 20,
-     "curveVol": 0.0041241698212326795,
-     "perPeriodSharpe": -0.04554915256013048,
+     "curveVol": 0.00412414150408348,
+     "perPeriodSharpe": -0.04554919245017679,
      "beatsHold": false,
-     "wfOos": -0.030858000174686956,
-     "wfGap": 0.0370752703440001,
-     "luckPercentile": 0.105
+     "wfOos": -0.019851630540644483,
+     "wfGap": 0.02409702764581237,
+     "luckPercentile": 0.0925
     },
     "trend+vt": {
-     "totalReturn": -0.11337383497958597,
-     "maxDrawdown": 0.15892631069545346,
+     "totalReturn": -0.11337319501264242,
+     "maxDrawdown": 0.15892631011408803,
      "trades": 20,
-     "curveVol": 0.003456231784054906,
-     "perPeriodSharpe": -0.044628969680509695,
+     "curveVol": 0.0034562115401644976,
+     "perPeriodSharpe": -0.0446289732958518,
      "beatsHold": false,
-     "wfOos": -0.020992193115066615,
-     "wfGap": 0.025504357013523854,
-     "luckPercentile": 0.105
+     "wfOos": -0.012673422981730603,
+     "wfGap": 0.017960817748466862,
+     "luckPercentile": 0.0925
     },
     "meanrev": {
-     "totalReturn": -0.1675237285429545,
-     "maxDrawdown": 0.2042369698171682,
+     "totalReturn": -0.16754849524611704,
+     "maxDrawdown": 0.20423359064818955,
      "trades": 18,
-     "curveVol": 0.004813384895744674,
-     "perPeriodSharpe": -0.04830940629599145,
+     "curveVol": 0.0048107648641148954,
+     "perPeriodSharpe": -0.048346618541840004,
      "beatsHold": false,
-     "wfOos": -0.020525886083213707,
-     "wfGap": 0.044474311543813205,
+     "wfOos": -0.02053463540911238,
+     "wfGap": 0.046166454561186954,
      "luckPercentile": 0.1925
     },
     "breakout": {
-     "totalReturn": -0.061734279908968515,
-     "maxDrawdown": 0.1919102040037118,
+     "totalReturn": -0.06172645227015705,
+     "maxDrawdown": 0.1919102000569824,
      "trades": 18,
-     "curveVol": 0.004113076719454522,
-     "perPeriodSharpe": -0.01857123292359388,
+     "curveVol": 0.004112540418541693,
+     "perPeriodSharpe": -0.01857149031010267,
      "beatsHold": false,
-     "wfOos": -0.021274337999472315,
-     "wfGap": 0.03667399806696692,
-     "luckPercentile": 0.3125
+     "wfOos": -0.0211074966136523,
+     "wfGap": 0.040790017630466524,
+     "luckPercentile": 0.28
     },
     "ensemble": {
-     "totalReturn": -0.10326912372218122,
-     "maxDrawdown": 0.14114154331550388,
+     "totalReturn": -0.10326910322128968,
+     "maxDrawdown": 0.14114154320533875,
      "trades": 11,
-     "curveVol": 0.0024132191797081215,
-     "perPeriodSharpe": -0.05892766130675182,
+     "curveVol": 0.0024132180506848907,
+     "perPeriodSharpe": -0.058927677394755976,
      "beatsHold": false,
-     "wfOos": -0.030962141332516846,
-     "wfGap": 0.04804773115949523,
+     "wfOos": -0.030621579112820152,
+     "wfGap": 0.0554602357496814,
      "luckPercentile": 0.0475
     },
     "ensemble+vt": {
-     "totalReturn": -0.07677465617843116,
-     "maxDrawdown": 0.10395250527825416,
+     "totalReturn": -0.07677463906440662,
+     "maxDrawdown": 0.1039525051919732,
      "trades": 11,
-     "curveVol": 0.0016543558217292672,
-     "perPeriodSharpe": -0.06346251758923913,
+     "curveVol": 0.0016543547613883907,
+     "perPeriodSharpe": -0.06346254440854038,
      "beatsHold": false,
-     "wfOos": -0.01894082598417557,
-     "wfGap": 0.03309602462612127,
+     "wfOos": -0.018737270523484062,
+     "wfGap": 0.040040599694998624,
      "luckPercentile": 0.0475
     }
    },
    "bestVariant": "breakout",
-   "deflatedSharpe": 0.14188457441711988
+   "deflatedSharpe": 0.14187687053077502
   },
   "XRP-USD": {
    "symbol": "XRP-USD",
    "assetClass": "crypto",
-   "buyHold": 0.6125637755102042,
+   "buyHold": 0.6347784354503281,
    "variants": {
     "trend": {
-     "totalReturn": -0.012418486387055006,
-     "maxDrawdown": 0.08053554109798802,
+     "totalReturn": -0.012418476966198577,
+     "maxDrawdown": 0.0805347394076072,
      "trades": 20,
-     "curveVol": 0.0037125336846174687,
-     "perPeriodSharpe": -0.0012218021813246627,
+     "curveVol": 0.003712524466864658,
+     "perPeriodSharpe": -0.0012218121138863859,
      "beatsHold": false,
-     "wfOos": -0.011093731908661883,
-     "wfGap": 0.019349012772931884,
-     "luckPercentile": 0.6775
+     "wfOos": -0.01063026922486184,
+     "wfGap": 0.020355505570393416,
+     "luckPercentile": 0.6725
     },
     "trend+vt": {
-     "totalReturn": -0.011125633970751392,
-     "maxDrawdown": 0.028506451659037323,
+     "totalReturn": -0.011125631384255708,
+     "maxDrawdown": 0.028506213098022492,
      "trades": 20,
-     "curveVol": 0.0012132696523206522,
-     "perPeriodSharpe": -0.007815368307345898,
+     "curveVol": 0.001213267433941126,
+     "perPeriodSharpe": -0.007815382847250326,
      "beatsHold": false,
-     "wfOos": -0.004472356081501168,
-     "wfGap": 0.005964254951799715,
-     "luckPercentile": 0.6775
+     "wfOos": -0.004411264270720916,
+     "wfGap": 0.006256605037278022,
+     "luckPercentile": 0.6725
     },
     "meanrev": {
-     "totalReturn": -0.047339723448264315,
-     "maxDrawdown": 0.10064466911079109,
+     "totalReturn": -0.047334281350679186,
+     "maxDrawdown": 0.10064429652684617,
      "trades": 14,
-     "curveVol": 0.002629613307745499,
-     "perPeriodSharpe": -0.015521925506007181,
+     "curveVol": 0.002624042582205101,
+     "perPeriodSharpe": -0.01555846921027161,
      "beatsHold": false,
-     "wfOos": 0.009074624342348236,
-     "wfGap": -0.021853817240719664,
-     "luckPercentile": 0.2375
+     "wfOos": -0.0007931909116084546,
+     "wfGap": -0.012431548525669467,
+     "luckPercentile": 0.255
     },
     "breakout": {
-     "totalReturn": 0.07696155712631936,
-     "maxDrawdown": 0.09622151252068337,
+     "totalReturn": 0.07696189780267404,
+     "maxDrawdown": 0.09621602409317226,
      "trades": 8,
-     "curveVol": 0.0024931628192133436,
-     "perPeriodSharpe": 0.028398746868658915,
+     "curveVol": 0.002493106789159363,
+     "perPeriodSharpe": 0.028399444645171162,
      "beatsHold": false,
-     "wfOos": -0.02032802159325242,
-     "wfGap": 0.07923855377442068,
-     "luckPercentile": 0.8275
+     "wfOos": -0.02032807029490069,
+     "wfGap": 0.07923904277173466,
+     "luckPercentile": 0.845
     },
     "ensemble": {
      "totalReturn": -0.02024660424561775,
@@ -2914,8 +2920,8 @@
      "totalReturn": -0.008916620161926403,
      "maxDrawdown": 0.008916620161926403,
      "trades": 1,
-     "curveVol": 0.00024613564937931077,
-     "perPeriodSharpe": -0.033108488023059844,
+     "curveVol": 0.00024613564937931174,
+     "perPeriodSharpe": -0.03310848802305971,
      "beatsHold": false,
      "wfOos": null,
      "wfGap": null,
@@ -2923,7 +2929,7 @@
     }
    },
    "bestVariant": "breakout",
-   "deflatedSharpe": 0.4789665297996971
+   "deflatedSharpe": 0.4789426728122564
   }
  }
 }

@@ -8,22 +8,22 @@
 
 | Variant | Beats hold | Median return | Median max DD | Median curve vol | Median WF out-of-sample | Median luck percentile | Median trades |
 |---|---|---|---|---|---|---|---|
-| trend | 10/38 | -0.1% | -12.7% | 0.42% | -1.7% | 53 | 20 |
-| trend+vt | 11/38 | -0.1% | -7.6% | 0.26% | -0.9% | 53 | 20 |
-| meanrev | 8/38 | -5.5% | -12.1% | 0.41% | +0.0% | 40 | 17.5 |
-| breakout | 10/38 | -0.4% | -9.8% | 0.41% | -1.1% | 50 | 17.5 |
-| ensemble | 10/38 | +0.0% | -6.3% | 0.24% | +0.4% | 40 | 9 |
-| ensemble+vt | 10/38 | +0.0% | -2.8% | 0.14% | +0.3% | 40 | 9 |
+| trend | 10/38 | -0.1% | -12.7% | 0.42% | -1.3% | 54 | 20 |
+| trend+vt | 11/38 | -0.1% | -7.6% | 0.26% | -0.6% | 54 | 20 |
+| meanrev | 8/38 | -5.5% | -12.1% | 0.40% | +0.0% | 40 | 17.5 |
+| breakout | 9/38 | -0.4% | -9.8% | 0.41% | -1.2% | 49 | 17.5 |
+| ensemble | 10/38 | +0.0% | -6.3% | 0.24% | +0.6% | 41 | 9 |
+| ensemble+vt | 10/38 | +0.0% | -2.8% | 0.14% | +0.0% | 41 | 9 |
 
-Median buy-and-hold across the same assets: **+39.6%**.
+Median buy-and-hold across the same assets: **+40.8%**.
 
 ## Deflated Sharpe verdict
 
 For each asset, the best of the 6 variants was tested against the Sharpe that the best of 6 junk variants would show by luck alone:
 
-**0 of 38 assets** produced a best-variant that survives deflation (DSR > 0.95). After correcting for selection across variants, no variant on any asset shows statistically credible positive true Sharpe. This is the normal, honest result — and the one the hype dashboards never compute.
+**1 of 38 assets** produced a best-variant with DSR > 0.95: GLD (ensemble+vt, 0.971). Treat survivors with suspicion, not excitement: 3 years of daily data is a short sample, and this correction covers only OUR 6 trials — not the millions of variants the industry has collectively tried on the same public signals.
 
-Which variant most often had the best raw Sharpe per asset (before deflation): meanrev (12), breakout (9), trend+vt (5), ensemble (5), ensemble+vt (4), trend (3).
+Which variant most often had the best raw Sharpe per asset (before deflation): meanrev (11), breakout (9), trend+vt (6), ensemble (5), ensemble+vt (4), trend (3).
 
 ## Reading
 
