@@ -1,22 +1,23 @@
 # Weekly Model Allocation (rules-based)
 
-*As of equities 2026-08-14 / crypto 2026-08-16. Rules-based model portfolio for research/education. Not financial advice, not a prediction. Every weight traces to a measured, cited rule; the rules are tilts and risk controls, not knowledge of the future.*
+*As of equities 2026-08-24 / crypto 2026-08-24. Rules-based model portfolio for research/education. Not financial advice, not a prediction. Every weight traces to a measured, cited rule; the rules are tilts and risk controls, not knowledge of the future.*
 
 | Weight | Asset | Sleeve | Rule (auditable) |
 |---|---|---|---|
 | 12.5% | **TLT** | diversifier | low measured STRESS-day correlation to equities (study 4) |
 | 10.7% | **SPY** | core | inverse-vol core (12m vol 15%), cap 20% |
 | 10.6% | **EFA** | core | inverse-vol core (12m vol 16%), cap 20% |
-| 8.3% | **EEM** | core | inverse-vol core (12m vol 20%), cap 20% |
-| 8.1% | **GLD** | diversifier | low measured STRESS-day correlation to equities (study 4) |
-| 8.0% | **QQQ** | core | inverse-vol core (12m vol 21%), cap 20% |
-| 7.8% | **IWM** | core | inverse-vol core (12m vol 21%), cap 20% |
-| 2.8% | **XLK** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
-| 2.8% | **JPM** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
-| 2.8% | **NVDA** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
-| 25.7% | **CASH** | reserve | cash floor + vol-target overlay overflow + closed crypto gate |
+| 8.2% | **EEM** | core | inverse-vol core (12m vol 20%), cap 20% |
+| 8.0% | **GLD** | diversifier | low measured STRESS-day correlation to equities (study 4) |
+| 8.0% | **QQQ** | core | inverse-vol core (12m vol 20%), cap 20% |
+| 7.7% | **IWM** | core | inverse-vol core (12m vol 21%), cap 20% |
+| 4.1% | **BTC-USD** | crypto | above 200d trend gate; capped small — fattest measured tails (study 1), no luck-adjusted timing evidence (DSR 0/38) |
+| 2.7% | **XLK** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
+| 2.7% | **JPM** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
+| 2.7% | **GOOGL** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
+| 22.0% | **CASH** | reserve | cash floor + vol-target overlay overflow |
 
-Portfolio vol overlay: realized 14.5% vs target 12% → scale 0.83.
+Portfolio vol overlay: realized 14.6% vs target 12% → scale 0.82.
 
 ## Why these rules and not "better" ones
 
