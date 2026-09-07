@@ -1,6 +1,6 @@
 # Weekly Model Allocation (rules-based)
 
-*As of equities 2026-08-28 / crypto 2026-08-30. Rules-based model portfolio for research/education. Not financial advice, not a prediction. Every weight traces to a measured, cited rule; the rules are tilts and risk controls, not knowledge of the future.*
+*As of equities 2026-09-04 / crypto 2026-09-06. Rules-based model portfolio for research/education. Not financial advice, not a prediction. Every weight traces to a measured, cited rule; the rules are tilts and risk controls, not knowledge of the future.*
 
 | Weight | Asset | Sleeve | Rule (auditable) |
 |---|---|---|---|
@@ -9,13 +9,13 @@
 | 10.4% | **EFA** | core | inverse-vol core (12m vol 15%), cap 20% |
 | 8.1% | **EEM** | core | inverse-vol core (12m vol 20%), cap 20% |
 | 7.9% | **QQQ** | core | inverse-vol core (12m vol 20%), cap 20% |
-| 7.9% | **GLD** | diversifier | low measured STRESS-day correlation to equities (study 4) |
+| 7.8% | **GLD** | diversifier | low measured STRESS-day correlation to equities (study 4) |
 | 7.6% | **IWM** | core | inverse-vol core (12m vol 21%), cap 20% |
-| 4.0% | **BTC-USD** | crypto | above 200d trend gate; capped small — fattest measured tails (study 1), no luck-adjusted timing evidence (DSR 0/38) |
+| 4.1% | **BTC-USD** | crypto | above 200d trend gate; capped small — fattest measured tails (study 1), no luck-adjusted timing evidence (DSR 0/38) |
+| 2.7% | **NVDA** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
 | 2.7% | **XLK** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
 | 2.7% | **JPM** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
-| 2.7% | **NVDA** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
-| 23.1% | **CASH** | reserve | cash floor + vol-target overlay overflow |
+| 23.0% | **CASH** | reserve | cash floor + vol-target overlay overflow |
 
 Portfolio vol overlay: realized 14.8% vs target 12% → scale 0.81.
 
