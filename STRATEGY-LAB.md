@@ -8,14 +8,14 @@
 
 | Variant | Beats hold | Median return | Median max DD | Median curve vol | Median WF out-of-sample | Median luck percentile | Median trades |
 |---|---|---|---|---|---|---|---|
-| trend | 7/38 | -1.9% | -11.5% | 0.41% | -1.1% | 48 | 20 |
-| trend+vt | 7/38 | -1.1% | -6.7% | 0.24% | -0.3% | 48 | 20 |
-| meanrev | 7/38 | -4.7% | -12.5% | 0.41% | -0.8% | 41 | 18 |
-| breakout | 6/38 | -1.0% | -9.5% | 0.42% | -1.7% | 43 | 17 |
-| ensemble | 6/38 | -0.1% | -6.6% | 0.23% | -0.1% | 36 | 9 |
-| ensemble+vt | 6/38 | -0.1% | -2.9% | 0.14% | -0.1% | 36 | 9 |
+| trend | 7/38 | -1.9% | -11.5% | 0.41% | -1.1% | 49 | 20 |
+| trend+vt | 7/38 | -1.1% | -6.7% | 0.24% | -0.3% | 49 | 20 |
+| meanrev | 7/38 | -4.7% | -12.4% | 0.41% | -0.8% | 41 | 18 |
+| breakout | 6/38 | -1.0% | -9.5% | 0.42% | -1.8% | 40 | 17 |
+| ensemble | 6/38 | +0.0% | -6.6% | 0.23% | -0.1% | 37 | 9 |
+| ensemble+vt | 6/38 | -0.1% | -2.9% | 0.14% | -0.1% | 37 | 9 |
 
-Median buy-and-hold across the same assets: **+53.9%**.
+Median buy-and-hold across the same assets: **+55.7%**.
 
 ## Deflated Sharpe verdict
 
@@ -23,7 +23,7 @@ For each asset, the best of the 6 variants was tested against the Sharpe that th
 
 **0 of 38 assets** produced a best-variant that survives deflation (DSR > 0.95). After correcting for selection across variants, no variant on any asset shows statistically credible positive true Sharpe. This is the normal, honest result — and the one the hype dashboards never compute.
 
-Which variant most often had the best raw Sharpe per asset (before deflation): breakout (9), meanrev (9), trend+vt (7), ensemble (5), ensemble+vt (4), trend (4).
+Which variant most often had the best raw Sharpe per asset (before deflation): breakout (10), meanrev (9), trend+vt (7), ensemble+vt (4), trend (4), ensemble (4).
 
 ## Reading
 
