@@ -1,22 +1,22 @@
 # Weekly Model Allocation (rules-based)
 
-*As of equities 2026-10-02 / crypto 2026-10-04. Rules-based model portfolio for research/education. Not financial advice, not a prediction. Every weight traces to a measured, cited rule; the rules are tilts and risk controls, not knowledge of the future.*
+*As of equities 2026-10-09 / crypto 2026-10-11. Rules-based model portfolio for research/education. Not financial advice, not a prediction. Every weight traces to a measured, cited rule; the rules are tilts and risk controls, not knowledge of the future.*
 
 | Weight | Asset | Sleeve | Rule (auditable) |
 |---|---|---|---|
 | 12.6% | **TLT** | diversifier | low measured STRESS-day correlation to equities (study 4) |
-| 10.7% | **QQQ** | core | inverse-vol core (12m vol 20%), cap 20% + momentum-tilt: top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
+| 10.6% | **QQQ** | core | inverse-vol core (12m vol 20%), cap 20% + momentum-tilt: top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
 | 10.6% | **SPY** | core | inverse-vol core (12m vol 15%), cap 20% |
-| 10.5% | **EFA** | core | inverse-vol core (12m vol 16%), cap 20% |
-| 8.1% | **EEM** | core | inverse-vol core (12m vol 20%), cap 20% |
-| 7.7% | **GLD** | diversifier | low measured STRESS-day correlation to equities (study 4) |
-| 7.7% | **IWM** | core | inverse-vol core (12m vol 21%), cap 20% |
-| 4.1% | **BTC-USD** | crypto | above 200d trend gate; capped small — fattest measured tails (study 1), no luck-adjusted timing evidence (DSR 0/38) |
+| 10.4% | **EFA** | core | inverse-vol core (12m vol 15%), cap 20% |
+| 8.0% | **EEM** | core | inverse-vol core (12m vol 20%), cap 20% |
+| 7.6% | **IWM** | core | inverse-vol core (12m vol 21%), cap 20% |
+| 7.6% | **GLD** | diversifier | low measured STRESS-day correlation to equities (study 4) |
+| 4.0% | **BTC-USD** | crypto | above 200d trend gate; capped small — fattest measured tails (study 1), no luck-adjusted timing evidence (DSR 0/38) |
 | 2.7% | **XLK** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
 | 2.7% | **NVDA** | momentum-tilt | top-3 composite screen; documented factor, but it FAILED our own 3y test (study 5) — kept small |
-| 22.6% | **CASH** | reserve | cash floor + vol-target overlay overflow |
+| 23.1% | **CASH** | reserve | cash floor + vol-target overlay overflow |
 
-Portfolio vol overlay: realized 14.7% vs target 12% → scale 0.82.
+Portfolio vol overlay: realized 14.8% vs target 12% → scale 0.81.
 
 ## Why these rules and not "better" ones
 
