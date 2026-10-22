@@ -6,9 +6,9 @@
 
 | Asset | Excess kurtosis (0 = normal) | Worst day | 3σ days observed | 3σ days a normal distribution predicts |
 |---|---|---|---|---|
-| BTC-USD | 3.38 | -14.0% | 16 | 3.0 |
-| SPY | 21.22 | -5.9% | 7 | 2.0 |
-| NVDA | 5.03 | -17.0% | 8 | 2.0 |
+| BTC-USD | 3.31 | -14.0% | 15 | 3.0 |
+| SPY | 21.23 | -5.9% | 7 | 2.0 |
+| NVDA | 5.02 | -17.0% | 8 | 2.0 |
 
 **What it means:** every asset shows positive excess kurtosis — extreme days happen far more often than bell-curve math allows. Any risk model (or position size) calibrated to "normal" volatility will be blindsided by the tails. This is why the engine sizes positions off a hard risk cap, not off average volatility.
 
@@ -16,11 +16,11 @@
 
 | Asset | Full-period return | Missing the 10 BEST days | Missing the 10 WORST days | Best days within ±5d of a worst day |
 |---|---|---|---|---|
-| BTC-USD | +176.4% | +7.4% | +531.5% | 50% |
-| ETH-USD | +47.0% | -64.3% | +395.9% | 40% |
-| SPY | +82.9% | +32.7% | +157.8% | 40% |
-| QQQ | +101.8% | +34.6% | +208.4% | 40% |
-| NVDA | +403.7% | +86.6% | +1193.9% | 30% |
+| BTC-USD | +153.9% | +1.0% | +480.2% | 50% |
+| ETH-USD | +39.9% | -66.0% | +372.1% | 40% |
+| SPY | +83.9% | +33.4% | +159.1% | 40% |
+| QQQ | +103.9% | +36.0% | +211.6% | 40% |
+| NVDA | +416.5% | +91.3% | +1226.7% | 30% |
 
 **What it means:** missing just the 10 best days destroys most (sometimes all) of the return. Missing the 10 worst days would of course be even better — but the last column is why you can't have one without the other: it MEASURES how often the best days land within a week of the worst ones. Where that clustering is high, "getting out until things calm down" mechanically forfeits the rebound days too. Perfect foresight of bad days is not on the menu; being absent for the good ones is the realistic cost of trying.
 
@@ -28,7 +28,7 @@
 
 | Asset | Direction: lag-1 autocorr | Direction: avg lags 1–10 | Volatility (\|r\|): lag-1 autocorr | Volatility: avg lags 1–10 |
 |---|---|---|---|---|
-| BTC-USD | -0.056 | -0.005 | 0.143 | 0.059 |
+| BTC-USD | -0.061 | -0.005 | 0.145 | 0.061 |
 | SPY | -0.077 | -0.014 | 0.208 | 0.138 |
 
 **What it means:** yesterday's return says little about which WAY today goes (direction autocorrelation small, slightly negative here — mild mean reversion at best), but yesterday's SIZE of move says a lot about today's size (volatility autocorrelation several times larger, and it persists across lags). This asymmetry is the closest thing to a free, robust "truth" in market data — and note what it implies: the predictable quantity (risk) is the one honest systems manage, while the unpredictable one (direction) is the one hype systems claim to know.
@@ -53,10 +53,10 @@ Classic 12-1 momentum (the 11-month return ending one month before entry), month
 
 | Universe | Top-quartile (past winners) | Bottom-quartile (past losers) | Equal-weight all | Months top beat bottom |
 |---|---|---|---|---|
-| 16 crypto | -41.3% | -38.2% | -24.3% | 52% |
+| 16 crypto | -52.9% | -56.8% | -33.7% | 61% |
 | 22 equities/ETFs | +20.4% | +32.1% | +33.8% | 41% |
 
-**What it means:** this is the honest test of the dashboard screen's core premise on our own data, and the result cuts however it cuts: in crypto, past winners LAGGED past losers (-41.3% vs -38.2%); in equities, past winners LAGGED past losers (+20.4% vs +32.1%). Factor premia are noisy and episodic, and three years is a short sample — which is precisely why a screen built on momentum must be treated as a tilt, not a truth. The equal-weight column shows how much of everything is just market beta. Where our own screen's premise fails on our own data, we say so.
+**What it means:** this is the honest test of the dashboard screen's core premise on our own data, and the result cuts however it cuts: in crypto, past winners beat past losers (-52.9% vs -56.8%); in equities, past winners LAGGED past losers (+20.4% vs +32.1%). Factor premia are noisy and episodic, and three years is a short sample — which is precisely why a screen built on momentum must be treated as a tilt, not a truth. The equal-weight column shows how much of everything is just market beta. Where our own screen's premise fails on our own data, we say so.
 
 ## 6 · Is the strategy distinguishable from luck? (usually: no)
 
@@ -64,8 +64,8 @@ Classic 12-1 momentum (the 11-month return ending one month before entry), month
 
 | Asset | Trend strategy, unit-notional replay (actual sized backtest) | Random-trader median | Random 95th percentile | Strategy's percentile among random |
 |---|---|---|---|---|
-| BTC-USD | +34.9% (+17.2%) | -30.8% | +157.0% | 79th |
-| SPY | -3.2% (-6.2%) | -4.4% | +20.9% | 53rd |
+| BTC-USD | +36.6% (+17.7%) | -31.1% | +168.8% | 79th |
+| SPY | -3.2% (-6.2%) | -4.7% | +21.8% | 54th |
 
 **What it means:** a strategy below the ~95th percentile of random traders is statistically indistinguishable from luck. This is the test every "look at my bot's returns" screenshot silently fails — with enough random traders, some always look brilliant. Survivors post; the rest delete their accounts.
 
