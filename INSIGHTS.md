@@ -7,7 +7,7 @@
 | Asset | Excess kurtosis (0 = normal) | Worst day | 3σ days observed | 3σ days a normal distribution predicts |
 |---|---|---|---|---|
 | BTC-USD | 3.31 | -14.0% | 15 | 3.0 |
-| SPY | 21.42 | -5.9% | 7 | 2.0 |
+| SPY | 21.45 | -5.9% | 7 | 2.0 |
 | NVDA | 5.04 | -17.0% | 8 | 2.0 |
 
 **What it means:** every asset shows positive excess kurtosis — extreme days happen far more often than bell-curve math allows. Any risk model (or position size) calibrated to "normal" volatility will be blindsided by the tails. This is why the engine sizes positions off a hard risk cap, not off average volatility.
@@ -16,11 +16,11 @@
 
 | Asset | Full-period return | Missing the 10 BEST days | Missing the 10 WORST days | Best days within ±5d of a worst day |
 |---|---|---|---|---|
-| BTC-USD | +134.0% | -7.0% | +434.5% | 50% |
-| ETH-USD | +30.7% | -68.2% | +341.0% | 40% |
-| SPY | +85.2% | +34.3% | +161.0% | 40% |
-| QQQ | +106.5% | +37.7% | +215.7% | 40% |
-| NVDA | +429.5% | +96.1% | +1260.1% | 30% |
+| BTC-USD | +135.5% | -6.4% | +438.1% | 50% |
+| ETH-USD | +30.2% | -68.3% | +339.4% | 40% |
+| SPY | +85.8% | +34.8% | +161.9% | 40% |
+| QQQ | +107.8% | +38.6% | +217.6% | 40% |
+| NVDA | +423.3% | +93.8% | +1244.1% | 30% |
 
 **What it means:** missing just the 10 best days destroys most (sometimes all) of the return. Missing the 10 worst days would of course be even better — but the last column is why you can't have one without the other: it MEASURES how often the best days land within a week of the worst ones. Where that clustering is high, "getting out until things calm down" mechanically forfeits the rebound days too. Perfect foresight of bad days is not on the menu; being absent for the good ones is the realistic cost of trying.
 
@@ -53,10 +53,10 @@ Classic 12-1 momentum (the 11-month return ending one month before entry), month
 
 | Universe | Top-quartile (past winners) | Bottom-quartile (past losers) | Equal-weight all | Months top beat bottom |
 |---|---|---|---|---|
-| 16 crypto | -41.6% | -57.5% | -47.5% | 52% |
+| 16 crypto | -53.8% | -55.6% | -46.7% | 52% |
 | 22 equities/ETFs | +41.2% | +32.6% | +33.2% | 50% |
 
-**What it means:** this is the honest test of the dashboard screen's core premise on our own data, and the result cuts however it cuts: in crypto, past winners beat past losers (-41.6% vs -57.5%); in equities, past winners beat past losers (+41.2% vs +32.6%). Factor premia are noisy and episodic, and three years is a short sample — which is precisely why a screen built on momentum must be treated as a tilt, not a truth. The equal-weight column shows how much of everything is just market beta. Where our own screen's premise fails on our own data, we say so.
+**What it means:** this is the honest test of the dashboard screen's core premise on our own data, and the result cuts however it cuts: in crypto, past winners beat past losers (-53.8% vs -55.6%); in equities, past winners beat past losers (+41.2% vs +32.6%). Factor premia are noisy and episodic, and three years is a short sample — which is precisely why a screen built on momentum must be treated as a tilt, not a truth. The equal-weight column shows how much of everything is just market beta. Where our own screen's premise fails on our own data, we say so.
 
 ## 6 · Is the strategy distinguishable from luck? (usually: no)
 
@@ -64,8 +64,8 @@ Classic 12-1 momentum (the 11-month return ending one month before entry), month
 
 | Asset | Trend strategy, unit-notional replay (actual sized backtest) | Random-trader median | Random 95th percentile | Strategy's percentile among random |
 |---|---|---|---|---|
-| BTC-USD | +44.2% (+21.4%) | -35.7% | +169.0% | 82nd |
-| SPY | -3.1% (-6.2%) | -4.9% | +20.7% | 56th |
+| BTC-USD | +31.8% (+16.4%) | -31.8% | +177.9% | 77th |
+| SPY | -3.1% (-6.2%) | -4.8% | +21.0% | 55th |
 
 **What it means:** a strategy below the ~95th percentile of random traders is statistically indistinguishable from luck. This is the test every "look at my bot's returns" screenshot silently fails — with enough random traders, some always look brilliant. Survivors post; the rest delete their accounts.
 
