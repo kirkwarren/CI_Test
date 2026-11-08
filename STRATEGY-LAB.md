@@ -8,14 +8,14 @@
 
 | Variant | Beats hold | Median return | Median max DD | Median curve vol | Median WF out-of-sample | Median luck percentile | Median trades |
 |---|---|---|---|---|---|---|---|
-| trend | 8/38 | -0.7% | -11.6% | 0.42% | +0.4% | 49 | 20 |
-| trend+vt | 8/38 | -0.3% | -6.8% | 0.23% | +0.1% | 49 | 20 |
-| meanrev | 8/38 | -4.9% | -11.2% | 0.41% | +0.4% | 34 | 18.5 |
-| breakout | 8/38 | -1.3% | -10.1% | 0.40% | -1.0% | 38 | 18 |
-| ensemble | 8/38 | -0.2% | -7.3% | 0.25% | +0.2% | 37 | 9 |
-| ensemble+vt | 8/38 | -0.2% | -3.4% | 0.14% | +0.1% | 37 | 9 |
+| trend | 10/38 | -0.7% | -11.7% | 0.42% | -0.2% | 51 | 20 |
+| trend+vt | 8/38 | -0.5% | -6.6% | 0.23% | -0.0% | 51 | 20 |
+| meanrev | 8/38 | -5.5% | -11.2% | 0.42% | +0.1% | 37 | 18.5 |
+| breakout | 9/38 | -1.0% | -9.9% | 0.40% | -1.4% | 39 | 18 |
+| ensemble | 8/38 | -0.2% | -7.3% | 0.25% | -0.0% | 36 | 9 |
+| ensemble+vt | 8/38 | -0.2% | -3.4% | 0.14% | -0.0% | 36 | 9 |
 
-Median buy-and-hold across the same assets: **+50.6%**.
+Median buy-and-hold across the same assets: **+51.6%**.
 
 ## Deflated Sharpe verdict
 
