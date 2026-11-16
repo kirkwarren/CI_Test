@@ -2,12 +2,12 @@
 
 *The only honest meaning of "accurately predicts": make explicit probability-interval forecasts, register them BEFORE the outcome, then score every one when it matures. Accuracy is calibration — 68% intervals should contain the outcome ~68% of the time, 95% intervals ~95%. This page is the platform's complete accuracy record, misses included. Point predictions of direction are deliberately absent; they are not honestly makeable.*
 
-Registered forecasts: **2712** (152 added this run) · matured & scored: **716** · pending: **1996**
+Registered forecasts: **2864** (152 added this run) · matured & scored: **792** · pending: **2072**
 
 | Horizon | Matured | 68%-interval coverage (target ≈68%) | 95%-interval coverage (target ≈95%) |
 |---|---|---|---|
-| 1m | 510 | 76% | 96% |
-| 3m | 206 | 78% | 98% |
+| 1m | 548 | 74% | 97% |
+| 3m | 244 | 79% | 98% |
 | 1y | 0 | awaiting maturity | awaiting maturity |
 | 5y | 0 | awaiting maturity | awaiting maturity |
 
