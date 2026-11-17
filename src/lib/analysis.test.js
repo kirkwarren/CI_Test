@@ -1,6 +1,7 @@
 import {
   DEFAULT_ASSUMPTIONS,
   buildCompIndex,
+  buildCostFor,
   dealBasis,
   distanceKm,
   findComps,
@@ -37,6 +38,7 @@ const listings = listingsRaw.map((r) => ({
   baths: r.property.bathsFull,
   sqft: r.property.area,
   lotAcres: r.property.lotSizeAcres ?? null,
+  buildCostIndex: r.buildCostIndex ?? null,
   yearBuilt: r.property.yearBuilt,
   propertyType: TYPES[r.property.type],
   hoaMonthly: r.association?.fee || 0,
@@ -132,17 +134,20 @@ test('land is underwritten as land price + build cost against build-spec comps',
   expect(isLand(lot)).toBe(true);
 
   const a = DEFAULT_ASSUMPTIONS;
+  // Build cost is scaled by the lot's market, so compare against the
+  // effective cost rather than the flat base.
+  const effectiveBuild = buildCostFor(lot, a);
   const basis = dealBasis(lot, a);
   expect(basis.dealType).toBe('build');
   expect(basis.beds).toBe(a.buildBeds);
-  expect(basis.basis).toBe(lot.price + a.buildCost);
+  expect(basis.basis).toBe(lot.price + effectiveBuild);
 
   const deal = underwrite(lot, airbnb, a);
   expect(deal).not.toBeNull();
   expect(deal.dealType).toBe('build');
-  expect(deal.basis).toBe(lot.price + a.buildCost);
+  expect(deal.basis).toBe(lot.price + effectiveBuild);
   expect(deal.landPrice).toBe(lot.price);
-  expect(deal.buildCost).toBe(a.buildCost);
+  expect(deal.buildCost).toBe(effectiveBuild);
   // Comps must match the planned build, not the (bedroom-less) lot.
   expect(deal.beds).toBe(a.buildBeds);
   for (const c of deal.comps) {
@@ -153,10 +158,42 @@ test('land is underwritten as land price + build cost against build-spec comps',
   expect(deal.capRate).toBeCloseTo(deal.noi / deal.basis, 6);
 });
 
+test('build cost scales by market, and the flat override restores the base', () => {
+  const a = DEFAULT_ASSUMPTIONS;
+  const expensive = lots.find((l) => l.market === 'Gatlinburg, TN');
+  const cheap = lots.find((l) => l.market === 'Broken Bow, OK');
+  expect(expensive.buildCostIndex).toBeGreaterThan(1);
+  expect(cheap.buildCostIndex).toBeLessThan(1);
+
+  // The same spec costs materially more to build on a steep Smokies lot.
+  expect(buildCostFor(expensive, a)).toBeGreaterThan(buildCostFor(cheap, a));
+  expect(buildCostFor(expensive, a)).toBe(Math.round(a.buildCost * expensive.buildCostIndex));
+
+  // Opting out returns every market to the flat base cost.
+  const flat = { ...a, useMarketBuildCost: false };
+  expect(buildCostFor(expensive, flat)).toBe(a.buildCost);
+  expect(buildCostFor(cheap, flat)).toBe(a.buildCost);
+
+  // A listing with no index (e.g. a real MLS feed) falls back to the base.
+  expect(buildCostFor({ buildCostIndex: null }, a)).toBe(a.buildCost);
+});
+
+test('the regional index flows into the deal basis', () => {
+  const lot = lots.find((l) => l.market === 'Gatlinburg, TN');
+  const scaled = underwrite(lot, airbnb, DEFAULT_ASSUMPTIONS);
+  const flat = underwrite(lot, airbnb, { ...DEFAULT_ASSUMPTIONS, useMarketBuildCost: false });
+  expect(scaled.buildCost).toBeGreaterThan(flat.buildCost);
+  expect(scaled.basis).toBe(lot.price + scaled.buildCost);
+  // A costlier build on identical revenue must rank worse.
+  expect(scaled.capRate).toBeLessThan(flat.capRate);
+  expect(scaled.score).toBeLessThan(flat.score);
+});
+
 test('raising the build cost worsens a build deal', () => {
   const lot = lots[0];
-  const cheap = underwrite(lot, airbnb, { ...DEFAULT_ASSUMPTIONS, buildCost: 350000 });
-  const dear = underwrite(lot, airbnb, { ...DEFAULT_ASSUMPTIONS, buildCost: 600000 });
+  const flat = { ...DEFAULT_ASSUMPTIONS, useMarketBuildCost: false };
+  const cheap = underwrite(lot, airbnb, { ...flat, buildCost: 350000 });
+  const dear = underwrite(lot, airbnb, { ...flat, buildCost: 600000 });
   expect(dear.basis).toBeGreaterThan(cheap.basis);
   expect(dear.capRate).toBeLessThan(cheap.capRate);
   expect(dear.cashFlow).toBeLessThan(cheap.cashFlow);

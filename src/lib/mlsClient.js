@@ -81,6 +81,8 @@ export function normalize(raw) {
     // Per-market effective property tax rate when the feed supplies one;
     // the analysis engine falls back to its own assumption otherwise.
     taxRate: raw.taxRate ?? null,
+    // Regional construction cost multiplier for build-to-rent underwriting.
+    buildCostIndex: raw.buildCostIndex ?? null,
     daysOnMarket: raw.mls?.daysOnMarket ?? null,
     lat: geo.lat ?? null,
     lng: geo.lng ?? null,

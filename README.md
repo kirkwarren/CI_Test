@@ -18,7 +18,11 @@ Two deal types are underwritten:
 - **Land + build** — buy the lot, build a spec house on it (default 4 bd / 2 ba
   at $350,000 all-in, editable), then rent it. Cost basis becomes land price +
   build cost, and comps are matched to the *planned* bedroom count rather than
-  the empty lot.
+  the empty lot. The base cost is scaled by a **regional construction cost
+  index** (0.88x in Hot Springs, AR to 1.48x in Big Bear Lake, CA), because
+  steep mountain and coastal lots cost far more to build on than flat inland
+  ones. Switch to a flat cost in the assumptions panel to compare markets on
+  land price alone.
 
 ### Market selection dominates everything
 
@@ -158,11 +162,12 @@ Projections are estimates built from comparable-listing data and user-set
 assumptions — not appraisals, not financial advice. The bundled listings and
 comps are synthetic samples, not real inventory.
 
-Two caveats worth stressing on the build path: a single flat build cost is
-applied to every market, which flatters cheap-to-build ones (a 4 bd cabin in
-Gatlinburg realistically runs well above $350k), and the model ignores
-construction timeline, carrying cost during the build, and permitting risk
-entirely. Raise the build cost per market to test it honestly.
+On the build path the regional cost index is a coarse approximation of real
+construction costs — it captures the broad spread between markets, not any
+individual lot, where slope, access, soil and utility runs dominate. The model
+also ignores construction timeline, carrying cost during the build, and
+permitting risk entirely, all of which favor buying over building. Treat a
+build's returns as the optimistic end of a range.
 
 Verify local short-term-rental regulations, permitting, taxes, HOA rules, and
 real market performance before investing.

@@ -63,6 +63,45 @@ const ADR_PROFILE = {
 };
 
 /**
+ * Regional construction cost multipliers, applied to the base build cost.
+ *
+ * A flat per-square-foot build cost across every market is the single biggest
+ * distortion in the build-to-rent path: it flatters markets that are cheap to
+ * build in and penalizes none, so builds sweep the top of the ranking. Steep
+ * mountain lots (site work, retaining, deep foundations, long utility runs)
+ * and coastal lots (wind and flood code, elevated foundations) cost materially
+ * more per square foot than flat inland ones, and California and the Northeast
+ * carry higher labor costs on top.
+ *
+ * Roughly indexed to regional cost-per-square-foot spreads; 1.00 is an
+ * average inland market. Users can switch back to a flat cost in the UI.
+ */
+const BUILD_COST_INDEX = {
+  // Smokies — steep grades, heavy site work
+  'Gatlinburg, TN': 1.34, 'Pigeon Forge, TN': 1.26, 'Sevierville, TN': 1.22,
+  // Southern Appalachia
+  'Bryson City, NC': 1.12, 'Maggie Valley, NC': 1.14, 'Boone, NC': 1.18,
+  'Blue Ridge, GA': 1.08, 'Ellijay, GA': 1.04, 'Helen, GA': 1.06,
+  'Luray, VA': 1.02,
+  // Inland lakes & plains — flat, cheap to build
+  'Broken Bow, OK': 0.92, 'Branson, MO': 0.95, 'Hot Springs, AR': 0.88,
+  'Eureka Springs, AR': 0.90, 'Wisconsin Dells, WI': 1.05,
+  'Traverse City, MI': 1.06, 'Logan, OH': 1.00,
+  // Northeast — labor costs, snow loads
+  'Lake Ariel, PA': 1.12, 'Lake Placid, NY': 1.26, 'Stowe, VT': 1.30,
+  // West & southwest
+  'Big Bear Lake, CA': 1.48, 'Idyllwild, CA': 1.44, 'Ruidoso, NM': 1.00,
+  'Pagosa Springs, CO': 1.16, 'Sedona, AZ': 1.22,
+  // Coastal — wind/flood code, elevated foundations
+  'Panama City Beach, FL': 1.20, 'Destin, FL': 1.26, 'Gulf Shores, AL': 1.18,
+  'Myrtle Beach, SC': 1.12, 'Galveston, TX': 1.22,
+  // Urban
+  'Houston, TX': 0.94, 'Austin, TX': 1.10, 'San Antonio, TX': 0.92,
+  'Nashville, TN': 1.12, 'Memphis, TN': 0.90, 'Phoenix, AZ': 1.06,
+  'Kissimmee, FL': 1.00,
+};
+
+/**
  * Markets: [name, state, lat, lng, taxRate, ppsf, adrMult, profile, occ,
  *           landPerAcre, minAcres, maxAcres, zips, streets]
  *
@@ -237,6 +276,7 @@ for (const m of MARKETS) {
       geo: { lat: coord(m.lat + jitter(spread * 1.2)), lng: coord(m.lng + jitter(spread * 1.2)) },
       association: { fee: 0 },
       taxRate: m.taxRate,
+      buildCostIndex: BUILD_COST_INDEX[m.name] ?? 1.0,
       mls: { status: 'Active', daysOnMarket, area: m.name },
       sampleData: true,
     });
@@ -291,6 +331,10 @@ fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(path.join(outDir, 'listings.json'), JSON.stringify(listings));
 fs.writeFileSync(path.join(outDir, 'airbnb-comps.json'), JSON.stringify(comps));
 
+const missingIndex = MARKETS.filter((m) => !(m.name in BUILD_COST_INDEX)).map((m) => m.name);
+if (missingIndex.length) {
+  console.warn(`WARNING: no build cost index for: ${missingIndex.join(', ')} (defaulting to 1.0)`);
+}
 const land = listings.filter((l) => l.property.type === 'LND').length;
 const mb = (f) => (fs.statSync(path.join(outDir, f)).size / 1048576).toFixed(2);
 console.log(

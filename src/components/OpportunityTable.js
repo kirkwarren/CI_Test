@@ -90,7 +90,11 @@ export default function OpportunityTable({ deals, selectedId, onSelect }) {
                   <div style={{ color: 'var(--text-muted)' }}>
                     {d.listing.market} ·{' '}
                     {isBuild
-                      ? `${d.listing.lotAcres ?? '—'} ac land ${money(d.landPrice, { compact: true })} + build ${money(d.buildCost, { compact: true })}`
+                      ? `${d.listing.lotAcres ?? '—'} ac land ${money(d.landPrice, { compact: true })} + build ${money(d.buildCost, { compact: true })}${
+                          d.buildCostIndex && d.buildCostIndex !== 1
+                            ? ` (${d.buildCostIndex.toFixed(2)}x)`
+                            : ''
+                        }`
                       : d.listing.propertyType}
                   </div>
                 </td>

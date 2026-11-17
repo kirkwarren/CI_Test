@@ -29,6 +29,7 @@ export const DEFAULT_ASSUMPTIONS = {
   insurancePctOfPrice: 0.008, // STR policy, annual
   propertyTaxPct: 0.022,     // fallback when a listing carries no market rate
   useMarketTaxRate: true,    // prefer the listing's own market tax rate
+  useMarketBuildCost: true,  // scale build cost by the market's cost index
   occupancyHaircut: 0.05,    // shave comp-implied occupancy for conservatism
   // Build-to-rent spec, used for vacant-land deals.
   buildCost: 350000,         // all-in construction cost
@@ -58,6 +59,19 @@ export function isLand(listing) {
   return listing.propertyType === 'Land';
 }
 
+/**
+ * Effective build cost for a lot. A flat cost across every market is the
+ * build path's biggest distortion — it makes cheap-to-build markets look
+ * better than they are and lets builds sweep the ranking — so the market's
+ * construction cost index scales it unless the user opts out.
+ */
+export function buildCostFor(listing, a) {
+  if (a.useMarketBuildCost && listing.buildCostIndex != null) {
+    return Math.round(a.buildCost * listing.buildCostIndex);
+  }
+  return a.buildCost;
+}
+
 /** Effective property tax rate for a listing under the given assumptions. */
 export function taxRateFor(listing, a) {
   if (a.useMarketTaxRate && listing.taxRate != null) return listing.taxRate;
@@ -71,13 +85,15 @@ export function taxRateFor(listing, a) {
  */
 export function dealBasis(listing, a = DEFAULT_ASSUMPTIONS) {
   if (isLand(listing)) {
+    const buildCost = buildCostFor(listing, a);
     return {
       dealType: 'build',
       beds: a.buildBeds,
       baths: a.buildBaths,
       landPrice: listing.price,
-      buildCost: a.buildCost,
-      basis: listing.price + a.buildCost,
+      buildCost,
+      buildCostIndex: listing.buildCostIndex ?? null,
+      basis: listing.price + buildCost,
     };
   }
   return {
@@ -86,6 +102,7 @@ export function dealBasis(listing, a = DEFAULT_ASSUMPTIONS) {
     baths: listing.baths,
     landPrice: null,
     buildCost: 0,
+    buildCostIndex: null,
     basis: listing.price,
   };
 }

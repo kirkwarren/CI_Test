@@ -128,14 +128,27 @@ export default function AssumptionsPanel({ assumptions, onChange }) {
             {BUILD_FIELDS.map((f) => (
               <NumField key={f[0]} field={f} assumptions={assumptions} onChange={onChange} />
             ))}
+            <label className="flex flex-col gap-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+              Cost by market
+              <select
+                value={assumptions.useMarketBuildCost ? 'market' : 'flat'}
+                onChange={(e) =>
+                  onChange({ ...assumptions, useMarketBuildCost: e.target.value === 'market' })
+                }
+              >
+                <option value="market">Scale by region</option>
+                <option value="flat">Flat everywhere</option>
+              </select>
+            </label>
             <p
               className="col-span-2 lg:col-span-3 text-xs leading-snug"
               style={{ color: 'var(--text-muted)' }}
             >
               Applied to vacant-land listings: cost basis becomes land price +
               build cost, and comps are matched to the planned bedroom count.
-              A single flat build cost across every market is optimistic in
-              high-cost ones — raise it to test a market individually.
+              "Scale by region" adjusts the base cost for each market — steep
+              mountain and coastal lots cost far more to build on than flat
+              inland ones. Switch to flat to compare markets on land price alone.
             </p>
           </Group>
         </div>

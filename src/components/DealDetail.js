@@ -107,7 +107,15 @@ export default function DealDetail({ deal, assumptions, onClose }) {
           {isBuild ? (
             <>
               <Row label="Land price" value={money(deal.landPrice)} />
-              <Row label={`Build cost (${deal.beds} bd / ${deal.baths} ba)`} value={money(deal.buildCost)} />
+              <Row
+                label={
+                  `Build cost (${deal.beds} bd / ${deal.baths} ba)` +
+                  (deal.buildCostIndex && deal.buildCostIndex !== 1
+                    ? ` · ${deal.buildCostIndex.toFixed(2)}x region`
+                    : '')
+                }
+                value={money(deal.buildCost)}
+              />
               <Row label="All-in cost basis" value={money(deal.basis)} strong />
             </>
           ) : (
