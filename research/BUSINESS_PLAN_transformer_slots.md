@@ -3,6 +3,7 @@
 **Working name:** Slotline (placeholder)
 **Plan date:** 16 November 2026
 **Model:** [`slot_exchange_model.xlsx`](slot_exchange_model.xlsx) · **Evidence:** [`slot_resource.json`](slot_resource.json)
+**Execution assets:** [`slot_desk/GTM_EXECUTION_90_DAYS.md`](slot_desk/GTM_EXECUTION_90_DAYS.md) · [`slot_desk/EQUIPMENT_EVIDENCE_PACKAGE_TEMPLATE.md`](slot_desk/EQUIPMENT_EVIDENCE_PACKAGE_TEMPLATE.md) · [`slot_desk/pipeline_tracker.xlsx`](slot_desk/pipeline_tracker.xlsx)
 
 ---
 
@@ -45,6 +46,15 @@ Every transformer and HV breaker class sits inside that 18-month definition. And
 | Developers in the Abbott audit | **257 developers / ~5,140 questions** | 5 Nov 2026 |
 | Audit reports due | **10 December 2026** | — |
 | PUCT open meeting on the results | **17 December 2026** | — |
+
+### Timing correction — the product is remediation, not attestation
+
+The initial attestation deadline is reported inconsistently as **15 July 2026 or 24 July 2026** (the sources conflict and neither is asserted here). **Either way it has already passed.** That changes what we sell, and the distinction is commercially decisive:
+
+- We are **not** selling help filing an initial attestation. That moment is gone.
+- We **are** selling remediation of a *conditional* classification during verification — closing the evidence gaps ERCOT is reportedly finding, ahead of the 10 December reports and the 17 December PUCT meeting.
+
+The buyer is therefore not a developer preparing a submission; it is a developer holding a conditional classification who has been asked a question they cannot yet answer with documents. That is a better buyer — further along, more exposed, and already past the point of pretending the problem is hypothetical.
 
 Every Batch Zero classification ERCOT has issued is **conditional**. ERCOT has said loads that fail verification, or fail to respond, will be **disqualified**. A consultant commentary (secondary) reports the recurring deficiency ERCOT is finding is precisely *the inability to establish that equipment has been ordered and will be delivered in time*.
 
@@ -284,6 +294,10 @@ Re-sourced 16 November 2026 with live web search across 56 queries. **Direct pag
 
 **Known stale:** HV circuit-breaker lead time (~125 weeks, H2 2025 — roughly 12 months old); Wood Mackenzie figures reached only via syndication, not the primary report.
 
+### Verification attempted on 17 November 2026 — and blocked
+
+Item 1 below was attempted. The hosts `www.ercot.com` and `interchange.puc.texas.gov` were added to this environment's network allowlist (which succeeded), but the fetch itself was then refused by the session's permission policy, and the first attempt before that failed at DNS. **No primary ERCOT or PUCT document has been read.** The four items below remain open, and item 1 still gates everything.
+
 ### Before you spend money
 
 1. Pull the ERCOT Batch Zero eligibility documentation and the 20 August 2026 PUCT filing directly. The entire wedge rests on it.
@@ -295,4 +309,4 @@ Re-sourced 16 November 2026 with live web search across 56 queries. **Direct pag
 
 ## 11. The one-paragraph verdict
 
-The transformer slot exchange cannot be built: a slot is not a bearer instrument, transfer requires discretionary and priced OEM consent, unapproved assignment is void, and no slot has been observed to change hands. But the re-sourcing surfaced something better — a published ERCOT requirement that large loads prove their long-lead equipment is ordered and deliverable, with audit reports due 10 December 2026, a PUCT meeting on 17 December, conditional classifications across ~192 GW, and disqualification as the penalty. That is a $45k artifact sold under duress, convertible into an $18k/month desk, in a market where 90% of a 474 GW queue is data centres and roughly three-quarters of it will never be built. The model reaches **$14.4M revenue and 31% EBITDA in year 5 on $1.25M of capital**, with the one unproven leg capped at a fifth of revenue and a pre-registered gate that kills the whole thing at day 90 if buyers choose to hire instead of rent. Build the attestation product this month, because the deadline is in three weeks.
+The transformer slot exchange cannot be built: a slot is not a bearer instrument, transfer requires discretionary and priced OEM consent, unapproved assignment is void, and no slot has been observed to change hands. But the re-sourcing surfaced something better — a published ERCOT requirement that large loads prove their long-lead equipment is ordered and deliverable, with audit reports due 10 December 2026, a PUCT meeting on 17 December, conditional classifications across ~192 GW, and disqualification as the penalty. That is a $45k artifact sold under duress, convertible into an $18k/month desk, in a market where 90% of a 474 GW queue is data centres and roughly three-quarters of it will never be built. The model reaches **$14.4M revenue and 31% EBITDA in year 5 on $1.25M of capital**, with the one unproven leg capped at a fifth of revenue and a pre-registered gate that kills the whole thing at day 90 if buyers choose to hire instead of rent. Build the remediation product this month: the initial attestation deadline has already passed, the classifications it produced are conditional, and the verification reckoning is three weeks away.
