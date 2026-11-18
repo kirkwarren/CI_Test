@@ -1,0 +1,465 @@
+
+===== PAGE 1 =====
+ERCOT
+RFI Portal in RIOO —Batch Zero Verification
+User Guide for Transmission Service Providers (TSPs),
+Distribution Service Providers (DSPs), and Load Entities (ILLEs)
+Version 1.1
+September 11, 2026
+ERCOT Public
+© 2026 ERCOT. All rights reserved. Page | 1
+
+===== PAGE 2 =====
+Table of Contents
+1. Overview ......................................................................................................................................................................... 3
+1.1 Background ................................................................................................................................................................ 3
+1.2 Document Purpose .................................................................................................................................................... 3
+1.3 Who This Guide Is For ................................................................................................................................................ 3
+2. Getting Access to the RFI Portal in RIOO .......................................................................................................................... 4
+2.1 Getting Access — TSP ................................................................................................................................................. 4
+2.2 Getting Access — DSP and Load Entity ....................................................................................................................... 4
+3. Logging In ........................................................................................................................................................................ 4
+3.1 Login Screen ............................................................................................................................................................... 4
+3.2 Resetting Your Password ........................................................................................................................................... 5
+4. Your RFI Dashboard ......................................................................................................................................................... 6
+4.1 Status Tiles ................................................................................................................................................................. 6
+4.2 Verification RFI List Table ........................................................................................................................................... 6
+5. Opening a Verification RFI ............................................................................................................................................... 7
+5.1 Left Navigation Menu ................................................................................................................................................ 7
+5.2 Key Points from the Instructions ................................................................................................................................ 8
+6. Contact Invitation and Coordination ................................................................................................................................ 8
+6.1 Understanding the Contact Workflow ........................................................................................................................ 9
+6.2 How to invite a contact: ............................................................................................................................................. 9
+7. Answering Verification RFI Questions ............................................................................................................................ 10
+8. Review and Submit ........................................................................................................................................................ 11
+8.1 Review and Submit (DSP and Load Entity):............................................................................................................... 11
+8.2 Complete, Review and Submit (TSP only): ................................................................................................................ 12
+9. Message Center ............................................................................................................................................................. 13
+10. Load Entity — Screens and Procedures ........................................................................................................................ 14
+10.1 RFI Dashboard (Load Entity view) ........................................................................................................................... 14
+10.2 Invite Contacts (Load Entity) .................................................................................................................................. 15
+10.3 Review and Submit (Load Entity) ........................................................................................................................... 15
+10.4 Message Center (Load Entity) ................................................................................................................................. 16
+11. DSP — Screens and Procedures .................................................................................................................................... 16
+11.1 RFI Dashboard (DSP view) ...................................................................................................................................... 17
+11.2 Invite Contacts (DSPs) ............................................................................................................................................ 17
+11.3 Review and Submit (DSP view) ............................................................................................................................... 17
+12. Where to Get Help ....................................................................................................................................................... 18
+© 2026 ERCOT. All rights reserved. Page | 2
+
+===== PAGE 3 =====
+1. Overview
+1.1 Background
+ERCOT has issued a Request for Information and Production (RFI, referred to as the Verification RFI) as part of the Batch
+Zero Eligibility Verification process. The Verification RFI is administered through the RFI Portal in RIOO (the ERCOT online
+portal) and requires Interconnecting Transmission Service Providers (TSPs), Interconnecting Distribution Service Providers
+(DSPs), and Load Entities to provide information about their Large Loads that are conditionally classified for inclusion in
+Batch Zero as either base load or studied load under ERCOT Planning Guide, Section 9.
+This is being issued to all Large Loads that were conditionally classified on the list distributed to TSPs on Thursday,
+September 3, 2026, where the conditional classification was one of the following:
+• Base Load – Included in May 2026 QSZ/IVRT or earlier per ERCOT Planning Guide § 9.2.1.1(1)(c)
+• Base Load – Included in Permian Reliability Plan per Planning Guide § 9.2.1.1(1)(d)
+• Base Load – Advancing Large Load per Planning Guide § 9.2.1.1(1)(e)
+• Base Load – Committed Large Load per Planning Guide § 9.2.1.1(1)(f)
+• Base Load PURA §39.169 Net Metering Load per Planning Guide § 9.2.1.1(1)(g)
+• Studied Load – Firm per Planning Guide § 9.2.1.1(1)
+• Studied Load – PCLR per Planning Guide §§ 9.2.1.1(1), 9.2.2.1
+• Studied Load – WLPUN per Planning Guide §§ 9.2.1.1(1), 9.2.2.2
+1.2 Document Purpose
+This guide explains how TSPs, DSPs and Interconnecting Load Entities (Load Entities) can access the RFI Portal in RIOO,
+respond to an assigned Verification RFI, invite other contacts, submit attestations, and communicate with ERCOT through
+the Message Center.
+This guide is specific to using the RFI Portal in RIOO to respond to the Verification RFI. For questions regarding the specific
+questions and content in the Verification RFI, please email LargeLoadVerification@ercot.com.
+1.3 Who This Guide Is For
+Role Abbreviation Responsibilities in RIOO
+Transmission Service TSP Receives the Verification RFI from ERCOT. Invites DSP
+Provider and Load Entity contacts. Answers TSP-assigned
+questions, uploads supporting documents, provides
+their attestation, reviews all responses and submits
+the fully completed Verification RFI to ERCOT.
+Distribution Service DSP Invited by TSP. Answers DSP-assigned questions,
+Provider uploads supporting documents, provides its
+attestation, and submits their section to the TSP for
+submission.
+Load Entity LE Invited by TSP. Answers Load Entity-assigned
+questions, uploads supporting documents, provides
+its attestation, and submits their section to the TSP
+for review and submission.
+© 2026 ERCOT. All rights reserved. Page | 3
+
+===== PAGE 4 =====
+2. Getting Access to the RFI Portal in RIOO
+2.1 Getting Access — TSP
+All TSP employees who require access to the RFI Portal in RIOO must request access to RIOO through the TSP’s ERCOT User
+Security Administrator representative. Access is set up through the RIOO registration process managed by ERCOT.
+For instructions on how to sign up for RIOO Services as a TSP, refer to the official ERCOT guide:
+TSP Sign-Up for RIOO Services: https://www.ercot.com/files/docs/2022/01/14/TSP-Sign-Up-for-RIOO-Services.pdf
+Note: Contact your ERCOT User Security Administrator representative if you have questions about the TSP registration process
+or if you are unable to access the sign-up guide.
+2.2 Getting Access — DSP and Load Entity
+DSPs and Load Entities are granted access to the RFI Portal in RIOO by invitation:
+● The TSP adds one or more contracts for Individual representatives of the DSPs and Load Entities. When a DSP or
+Load Entity has more than one Verification RFI, registration is only required once for each email address. Once an
+account is created, the contact can log in directly and review or edit all assigned RFIs at any time.
+● When the DSPs and Load Entities contacts are invited by the TSP, they will receive an email. If the DSP or Load
+Entity contact is a new user in RIOO, then it will receive two emails:
+○ The first email is an invitation email directing the contact to the Verification RFI.
+○ The second email is a verification and change-password email allowing the contact to set their password
+and complete your registration.
+Note: Registration and password reset links expire 5 days after they are issued. If your link expires before you accept the
+invitation, please contact to servicedesk@ercot.com to re-send the invitation notification.
+● To register:
+○ Open the verification email.
+○ Click the link to set your password.
+○ Create a new password following the on-screen requirements.
+○ Once registered, return to the RIOO login page: https://sa.ercot.com/rioo-rs/
+○ Log in using your email address and new password.
+Note: Registration only needs to be completed once. After your account is created, you can log in directly at any time.
+3. Logging In
+3.1 Login Screen
+Navigate to the RIOO login page at https://sa.ercot.com/rioo-rs/ — You will see the ERCOT RIOO Services login screen.
+© 2026 ERCOT. All rights reserved. Page | 4
+
+===== PAGE 5 =====
+Figure 1 — RIOO Services Login Screen
+To log in:
+● Enter your registered email address in the Email field.
+● Enter your password in the Password field.
+● Enter the CAPTCHA code shown in the image into the 'Enter the code shown above' field. If the code is difficult to
+read, click the refresh button ( ) to generate a new one.
+● Click Log In.
+↺
+● You will be prompted to complete Multi-Factor Authentication (MFA). Enter the one-time code from your SMS text
+message or Google Authenticator app, then click Verify to complete the login.
+Note: MFA is required every time you log in. The one-time code is delivered via SMS to your registered mobile number or
+through the Google Authenticator app — it is not sent by ERCOT. If you are unable to receive your MFA code, contact your
+company’s IT administrator.
+3.2 Resetting Your Password
+If you have forgotten your password, click Forgot password? / Reset password below the Log In button. Enter your email
+address and follow the instructions in the reset email you receive.
+Note: If you do not receive a reset email within a few minutes, check your spam/junk folder.
+Note: Registration and password reset links expire 5 days after they are issued. If your link expires before you accept the
+invitation, please contact to servicedesk@ercot.com to re-send the invitation notification.
+© 2026 ERCOT. All rights reserved. Page | 5
+
+===== PAGE 6 =====
+4. Your RFI Dashboard
+After logging in, you will be taken to the RFI Dashboard. This page shows all Verification RFIs that ERCOT or the TSP has
+assigned to you. TSPs will see all loads for which they are the responsible TSP. DSPs and Load Entities will see only the
+Verification RFIs they have been invited to participate in by the TSP.
+Figure 2 — External User Verification RFI Dashboard (Project names redacted)
+4.1 Status Tiles
+At the top of the dashboard, five status tiles show the number of your Verification RFIs in each stage:
+Status What it means
+Draft The Verification RFI has been issued and is awaiting the responses from
+all required parties.
+Ready for TSP Review The Load Entity and DSP have submitted their sections. The TSP is
+reviewing and ensuring completeness before submitting it to ERCOT.
+Returned to Load Entity The TSP has returned the Verification RFI to the Load Entity for possible
+correction.
+Submitted to ERCOT The TSP has submitted the completed Verification RFI to ERCOT for
+review.
+Returned to Submitter ERCOT has returned the Verification RFI to the TSP for possible
+correction.
+4.2 Verification RFI List Table
+Each row in the table represents one Verification RFI. The columns show:
+Column Description
+Unique ID The Batch Zero identifier for this load (e.g., BZ-626).
+© 2026 ERCOT. All rights reserved. Page | 6
+
+===== PAGE 7 =====
+Column Description
+RFI Round Whether this is the first Verification RFI (Original) or a Follow-up Verification RFI.
+Project Name The name of the project or facility that is the subject of the specific Verification
+RFI.
+Developer Name The developer or company associated with this project or facility.
+Responsible TSP or DSP The TSP responsible for submitting this Verification RFI to ERCOT.
+Status The current status of this Verification RFI (see Section 4.1 Status Tiles).
+Assigned To The contacts who have been invited to this Verification RFI, shown with their role
+(DSP, Load Entity).
+Due Date The deadline by which the completed Verification RFI must be submitted to
+ERCOT.
+Submit Date The date the Verification RFI was submitted to ERCOT (blank if not yet
+submitted).
+Open Click Open to open the Verification RFI to begin, continue or review your
+response.
+5. Opening a Verification RFI
+From your Dashboard, click Open on any Verification RFI row to open it. The first screen you will see is the Instructions
+section. Read the instructions carefully before starting your response — they explain what ERCOT requires from you, the
+deadline for submission, and what to do if information is not available.
+Figure 3 — Instructions section when opening a Verification RFI
+5.1 Left Navigation Menu
+© 2026 ERCOT. All rights reserved. Page | 7
+
+===== PAGE 8 =====
+The left navigation menu lists every section in the Verification RFI. The sections you see for each Verification RFI depend on
+the Large Load’s conditional classification designated by ERCOT in Batch Zero as outlined in Section 1.1 Background above.
+Common sections include:
+Navigation item What it contains
+Instructions The rules and requirements for completing this Verification RFI. Read
+before starting.
+Sections (e.g. Section SC, Section Questions about site control, financial security, etc. Each section is
+FS...) assigned to a specific role (ILLE, DSP or TSP). The Sections and questions
+in each Section vary by the conditional classification in Batch Zero.
+Contacts Invite or view the DSP and Load Entity contacts added to this
+Verification RFI.
+Attestation Each participating party (ILLE, DSP, and TSP) is required to complete a
+notarized attestation. Upload your company’s attestation file in the
+designated Section before submitting.
+Review Check that all sections are complete and submit your response.
+Message Center Send and receive messages with ERCOT and other contacts on this
+Verification RFI.
+5.2 Key Points from the Instructions
+● Each Load Entity must complete and submit a separate response for each data center or facility with a conditional
+classification designated by ERCOT in Batch Zero as outlined in Section 1.1 Background above.
+● Respond to all questions in each section assigned to your role. If information is not available or not applicable,
+state so and explain why.
+● Provide all supporting documentation where requested.
+● All information submitted will be treated as confidential to the extent permitted by law.
+● Responses are due within 10 business days of issuance. A 5-day extension may be requested from ERCOT through
+your TSP.
+● If the Load Entity fails to provide information and/or supporting documentation necessary for the TSP to timely
+submit a completed response to this Verification RFI, the Large Load may be removed from the Batch Zero Process.
+From the Instructions, click Continue to move to the first section of the Verification RFI.
+6. Contact Invitation and Coordination
+Using Invite Contacts or from Contacts on the left-side Navigation, the responsible TSP, is obliged to invite the appropriate
+DSP and/or Load Entity to complete their portions of the Verification RFI including submitting their Attestations. Invited
+contacts receive an email with a sign-in link and access limited to this Verification RFI response (and others if they have
+been assigned to the same email account).
+Once a DSP and/or Load Entity is assigned to a Verification RFI, they can use Invite Contacts to invite others, as needed, to
+review and/or assist with completing their sections of the Verification RFI.
+TSP employees cannot be added using the Invite Contacts method. All TSP employees who require access to the RFI Portal
+in RIOO must request access to RIOO through the TSP’s ERCOT representative. Access is set up through the RIOO
+registration process managed by ERCOT (see Section 2.1 above)
+All Contacts invited to participate in the Verification RFI can provide information and upload documents in the Sections
+assigned to their role, but only the TSP can submit the completed Verification RFI response to ERCOT.
+© 2026 ERCOT. All rights reserved. Page | 8
+
+===== PAGE 9 =====
+6.1 Understanding the Contact Workflow
+● The TSP is obliged to invite the ILLE and DSP contacts to complete their sections of the Verification RFI (see Section
+6.2 for instructions).
+○ Note: All invited contacts can view the entire Verification RFI, but each contact will only be able to answer
+the sections and questions within the Verification RFI that are assigned to their role. If communication
+related to the Verification RFI is required between the assigned parties, they can use the Message Center
+(see Section 9 below) to assist in directing contacts to specific sections and to clarify the specific
+documentation that may be required.
+● The Load Entity and/or DSP complete their Verification RFI sections, upload their required Attestations and submit
+to the TSP for review [Ready for TSP/DSP Review] when they are done.
+○ The TSP reviews all sections. If corrections are needed, the TSP may return the Verification RFI to the Load
+Entity [Returned to Load Entity]. This process can be repeated until all sections are complete.
+● The TSP completes the final completeness check and submission to ERCOT [Submitted to ERCOT].
+6.2 How to invite a contact:
+Figure 4 — Invite Contacts screen
+To invite a contact:
+● Open the Verification RFI from your dashboard. Click Invite Contacts at the top of the screen or Contacts in the left
+navigation menu.
+● Click ‘+ Invite more people by email’ to add a new contact.
+● Enter the contact’s Email Address, First Name, and Last Name.
+● Select the Contact Type: ILLE (referred to as Load Entity) or DSP.
+● Click Save. The contact(s) will receive an invitation email with a sign-in link.
+© 2026 ERCOT. All rights reserved. Page | 9
+
+===== PAGE 10 =====
+Note: Once a contact has signed in, their fields are locked and you will see ‘Invited and signed in’ with a green padlock. Click
+‘Remove to revoke access’ if you need to remove a contact. The contacts can only be changed before the Verification RFI is
+submitted to ERCOT.
+Note: Registration and password reset links expire 5 days after they are issued. If your link expires before you accept the
+invitation, please contact to servicedesk@ercot.com to re-send the invitation notification.
+7. Answering Verification RFI Questions
+Each Verification RFI is divided into sections. The sections and questions you see depend on your role and the Large Load
+Project’s conditional classification in Batch Zero. Navigate between sections using the left navigation menu.
+Note: Everyone assigned to complete the Verification RFI can edit at the same time. Since sections are assigned to each
+specific role, there should be no overlap/conflicts at that level. However, if multiple people with the same role are working in
+the same section at the same time, there could be an overlap. This can happen if two users are attempting to answer the
+same question. In this case, only the answer last saved will be kept.
+Figure 5 — Example Verification RFI section showing different question types and supporting documents
+Question types you may see:
+Question type How to answer
+Text / Number field Type your answer directly into the field. Number fields may show a unit (e.g.,
+USD, MW).
+Yes / No (radio button) Select one option by clicking the radio button next to your answer.
+Multiple choice (radio Select one or more options as applicable.
+button or checkbox)
+Table entry Fill in the data required in each table row provided. Add rows if needed.
+© 2026 ERCOT. All rights reserved. Page | 10
+
+===== PAGE 11 =====
+Question type How to answer
+Supporting document Click ‘+ Choose File’ to attach a file. You can upload multiple files. All file types
+upload are accepted. Files appear in the Supporting Documents table once uploaded.
+File naming conventions are specified in the Instructions.
+Note: all uploaded files are scanned by ERCOT’s Security systems and will not
+upload if they are harmful or corrupt. For very large files and depending on
+your upload bandwidth, this can take time. Once the file is scanned and fully
+uploaded, it can be viewed.
+To complete a section:
+● Click on the section name in the left navigation menu.
+● Answer each question in your assigned section.
+● For questions requiring supporting document(s), click ‘+ Choose File’ to upload your file. It will appear in the
+Supporting Documents table showing File Name, Type, User, and the date it was attached.
+● Click ‘Save & Continue’ at the bottom right to save your answers and move to the next section. Click ‘Back’ to
+return to the previous section.
+Note: You can save your progress at any time and return later. Your answers are not submitted to the TSP until you explicitly
+click ‘Submit to TSP for review’ on the Review screen. If a question is marked (Required), you must answer it before submitting.
+8. Review and Submit
+8.1 Review and Submit (DSP and Load Entity):
+Once you have completed all Sections and questions assigned to your role (Load Entity, DSP), or at any point during
+completion, you can navigate to the Review screen to ensure your Sections are complete.
+JA-1942 Project ABC
+Figure 6 — Review & Submit screen (red = incomplete, green = complete, View = read-only)
+Understanding the section status buttons:
+Button What it means
+Red Edit This section has missing or incomplete required fields. Click Edit to open it,
+complete the missing answers, and return to Review.
+© 2026 ERCOT. All rights reserved. Page | 11
+
+===== PAGE 12 =====
+Button What it means
+Green Edit This section is complete. If it is assigned to your role, you can still click Edit to
+review or change answers before submitting.
+View This item is view-only from the Review screen. Once the Verification RFI is
+submitted, you will be able to View the responses.
+To submit the Verification RFI to the TSP (referred to as Responsible TSP:
+● Review every section listed on the screen. Ensure all sections that are assigned to the role show a green Edit
+button.
+● If any of your Sections show a red Edit button, click it to open that section, complete the missing information, and
+return to Review.
+● Once all required sections are complete, the Submit to Responsible TSP/DSP button becomes active.
+● Click Submit to send the completed Verification RFI to the Responsible TSP/DSP.
+Note: If the Load Entity clicks Submit to ERCOT before the DSP has responded, the TSP must Return the Verification RFI to the
+Load Entity to unlock it so the DSP can complete its section.
+Note: Only the TSP can submit the completed Verification RFI to ERCOT. Once submitted, the Verification RFI is locked and
+cannot be edited. If ERCOT finds an issue, they may contact the TSP to resolve it.
+8.2 Complete, Review and Submit (TSP only):
+Once you have completed all Sections and questions assigned to your role (TSP), or at any point during completion, you can
+navigate to the Review screen to ensure your Sections are complete.
+JA-1942 Project ABC
+Figure 7 — Review & Submit screen (red = incomplete, green = complete, View = read-only)
+Understanding the section status buttons:
+Button What it means
+Red Edit This section has missing or incomplete required fields. Click Edit to open it,
+complete the missing answers, and return to Review.
+Green Edit This section is complete. If it is assigned to your role, you can still click Edit to
+review or change answers before submitting.
+© 2026 ERCOT. All rights reserved. Page | 12
+
+===== PAGE 13 =====
+Button What it means
+View This item is view-only from the Review screen. Once the Verification RFI is
+submitted, you will be able to View the responses.
+When all parties participating in the Verification RFI have completed their Sections and questions and submitted the
+Verification RFI to the Responsible DSP/TSP:
+● Review every section listed on the screen. Ensure all sections show a green Edit button.
+● If any of your Sections show a red Edit button, click it to open that section, complete the missing information, and
+return to Review.
+○ ILLE and DSP Sections should be green as they are unable to submit to you when they are Red.
+● Once all required sections are complete, the Submit to ERCOT button becomes active.
+● Click Submit to send the completed Verification RFI to the ERCOT.
+Note: It is the TSP’s responsibility to submit the fully completed Verification RFI to ERCOT. Only the TSP has the Submit to
+ERCOT button available. Once submitted, the Verification RFI is locked and cannot be edited. If ERCOT finds an issue, they may
+contact the TSP to resolve it.
+9. Message Center
+The Message Center (accessed from the left navigation menu inside a Verification RFI) allows TSPs, DSPs, Load Entities, and
+ERCOT to communicate about a specific Verification RFI. You can create a new message topic, select its type, set an optional
+due date for the message response, and choose which parties receive the message.
+JA-1942 Project ABC
+Figure 8 — Message Center — New Topic form with Type dropdown
+To create a new message topic:
+● Open the Verification RFI. Click Message Center on the left navigation menu.
+● Click ‘+ New topic’ in the top right.
+● Enter a Subject for your message.
+● Select a Type from the dropdown:
+© 2026 ERCOT. All rights reserved. Page | 13
+
+===== PAGE 14 =====
+Type When to use it
+Information Share general information with the selected parties.
+Action Required Notify a party that they need to take a specific action.
+Document Request Request a document or file from a party.
+Review Complete Notify that a review has been completed.
+Milestone Update Share a project milestone or progress update.
+Returned for Correction Notify a party that their submission has been returned and needs
+correction.
+Returned to Load Entity Notify the Load Entity that the Verification RFI has been returned to
+them for correction.
+Follow-up Verification RFI Issued Notify parties that a follow-up Verification RFI has been issued.
+● Optionally set a Due date using the date picker (future dates only).
+● Write your message in the Message field.
+● Use the Send to checkboxes to select who receives this message: All, ERCOT, TSP, DSP, or Load Entity.
+● Click ‘Open topic’ to send.
+Filtering and tracking messages:
+Use the filter buttons below the form — All, Open, Awaiting Response, Resolved — to view threads by their current status.
+Click any thread to open it and reply.
+Note: Only the parties selected in ‘Send to’ can see a message thread. ERCOT can see all threads on every Verification RFI.
+10. Load Entity — Screens and Procedures
+Note: Load Entities and DSPs follow the same screens and procedures described in this section. The only differences are the
+questions assigned to each role and the attestation file type accepted.
+10.1 RFI Dashboard (Load Entity view)
+When a Load Entity logs in, the RFI Dashboard shows all Verification RFIs they have been invited to by a TSP. The layout and
+status tiles are the same as the TSP dashboard.
+© 2026 ERCOT. All rights reserved. Page | 14
+
+===== PAGE 15 =====
+Figure 9 — RFI Dashboard as seen by a Load Entity (same layout as DSP dashboard
+10.2 Invite Contacts (Load Entity)
+Load Entities can also invite additional contacts to help complete their assigned sections of the Verification RFI. The Invite
+Contacts screen works the same way as for TSPs — enter Email, First Name, Last Name, select a Contact Type, then click
+Save.
+Figure 10 — Invite Contacts screen (Load Entity view)
+10.3 Review and Submit (Load Entity)
+The Review screen for the DSP or Load Entity shows all sections with their completion status. The DSP and Load Entity
+submit their responses to the TSP for review — not directly to ERCOT.
+© 2026 ERCOT. All rights reserved. Page | 15
+
+===== PAGE 16 =====
+JA-1942 Project ABC
+Figure 11 — Review & Submit screen (Load Entity view — Submit Verification RFI for TSP/DSP review)
+Once all required sections are complete and the attestation has been uploaded, click ‘Submit RFI for TSP/DSP review’. The
+form will be locked while under review and will unlock if the TSP/DSP returns it to you.
+Note: The Load Entity’s Submit button says ‘Submit RFI for TSP/DSP review’. This sends your response to the TSP, not to
+ERCOT. Only the TSP can submit the final completed Verification RFI to ERCOT.
+Note: If the Load Entity Submits to ERCOT before the DSP has responded, the TSP must Return the Verification RFI to the Load
+Entity to unlock it so the DSP can complete their section.
+10.4 Message Center (Load Entity)
+The Message Center works the same way for Load Entities as for TSPs. Load Entities can send messages to All, ERCOT, TSP,
+DSP, or Load Entity using the Send to checkboxes.
+JA-1942 Project ABC
+Figure 12 — Message Center (Load Entity view)
+11. DSP — Screens and Procedures
+Note: DSPs follow the same screens and procedures as Load Entities for answering questions, attestation, and the Message
+Center. The key differences are highlighted below.
+© 2026 ERCOT. All rights reserved. Page | 16
+
+===== PAGE 17 =====
+11.1 RFI Dashboard (DSP view)
+When a DSP logs in, the RFI Dashboard shows all Verification RFIs they have been invited to by a TSP. The dashboard shows
+status tiles and the same Verification RFI list as other roles.
+Figure 13 — RFI Dashboard as seen by a DSP
+11.2 Invite Contacts (DSPs)
+DSPs can also invite additional contacts to help complete its assigned sections of the Verification RFI. The Invite Contacts
+screen works the same way as for TSPs — enter Email, First Name, Last Name, select a Contact Type, then click Save.
+Figure 14 — Invite Contacts screen (DSP view)
+11.3 Review and Submit (DSP view)
+The DSP Review screen shows all sections and their completion status. Key differences from the TSP and Load Entity views:
+© 2026 ERCOT. All rights reserved. Page | 17
+
+===== PAGE 18 =====
+● The Verification RFI shows a lock message when it has already been submitted for TSP review: ‘This response has
+been submitted for TSP/DSP review and is locked. It will be editable again if the TSP returns it to you.’
+● The DSP does not have a Submit to ERCOT button. The DSP’s role is to complete their assigned sections, including
+their Attestation and submit to the TSP — the TSP is responsible for the final submission to ERCOT.
+JA-1942 Project ABC
+Figure 15 — Review screen (DSP view — locked after Load Entity submits to TSP, no Submit to ERCOT button)
+Note: If the DSP needs to make changes after the Verification RFI has been locked, the TSP must return it. The DSP cannot
+unlock the Verification RFI themselves. DSPs follow the same question-answering, attestation, and Message Center procedures
+as Load Entities described in Section 10.
+12. Where to Get Help
+• If you have any questions about the substance of the Verification RFI, please submit them to
+LargeLoadVerification@ercot.com
+• If you have any technical questions about or issues using the RIOO platform, please submit them to
+servicedesk@ercot.com.
+Note: Registration and password reset links expire 5 days after they are issued. If your link expires before you accept the
+invitation, please contact to servicedesk@ercot.com to re-send the invitation notification.
+© 2026 ERCOT. All rights reserved. Page | 18

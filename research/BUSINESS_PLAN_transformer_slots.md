@@ -3,6 +3,7 @@
 **Working name:** Slotline (placeholder)
 **Plan date:** 16 November 2026
 **Model:** [`slot_exchange_model.xlsx`](slot_exchange_model.xlsx) · **Evidence:** [`slot_resource.json`](slot_resource.json)
+**Primary-source verification (18 Nov 2026):** [`slot_desk/PRIMARY_SOURCE_VERIFICATION.md`](slot_desk/PRIMARY_SOURCE_VERIFICATION.md) — **read this before the plan; it corrects several figures below**
 **Execution assets:** [`slot_desk/GTM_EXECUTION_90_DAYS.md`](slot_desk/GTM_EXECUTION_90_DAYS.md) · [`slot_desk/EQUIPMENT_EVIDENCE_PACKAGE_TEMPLATE.md`](slot_desk/EQUIPMENT_EVIDENCE_PACKAGE_TEMPLATE.md) · [`slot_desk/pipeline_tracker.xlsx`](slot_desk/pipeline_tracker.xlsx)
 
 ---
@@ -46,6 +47,24 @@ Every transformer and HV breaker class sits inside that 18-month definition. And
 | Developers in the Abbott audit | **257 developers / ~5,140 questions** | 5 Nov 2026 |
 | Audit reports due | **10 December 2026** | — |
 | PUCT open meeting on the results | **17 December 2026** | — |
+
+### VERIFIED 18 NOV 2026 — the forcing function is a 10-business-day clock, not a December date
+
+Primary ERCOT documents have now been read (see `slot_desk/PRIMARY_SOURCE_VERIFICATION.md`). They confirm the core requirement and **replace the plan's forcing function with a better one**:
+
+> "The Interconnecting Transmission Service Provider must submit the response to the Request for Information to ERCOT **within 10 Business Days of ERCOT's issuance of the RFI**." A 5-Business-Day extension may be requested.
+> "The ILLE's failure to provide necessary information and supporting documentation in time ... **may result in the Large Load's removal from the Batch Zero Process**."
+> — ERCOT Eligibility Verification RFI, Load Type E Question Reference Guide, 22 September 2026
+
+The long-lead definition is confirmed verbatim at **Planning Guide § 9.2.1.1(1)(e)(iii)**: *"has ordered all equipment with a lead time of at least 18 months."* The required evidence is confirmed and is more specific than assumed — a structured questionnaire **LLE-1 to LLE-8**, per equipment item, demanding *"purchase orders, order confirmations, delivery schedules, or similar"* plus **one-line diagrams, substation site plans and elevation drawings labelled with each item's number**.
+
+**Why this is the most important paragraph in the plan.** The objection that killed the original thesis was *"the client hires the person instead"* at $180–220k loaded. A rolling ten-business-day RFI, fired per project at ERCOT's discretion, requiring a complete exhibit-indexed package with labelled drawings, **cannot be staffed in-house.** Burst work with an existential penalty and no warning is precisely what firms retain outside specialists for. **Rent beats hire on the merits, from a primary source** — so the retainer leads and the fixed-fee package becomes the readiness build that precedes the RFI.
+
+**Two corrections that change the motion:**
+- **Sell to the Interconnecting TSP as a channel.** The TSP, not the developer, carries the duty to submit. One TSP relationship touches dozens of ILLEs — far better than cold-emailing developers individually.
+- **Confidentiality is a selling point.** Information the ILLE sends **directly** to ERCOT "may not qualify as Protected Information and therefore could be subject to public disclosure." A developer who emails its purchase orders to ERCOT can forfeit confidentiality over equipment pricing and OEM terms.
+
+**Figures in this plan now known to be wrong:** the eligibility threshold is **75 MW** (the 50 MW/100 kV figures belong to NERC's separate CLO registration); the ILLE attestation deadline was **10 July 2026**, not 15 July (that date appears in no ERCOT document); **17 December 2026 is an ERCOT LLWG meeting, not a PUCT open meeting**, and the 10 December report date is unverified. Queue figures (474 GW, 90.2%, 735 projects) remain search-level — the PUC docket returns HTTP 402.
 
 ### Timing correction — the product is remediation, not attestation
 
@@ -309,4 +328,4 @@ Item 1 below was attempted. The hosts `www.ercot.com` and `interchange.puc.texas
 
 ## 11. The one-paragraph verdict
 
-The transformer slot exchange cannot be built: a slot is not a bearer instrument, transfer requires discretionary and priced OEM consent, unapproved assignment is void, and no slot has been observed to change hands. But the re-sourcing surfaced something better — a published ERCOT requirement that large loads prove their long-lead equipment is ordered and deliverable, with audit reports due 10 December 2026, a PUCT meeting on 17 December, conditional classifications across ~192 GW, and disqualification as the penalty. That is a $45k artifact sold under duress, convertible into an $18k/month desk, in a market where 90% of a 474 GW queue is data centres and roughly three-quarters of it will never be built. The model reaches **$14.4M revenue and 31% EBITDA in year 5 on $1.25M of capital**, with the one unproven leg capped at a fifth of revenue and a pre-registered gate that kills the whole thing at day 90 if buyers choose to hire instead of rent. Build the remediation product this month: the initial attestation deadline has already passed, the classifications it produced are conditional, and the verification reckoning is three weeks away.
+The transformer slot exchange cannot be built: a slot is not a bearer instrument, transfer requires discretionary and priced OEM consent, unapproved assignment is void, and no slot has been observed to change hands. But the re-sourcing surfaced something better — a published ERCOT requirement that large loads prove their long-lead equipment is ordered and deliverable, with audit reports due 10 December 2026, a PUCT meeting on 17 December, conditional classifications across ~192 GW, and disqualification as the penalty. That is a $45k artifact sold under duress, convertible into an $18k/month desk, in a market where 90% of a 474 GW queue is data centres and roughly three-quarters of it will never be built. The model reaches **$14.4M revenue and 31% EBITDA in year 5 on $1.25M of capital**, with the one unproven leg capped at a fifth of revenue and a pre-registered gate that kills the whole thing at day 90 if buyers choose to hire instead of rent. Build the readiness-and-response desk now: the attestation window closed in July, the classifications it produced are conditional, and ERCOT can fire a ten-business-day verification RFI at any project on any morning — which is exactly why this cannot be hired in-house.
