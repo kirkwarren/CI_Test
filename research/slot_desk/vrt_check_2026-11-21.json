@@ -1,0 +1,246 @@
+[
+ {
+  "topic": "Who can fix ~180 failed ERCOT Batch Zero voltage ride-through (VRT) models in ~8 weeks (early Dec 2026 to 1 Feb 2027), and at what price",
+  "findings": [
+   {
+    "claim": "Public pick-up of ERCOT's VRT results is just starting. Only one trade-press item turned up, and no law-firm alerts or consultant write-ups of the 19 Nov LLWG meeting were found.",
+    "detail": "An Energy Central news post from about 20 Nov 2026 reports that ERCOT modelled large-load ride-through in its batched study from September to November: 31% rode through, 69% failed, 'largely due to load loss', framed as 'easier said than done'. Searches for Utility Dive, RTO Insider, Willkie, Seyfarth, Zero Emission Grid (ZEG) and Keentel write-ups of the 19 Nov meeting found nothing yet. ZEG and Keentel post LLWG summaries regularly, so they are likely to publish next. The Texan separately reported, in an undated article, that four large-load groups in North and West Texas had failed an earlier ERCOT VRT assessment and that members urged them to improve. LinkedIn reaction did not show up in search.",
+    "sources": [
+     "https://www.energycentral.com/energy-management/post/news-ercot-has-ordered-data-centers-to-ride-through-grid-disturbances--C8th9icDumY4anQ",
+     "https://thetexan.news/issues/energy/ercot-discusses-batch-zero-study-at-large-load-meeting-following-puc-approval/article_9879057b-cc55-4c61-9d24-bf3c6a2d51b6.html"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "The firms with public, ERCOT-specific large-load ride-through or EMT modelling material are a small group of boutiques plus a few larger names. None publishes a headcount, so total capacity cannot be measured.",
+    "detail": "Firms with active, ERCOT-specific large-load ride-through or EMT content: Keentel Engineering (data-centre EMT guide, Batch Zero/PGRR144 guides, HIL owner's-engineer offer; '30+ years', 8 ISO/RTO markets, no headcount); Zero Emission Grid (LLWG/Batch Zero summaries, QSA/VRT explainer; '70+ years collective experience', no headcount); EPE Consulting (NOGRR282 and large-load dynamic-model articles; nothing on size); PSC/Power Systems Consultants (data-centre EMT modelling of UPS rectifier/inverter and VRT logic); INS Engineering (PSCAD/model quality test packages, islanded data-centre studies); Quanta Technology (large-load best-practice paper; attribution is from the search summary, so weak). Electranix shows up as ERCOT's partner on a large-load sub-synchronous oscillation investigation and as author of a table in a PNNL report, not as a marketed VRT-fix service. Productised tools also appeared: Inertiafy ('twin data centre models for PSCAD and PSS/E, compiled from one kernel'; I know only its tagline) and the open-source perc-studio (PSS/E PERC1/PERC2 with a NOGRR282 ride-through preset). Searches found no evidence of ERCOT large-load VRT work by Siemens PTI, Hitachi Energy, GE Vernova consulting, 1898 & Co, Enernex, Elevate, Nexant or PowerTech Labs. That does not mean they don't do it.",
+    "sources": [
+     "https://keentelengineering.com/data-center-emt-modeling-grid-interconnection",
+     "https://keentelengineering.com/poi-interconnection-data-centers-large-loads",
+     "https://www.zeroemissiongrid.com/about-us/",
+     "https://www.zeroemissiongrid.com/zeg-blog/ercot-large-load-qsa/",
+     "https://epeconsulting.com/epe-intelligence/news/preparing-for-nogrr-282-ercot-s-next-phase-of-large-load-requirements",
+     "https://www.pscconsulting.com/news-insights/data-center-load-modeling-and-assessment",
+     "https://ins-engineering.com/services/pscad/",
+     "https://arxiv.org/pdf/2601.12686",
+     "https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-38817.pdf",
+     "https://docs.nlr.gov/docs/fy26osti/101189.pdf",
+     "https://inertiafy.com/",
+     "https://github.com/TimThacker/perc-studio"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "Consultant hours are probably not the main bottleneck. The constraint is getting UPS/converter OEMs to release models or firmware. Consultants' own published turnaround times barely fit, or don't fit, an 8-week window that includes the holidays.",
+    "detail": "Keentel says a well-documented plant can reach a submission-ready PSS/E plus PSCAD package in 3-5 weeks from authorisation, and that vendor model release under NDA is the most common cause of delay. It quotes 4-8 weeks for a data-centre interconnection data package and models. It also warns that getting a hardware-benchmarked UPS model from a manufacturer 'takes months of commercial negotiation'. INS says a standard model build plus model quality test (MQT) package takes 'a few weeks'. My inference: with results arriving in early December and updated models due by 1 Feb 2027, projects that need a new OEM model will miss the window unless the OEM already has a validated model. A capacity crunch is likely, but it sits at the OEM and model-validation layer more than in study engineering. The number of specialist engineers is not established.",
+    "sources": [
+     "https://keentelengineering.com/psse-pscad-model",
+     "https://keentelengineering.com/poi-interconnection-data-centers-large-loads",
+     "https://keentelengineering.com/data-center-emt-modeling-grid-interconnection",
+     "https://ins-engineering.com/services/pscad/"
+    ],
+    "confidence": "inferred",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "The main UPS OEMs already have ride-through behaviour or firmware on the record with NERC and ERCOT, and ERCOT's validation approach works per converter family. A fix can therefore scale by OEM family rather than project by project.",
+    "detail": "A NERC LMWG deck (27 Jan 2026) contrasts Schneider's traditional UPS behaviour, which protects only the critical load, with 'firmware-updated' behaviour that protects both the critical load and the grid, plotted against ERCOT's proposed curve. Eaton's July 2025 ERCOT deck shows its UPS carrying full load without battery down to about -15% voltage and proposes keeping the rectifier online through a fault ride-through window. NERC's large-loads conference material shows Vertiv only as a simulated 0.5 pu, 500 ms sag test. EPE describes ERCOT's proposed Converter Model Validation (CMV) test as hardware validation of the UPS converter and its load. Keentel says ERCOT accepts hardware-in-the-loop CMV done once per converter family in an OEM environment. Inference: 68% of deficiencies are full or partial load loss, which points to UPS/PSU trip and transfer settings. Many of the ~180 failures may be fixable with firmware or settings plus a re-parameterised model rather than new hardware, and a few converter families probably cover most projects. No public source gives the OEM mix.",
+    "sources": [
+     "https://www.nerc.com/globalassets/who-we-are/standing-committees/rstc/lmwg/20260127_lmwg_presentations.pdf",
+     "https://www.ercot.com/files/docs/2025/07/10/Eaton-Data-center-A-Good-Grid-Citizen.pdf",
+     "https://www.nerc.com/globalassets/our-work/webinars/large-loads-technical-conference-presenations-public.pdf",
+     "https://epeconsulting.com/epe-intelligence/news/ercot-proposes-new-dynamic-model-submission-and-review-requirements-for-large-loads",
+     "https://keentelengineering.com/data-center-emt-modeling-grid-interconnection"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "No published price exists for a data-centre ride-through study or model fix. The nearest public price points run from about $10k (model evaluation) to $300k (EMT study deposit), and 'six figures' for a full OEM model package.",
+    "detail": "Zero Emission Grid's SPP summary: a failed screen leads to an EMT study at the customer's expense, with a $300,000 deposit, and model submittals need a Model Evaluation Agreement with a $10,000 deposit. Keentel: full OEM product-level PSCAD model packages (validation, documentation, companion positive-sequence model) 'typically run into six figures', and the biggest cost driver is whether validation data exists, not modelling effort. Texas SB6 / ERCOT large-load screening: at least $100,000 flat screening study fee, plus a $500,000 non-refundable study deposit in one consultant table. These come from Keentel pages and are unverified against the tariff. These are deposits and engagement sizes, not quotes for an ERCOT NOG 2.15 VRT re-test, so the actual fee for one is not established.",
+    "sources": [
+     "https://www.zeroemissiongrid.com/iso-rto/spp-ics-process-2026/",
+     "https://keentelengineering.com/pscad-models-inverter-oems",
+     "https://keentelengineering.com/poi-interconnection-data-centers-large-loads",
+     "https://keentelengineering.com/cluster-interconnection-studies"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "What's at stake per failed project is far larger than any study fee. On the brief's own numbers, about 180 failed projects carry roughly $4.5B of security, and failing means no QSA and no energization.",
+    "detail": "Arithmetic on figures given in the brief, not from a search: ~180 failed projects \u00d7 ~500 MW average \u00d7 $50,000/MW (16 TAC 25.194) \u2248 $4.5B of security tied to projects that currently can't get a Quick Start Assessment (QSA), about $25M per average project. Missing the 1 Feb 2027 model update means missing the Feb-Apr 2027 QSA window for Q4 2027 energization. Context: in May 2026 ERCOT said a failed initial VRT test does not automatically remove a project from Batch Zero; it keeps its allocation but must update its model before Batch Zero completes. The 19 Nov deck now ties QSA, and so energization, to a model that shows ride-through. Projects keep their MW but cannot energize. Caveat: the average MW of the failed subset is unknown and may differ from the Batch Zero average.",
+    "sources": [
+     "https://www.zeroemissiongrid.com/iso-rto/ercot-batch-zero-5-15-2026/",
+     "https://www.zeroemissiongrid.com/zeg-blog/ercot-large-load-qsa/"
+    ],
+    "confidence": "inferred",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "Hardware fixes for projects that truly fail are costly and only loosely priced in public sources. Generic figures are about $40-80/kVAR for STATCOMs and $10-40/kVAR for synchronous condensers, with 30-50% added for installation.",
+    "detail": "Search results give STATCOM equipment at $55-70/kVAR (another source $40-80/kVAR) and synchronous condensers at $10-40/kVAR. One market report gives $1.8-2.5M per 100 MVAr STATCOM and $0.8-1.2M per 100 MVAr synchronous condenser, but its units are internally inconsistent, and it says total project cost adds 30-50% to equipment. An Australian source cites roughly AUD 35-40M for a ~125 MVA synchronous condenser and says grid-forming STATCOMs are competitive per MVA. Synchronous condensers respond in seconds and STATCOMs in 1-2 ms, which matters for the 24% 'slow recovery' failures. Academic EMT work on the TAMU-ERCOT model finds battery support achieves ride-through for all tested sags. None of these figures is specific to data centres. No public data was found on UPS retrofit or firmware cost per MW. Inference: lead times for STATCOMs, synchronous condensers or BESS cannot fit an 8-week model-update window, so hardware fixes would have to be modelled as committed future equipment.",
+    "sources": [
+     "https://www.renewable-d.com/insights/statcom-vs-svc",
+     "https://dataintelo.com/report/static-synchronocompensator-market",
+     "https://www.sssgears.co.uk/site/assets/files/1846/grid_forming_e-statcom_vs_synchronus_condenser_gridstab_news_may_2026.pdf",
+     "https://arxiv.org/html/2611.19667"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "The rules are getting stricter, which raises the bar for a quick fix: hardware-benchmarked PSCAD models are required and generic library blocks are not accepted.",
+    "detail": "NOGRR282 (LCL voltage and frequency ride-through) shows Approved 07/09/2026, effective 08/01/2026, on ERCOT's issue page. Consultant summaries say PGRR144 requires PSCAD for all large loads, benchmarked to hardware, with generic library blocks not acceptable. One summary dated 16 Nov 2026 lists PGRR144 as approved on 5 Nov 2026; I could not confirm that against ERCOT. ERCOT's own open-source PSCAD data-centre model is explicitly built from public information, has not been validated against hardware, and is not a submittal model. So developers cannot simply swap in the ERCOT reference model to pass.",
+    "sources": [
+     "https://www.ercot.com/mktrules/issues/NOGRR282",
+     "https://keentelengineering.com/pgrr144-batch-zero-batch",
+     "https://keentelengineering.com/data-center-emt-modeling-grid-interconnection",
+     "https://www.ercot.com/files/docs/2026/04/24/AIDataCenter_PSCAD-Manual.pdf"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "Political and process risk: one secondary source says ERCOT paused parts of Batch Zero on 3 Aug 2026 under a governor's audit directive, with reports due 10 Dec and a PUCT meeting on 17 Dec 2026.",
+    "detail": "gr1d.us says that on 3 Aug 2026 ERCOT paused the Batch Zero study, final classification and energization approvals for computational loads of 75 MW or more, under the governor's audit directive, with reports due 10 Dec and the PUCT meeting 17 Dec. Its overview also lists a 1 Nov 2026 QSA screen (17 loads, ~6,874 MW) and a 10 Dec verification and community-impact reports milestone. This conflicts with ERCOT having run VRT tests from September to November and setting 2027 QSA windows. It is single-source and unverified, but the 10-17 Dec dates fall right when developers would be hiring for model fixes and could change demand.",
+    "sources": [
+     "https://gr1d.us/insights/ercot-large-load-interconnection-texas"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-21"
+   }
+  ],
+  "bottom_line": "The opportunity is not selling more study hours. It is a fast, OEM-family-based ride-through fix service that takes a validated UPS/converter model or firmware from the manufacturer, re-parameterises each project in PSS/E and PSCAD, re-runs the NOG 2.15 tests and submits by 1 Feb 2027. The case: 68% of the ~180 failures are load loss, which points to UPS settings and firmware, not grid hardware. Schneider and Eaton have already shown ride-through firmware or behaviour to NERC and ERCOT, and ERCOT accepts converter validation once per family. The publicly visible specialists are a handful of small boutiques with no stated headcount (Keentel, Zero Emission Grid, EPE, PSC, INS, Quanta, Electranix). Their own quoted turnaround is 3-8 weeks per package, and they say OEM model release under NDA takes months. A crunch is therefore likely between December and January, mainly at the OEM and model-validation layer. Prices are not published. The nearest public figures run from a $10k model-evaluation deposit to a $300k EMT study deposit, plus 'six figures' for OEM model packages. Against that, each average failed project has about $25M of security and its Q4 2027 energization at stake, roughly $4.5B across the cohort on the brief's numbers. Hardware fixes (STATCOM at about $40-80/kVAR, synchronous condenser at $10-40/kVAR, BESS) cannot be delivered in the window. Public reaction so far is one Energy Central item, and the reported 10-17 Dec Batch Zero audit and PUCT milestone is unconfirmed process risk.",
+  "searches_run": 12
+ },
+ {
+  "topic": "Will ERCOT Batch Zero large-load projects still be built? Political and process risk as of 21 Nov 2026, and whether a voltage ride-through (VRT) remediation business has buyers through 2027",
+  "findings": [
+   {
+    "claim": "Hinojosa has promised a pause on new data-centre permits and approvals until the Legislature passes new protections. It is a campaign pledge, not an order. Its legal form (executive order or bill) and its reach (permits, ERCOT interconnection or energization) are not defined, and she has said nothing about grandfathering Batch Zero.",
+    "detail": "ABC13 and the Texas Tribune (4 Nov) report she will 'pause future data centers until new regulations are in place', which would extend Abbott's TCEQ permit pause. KCBD/Fox34 (20 Nov) report that she admits she cannot stop data centres already under construction. One search summary of a Houston Chronicle Q&A says a project that is permitted but not yet operating would still be covered. I could not confirm that wording in a second search, so it is unverified. The rest of her platform is about water, union labour, NDAs and subsidies, not grid reliability. Energy News Beat and an mlq.ai analysis both say which projects the moratorium covers is 'not yet defined'. The only grandfathering signal found is one analyst's guess that projects under construction would be allowed to connect. She takes office 19 Jan 2027. Inferred: Abbott's August 2026 letter showed that a governor's directive can get ERCOT to freeze energization of loads of 75 MW or more without any statute. A Hinojosa directive could do the same to Batch Zero projects that are not yet energized, so 'only new permits' is not a safe assumption.",
+    "sources": [
+     "https://abc13.com/post/governor-elect-gina-hinojosa-vows-ban-future-data-centers-texas/20021143/",
+     "https://www.texastribune.org/2026/11/04/data-center-texas-pause-gina-hinojosa-governor-policies/",
+     "https://www.kcbd.com/2026/11/20/hinojosa-calls-data-center-moratorium-perry-files-senate-bill/",
+     "https://www.houstonchronicle.com/politics/texas/article/gina-hinojosa-interview-22527630.php",
+     "https://energynewsbeat.co/energy-policy/hinojosa-can-pause-data-centers-she-cant-rewrite-texas-power-alone/",
+     "https://mlq.ai/news/texas-data-centers-face-a-december-limbo-as-ercots-batch-zero-review-meets-a-change-of-governor-what-it-means/",
+     "https://en.wikipedia.org/wiki/Gina_Hinojosa"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-20"
+   },
+   {
+    "claim": "The 90th Legislature convenes 12 Jan 2027, a week before the 19 Jan inauguration. The main pre-filed bill, Perry's SB 338 (filed 12 Nov, 16 Senate co-authors), conditions ERCOT grid access on low-water cooling but applies only to data centres that are new after 1 Sept 2027. Dozens of other data-centre bills have been filed.",
+    "detail": "Texas Dispatch and Fox34/KCBD report that SB 338 bars data centres from the ERCOT grid unless they use closed-loop, dry, saline or other low-water cooling. It caps local property-tax abatements at 50%, gives the PUC authority over water, light, noise and setback limits, and (per Texas Scorecard) repeals some sales and use tax exemptions. The 16 co-authors are a majority of the 31-member Senate and all but one are Republicans, so the bill is not partisan. Perry also expects follow-up work in 2027 on SB 6, the 2025 large-load interconnection law. The 12 Jan and 19 Jan dates come from an explainx.ai summary that cites Gibson Dunn; I did not see them in the Gibson Dunn alert itself. They match the constitutional rule (second Tuesday of January) and Wikipedia. SB 35 (2027) is on LegiScan but I did not establish what it says. Inferred: the 1 Sept 2027 prospective date probably spares most Batch Zero projects aiming for Q4 2027 or Q1 2028 energization, though how 'new' is defined matters.",
+    "sources": [
+     "https://thetexasdispatch.com/sb-338-data-center-water-cooling-grid-tax-breaks/",
+     "https://www.fox34.com/2026/11/20/hinojosa-calls-data-center-moratorium-perry-files-senate-bill/",
+     "https://texasscorecard.com/state/lawmakers-move-to-repeal-tax-exemptions-for-data-centers/",
+     "https://explainx.ai/blog/texas-tceq-resumes-data-center-permit-reviews-abbott-pause-ercool-audit-december-10-2026",
+     "https://legiscan.com/TX/bill/SB35/2027?guid=3AO8zNaiBSm7cpyJQV6yFw"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-20"
+   },
+   {
+    "claim": "Under Abbott's audit, ERCOT is to file two reports with the PUCT by 10 Dec 2026, a Batch Zero Eligibility Verification Report and a Community Impact Review Report, for discussion at the 17 Dec PUCT open meeting. ERCOT's freeze on energizing data centres and crypto loads of 75 MW or more stays until then. TCEQ restarted data-centre permit reviews after 13 Nov.",
+    "detail": "Gibson Dunn (updated 18 Nov) and Utility Dive give the 10 Dec filing and 17 Dec meeting. Several sources agree on 10 Dec; I found no support for the alternative 3 Dec date. A 5 Nov ERCOT presentation to the PUC reportedly kept the energization pause for large loads but not for medium loads. On 13 Nov the governor's office told TCEQ that ERCOT had finished collecting community-impact data, and TCEQ resumed permit reviews (Fox4). The audit came from Abbott's 3 Aug 2026 letter, which says projects that fail must be denied grid connection. The ERCOT survey covered more than 400 data centres.",
+    "sources": [
+     "https://www.gibsondunn.com/texas-data-center-critical-dates-and-procedures-following-the-2026-elections/",
+     "https://www.utilitydive.com/news/ercot-texas-puc-data-center-audit/828472/",
+     "https://www.fox4news.com/news/texas-data-center-permits-moving-forward-again-after-abbott-pause",
+     "https://www.texastribune.org/2026/08/03/texas-data-center-project-audit-greg-abbott/",
+     "https://www.houstonpublicmedia.org/articles/news/energy-environment/2026/09/11/561649/ercot-to-survey-more-400-data-centers-as-part-of-gov-abbott-audit/",
+     "https://www.ercot.com/files/docs/2026/08/20/Batch-Zero-Verification-and-Audit-PUCT-Presentation.pdf"
+    ],
+    "confidence": "sourced-strong",
+    "as_of": "2026-11-18"
+   },
+   {
+    "claim": "No November 2026 source says how many Batch Zero projects the 10 Dec verification will exclude. The only published counts are preliminary and do not fully agree with each other.",
+    "detail": "The 3 Sept 2026 provisional classifications reportedly put 373 projects (302 GW) in 'excluded', separate from base and studied (Yahoo Finance and ERCOT's 11 Sept Batch Zero update). In August an ERCOT official said 'between 250 and 300 entities' would be eligible for Batch Zero. The brief's figure of about 362 conditionally included loads (about 194 GW) fits better with a project count than with the entity count, but I could not reconcile these. Excluded projects can use the dispute and ADR process, and they move to Batch One. Whether the 10 Dec report will exclude many of the roughly 180 projects that failed VRT is unknown.",
+    "sources": [
+     "https://finance.yahoo.com/energy/articles/ercot-sorts-batch-zero-projects-135342202.html",
+     "https://www.ercot.com/files/docs/2026/09/11/14-Batch-Zero-Update.pdf",
+     "https://mlq.ai/news/texas-data-centers-face-a-december-limbo-as-ercots-batch-zero-review-meets-a-change-of-governor-what-it-means/",
+     "https://www.bakerbotts.com/thought-leadership/publications/2026/august/texas-large-load-interconnection-update---ercot-batch-zero-pause-and-verification-process"
+    ],
+    "confidence": "not-established",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "The Batch Zero schedule is slipping. ERCOT has said it will miss the 9 Apr 2027 deadline for study results, and an extension is expected. That deadline sits inside the 1 Feb\u201330 Apr 2027 QSA window.",
+    "detail": "Gibson Dunn's 18 Nov alert, as summarised in search results, says the current deadline for Batch Zero study results is 9 Apr 2027, that ERCOT has said it will not meet it, and that an extension is expected. The ERCOT schedule approved on 18 June 2026 had allocations in Spring 2027, proof of commitment in Q2 2027 and a final transmission plan in Fall 2027. Inferred: if the study slips, the 1 Feb 2027 model-update deadline and the QSA window may also move. That could give failing projects more time to remediate, but it also delays when developers have to commit money.",
+    "sources": [
+     "https://www.gibsondunn.com/texas-data-center-critical-dates-and-procedures-following-the-2026-elections/",
+     "https://www.ercot.com/files/docs/2026/06/18/ERCOT-Trending-Topic-New-Batch-Connection-Process-for-Large-Electricity-Users.pdf",
+     "https://www.ercot.com/news/release/06182026-puct-approves-ercots"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-18"
+   },
+   {
+    "claim": "The ride-through requirement is a standing ERCOT rule, not a one-off Batch Zero test. NOGRR 282 was approved 9 Jul 2026 and took effect 1 Aug 2026, putting voltage ride-through for Large Computational Loads in Nodal Operating Guide 2.15 (frequency in 2.6.4). Batch One, which opens to applications around Summer 2027, will therefore face the same requirement.",
+    "detail": "ERCOT's NOGRR tracker lists NOGRR 282 as approved 9 Jul 2026, effective 1 Aug 2026. Secondary summaries say it covers loads of 75 MW or more where at least half the demand is computational. ERCOT's 18 June 2026 release says Batch One applications are expected to open in Summer 2027, and Keentel says new projects and projects excluded from Batch Zero both enter through Batch One. The 21 May 2026 LLWG summary says voltage disturbance testing is required for all large loads, but results are 'informational only' for loads not subject to NOGRR 282. The 15 May 2026 readiness summary says failing the first VRT test does not by itself remove a project from Batch Zero, which fits with the single update window. No source states the exact Batch One screening steps. That Batch One will repeat dynamic-model and VRT screening is my inference from the standing rule, so remediation demand probably recurs with each batch. ERCOT's 26 Jun 2026 notice found four groups of large loads that could together cause more than 3,200 MW of load loss, mainly because Large Computational Loads lack ride-through. That reliability record makes it unlikely the rule will be relaxed.",
+    "sources": [
+     "https://www.ercot.com/mktrules/issues/NOGRR282",
+     "https://www.ercot.com/mktrules/issues/reports/nogrr",
+     "https://3dfs.com/articles/ercot-nogrr282-plain-english/10/2026",
+     "https://www.ercot.com/news/release/06182026-puct-approves-ercots",
+     "https://keentelengineering.com/pgrr144-batch-zero-batch",
+     "https://www.zeroemissiongrid.com/iso-rto-meeting-summaries/ercot-llwg-05-21/",
+     "https://www.zeroemissiongrid.com/iso-rto/ercot-batch-zero-5-15-2026/",
+     "https://www.ercot.com/services/comm/mkt_notices/M-A013126-02"
+    ],
+    "confidence": "sourced-strong",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "NERC's registration petition (FERC Docket RR27-1-000, filed 21 Oct 2026) would create two new registered entities, Computational Load Owner (CLO) and Computational Load Operator (CLOP), for sites with at least 50 MW of connected load at 100 kV or above. Comments closed 20 Nov 2026 and FERC has not yet ruled.",
+    "detail": "The petition revises NERC's Rules of Procedure to add CLO and CLOP to the Compliance Registry. 'Computational Load Entity' is FERC's wording from its 16 Jul 2026 order; the petition itself uses CLO and CLOP. NERC asked FERC to act quickly (DWT). PJM filed comments on 20 Nov supporting the proposal and asking for better coordination of data on existing and planned facilities. The petition does not itself create standards. The 50 MW threshold is below ERCOT's 75 MW, so more sites would be covered nationally. NERC's implementation plan expects CLO registration to start in 2027.",
+    "sources": [
+     "https://www.dwt.com/blogs/energy--environmental-law-blog/2026/11/nerc-data-center-registration-ferc-petition",
+     "https://www.troutmanenergyreport.com/2026/11/nerc-seeks-ferc-approval-of-new-registration-categories-related-to-computational-loads/",
+     "https://www.pillsburylaw.com/en/news-and-insights/nerc-federal-reliability-registration-data-centers.html",
+     "https://www.federalregister.gov/documents/2026/10/27/2026-21877/combined-notice-of-filings-1"
+    ],
+    "confidence": "sourced-strong",
+    "as_of": "2026-11-20"
+   },
+   {
+    "claim": "NERC's first computational-load standards (CLO-001-1, CLO-002-1, CLO-003-1; RD26-7, due at FERC by 31 Dec 2026) would make ride-through modelling and model verification a national obligation from mid-2027. A ride-through performance requirement outside ERCOT appears to be a later phase and is unlikely before 2028.",
+    "detail": "CLO-001-1 covers interconnection, studies and modelling. Secondary summaries say it requires planning model data on tripping, ride-through and disturbance-recovery parameters, updated at least every 13 months. It also requires Model Verification evidence that site-specific parameters match the equipment as installed. CLO-002-1 covers operational data and communications; CLO-003-1 covers protection coordination and disturbance monitoring. The NERC Board reportedly adopted all three in late October 2026 (gridstrong.ai gives 26 Oct, unverified). They take effect on the first day of the first calendar quarter after FERC approval. ERCOT's 14 Oct 2026 LLWG deck projected an effective date of 1 Apr 2027 and first compliance (CLO-001 R7/R8) on 1 Jul 2027, assuming FERC approves early in Q1 2027. That is an estimate. NERC's Phase II workplan is due about 1 Mar 2027 and lists disturbance performance, model validation, oscillations and protection coordination. Sources disagree on whether a ride-through performance standard is in Phase I or Phase II. My inference is that a national requirement to actually ride through, beyond modelling it, is 2028 or later. The 3.8 GW load drop in Virginia is cited as a driver.",
+    "sources": [
+     "https://www.ercot.com/files/docs/2026/10/14/02.-NERC-Computational-Load-Update-for-ERCOT-October-LLWG.pdf",
+     "https://www.publicpower.org/periodical/article/nerc-seeks-ferc-approval-proposed-reliability-standards-tied-integration-computational-loads",
+     "https://www.nerc.com/globalassets/standards/projects/2026-02/formal-posting-1/formal-posting-1/project-2026-02-clo-001-1-tr-draft-1.pdf",
+     "https://www.zeroemissiongrid.com/zeg-blog/nerc-computational-load-standards/",
+     "https://www.gridstrong.ai/large-load",
+     "https://www.gridstrong.ai/help-center/clo-003-1",
+     "https://distroforge.com/blog/nerc-computational-load-standards-clo-003-1-transformer-owners/",
+     "https://rmsenergy.com/tdec-post/after-3-8-gw-dropped-in-virginia-nercs-computational-load-standards-move-from-draft-to-deadline/"
+    ],
+    "confidence": "sourced-weak",
+    "as_of": "2026-11-21"
+   },
+   {
+    "claim": "The decision to pay for remediation will be made during the political handover. ERCOT returns VRT results in early December, the PUCT considers the audit on 17 Dec, Hinojosa takes office 19 Jan, and updated models are due around 1 Feb 2027. That gives failing projects about 8\u201310 weeks, under the most political uncertainty of the cycle.",
+    "detail": "This is assembled from the brief's ERCOT 19 Nov deck dates (results in early December, models by January or 1 Feb 2027, QSA window 1 Feb\u201330 Apr 2027) and the sourced political dates above. Inferred: the developers who most need to fix ride-through to stay QSA-eligible must decide whether to spend in the same weeks they learn whether they survived the verification and whether the new governor will freeze energization again. If the Batch Zero study extension also pushes back the model deadline, the window widens. If not, the work is a short sprint that suits people already on the project (UPS/PSU OEM vendors and the engineering consultants who built the original dynamic models) more than a new entrant.",
+    "sources": [
+     "https://www.gibsondunn.com/texas-data-center-critical-dates-and-procedures-following-the-2026-elections/",
+     "https://en.wikipedia.org/wiki/Gina_Hinojosa",
+     "https://www.utilitydive.com/news/ercot-texas-puc-data-center-audit/828472/"
+    ],
+    "confidence": "inferred",
+    "as_of": "2026-11-21"
+   }
+  ],
+  "bottom_line": "Yes, there are very likely buyers through 2027. Demand comes from technical rules that sit mostly outside political control: NOGRR 282 is a standing ERCOT rule in effect since 1 Aug 2026 (NOG 2.15); the Batch Zero gate is no demonstrated ride-through, no QSA, no energization; and NERC CLO-001 would require ride-through modelling and model verification nationally, at 50 MW and above, from about mid-2027. Hinojosa's pledge targets new permits and approvals and is driven by water, labour and subsidy concerns, not reliability. The main bipartisan bill, SB 338, applies only to data centres new after 1 Sept 2027.\n\nThese probabilities are my judgement, not sourced:\n- About 80\u201385% that ERCOT developers pay for ride-through remediation in real volume during 2027. That covers the Batch Zero model-update sprint in Dec 2026\u2013Feb 2027 plus Batch One, which opens around Summer 2027 and must meet the same rule.\n- About 50\u201360% that the Batch Zero sprint comes close to the full set of roughly 180 failing projects. Some failing projects may be excluded by the 10 Dec verification, which has published no exclusion count, and some developers will wait and see.\n- About 20\u201330% that a Hinojosa directive after 19 Jan materially freezes energization of Batch Zero projects in 2027. Abbott's August letter shows a governor can do this without a statute.\n- National demand beyond modelling, meaning required ride-through performance, looks like 2028 or later (NERC Phase II).\n\nThe single biggest risk is timing. The paid Batch Zero work is one window of about 8\u201310 weeks (results in early December, models due around 1 Feb 2027) that falls on the political handover: the 10 Dec verification and 17 Dec PUCT meeting, then the 19 Jan inauguration. If the verification excludes many of the failing projects, or developers expect a new energization freeze, they will rationally hold off. Paying demand would then slip to Batch One and NERC compliance in the second half of 2027, and the short sprint itself favours the OEMs and modelling consultants already on these projects over a new entrant.",
+  "searches_run": 12
+ }
+]

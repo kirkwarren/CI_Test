@@ -15,3 +15,8 @@ ERCOT's own publications, retained so the quotes in
 Extraction is automated (pdfplumber / python-docx / python-pptx); table layout is
 imperfect and page furniture is retained. For anything load-bearing, go to ERCOT's
 published original rather than these extracts.
+| `ERCOT_LLWG_2026-11-19_BatchZero_VRT_Results.txt` | **ERCOT's Update — Voltage Ride-Through Test Results** (LLWG, Sun Wook Kang, Dynamic Studies) | 18–19 Nov 2026 |
+| `ERCOT_LLWG_2026-11-19_LIOO_Portal.txt` | Update on ERCOT Portal for Large Loads (LIOO) | 18 Nov 2026 |
+| `ERCOT_NOG_Section2_LCL_RideThrough_EXCERPT.txt` | Nodal Operating Guide §2.15 (LCL voltage ride-through) + Table A + §2.6.4 | NOG version 1 Nov 2026 |
+| `ERCOT_NOGRR282_PUCT_Report.txt` | NOGRR282 PUCT Report | 9 Jul 2026 decision |
+| `ERCOT_NPRR1308_PUCT_Report.txt` | NPRR1308 PUCT Report (defines Large Load ≥75 MW, LCL) | 9 Jul 2026 decision |

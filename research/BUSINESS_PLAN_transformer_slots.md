@@ -1,5 +1,8 @@
 # Business Plan — Grid Equipment Position Desk
 
+> **SUPERSEDED 21 November 2026.** ERCOT's own 19 November deck shows **69% of ~260 Batch Zero projects failed voltage ride-through**, with corrected models due about 1 February 2027 and no energization without them. That — not equipment evidence — is the opportunity. Read [`slot_desk/OPPORTUNITY_VERDICT.md`](slot_desk/OPPORTUNITY_VERDICT.md) first. This plan is kept for its reasoning and the evidence trail.
+
+
 **Working name:** Slotline (placeholder)
 **Plan date:** 16 November 2026
 **Model:** [`slot_exchange_model.xlsx`](slot_exchange_model.xlsx) · **Evidence:** [`slot_resource.json`](slot_resource.json)
