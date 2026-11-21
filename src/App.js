@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Home, Database, AlertTriangle } from 'lucide-react';
-import { fetchListings } from './lib/mlsClient';
+import { fetchListings, fetchRealLand } from './lib/mlsClient';
 import { fetchComps } from './lib/airbnbClient';
 import {
   buildCompIndex,
@@ -16,6 +16,30 @@ import MarketTable from './components/MarketTable';
 import OpportunityScatter from './components/OpportunityScatter';
 import OpportunityTable from './components/OpportunityTable';
 import DealDetail from './components/DealDetail';
+import { BenchmarkTable } from './components/RealData';
+
+const EMPTY_FILTERS = {
+  market: '',
+  dealType: '',
+  maxPrice: null,
+  minBeds: 0,
+  minCapRate: null,
+  positiveOnly: false,
+  strStatus: '',
+  hideStale: false,
+};
+
+// Short-term-rental status buckets for the real-listing filter.
+const STR_FILTERS = {
+  friendly: new Set(['allowed', 'unrestricted', 'area', 'permit']),
+  explicit: new Set(['allowed', 'unrestricted']),
+};
+
+const MANAGEMENT_PRESETS = [
+  [0.2, 'Full-service manager (20%)'],
+  [0.25, 'Full-service manager (25%)'],
+  [0.05, 'Self-managed (5% for tools)'],
+];
 
 function median(nums) {
   if (!nums.length) return null;
@@ -25,37 +49,40 @@ function median(nums) {
 }
 
 export default function App() {
-  const [feed, setFeed] = useState(null); // {listings, comps, source, error?}
+  // 'real': researched land listings underwritten against published market
+  // benchmarks. 'sample': the synthetic multi-market model.
+  const [dataset, setDataset] = useState('real');
+  const [feed, setFeed] = useState(null); // {listings, comps, source, benchmarks?, error?}
   const [assumptions, setAssumptions] = useState({ ...DEFAULT_ASSUMPTIONS });
-  const [filters, setFilters] = useState({
-    market: '',
-    dealType: '',
-    maxPrice: null,
-    minBeds: 0,
-    minCapRate: null,
-    positiveOnly: false,
-  });
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [selected, setSelected] = useState(null);
   const detailRef = useRef(null);
 
   useEffect(() => {
     let alive = true;
-    // Listings and comps are independent fetches; load them together.
-    Promise.all([fetchListings(), fetchComps()]).then(([l, c]) => {
-      if (!alive) return;
-      setFeed({ ...l, comps: c.comps, compsError: c.error });
-    });
+    setFeed(null);
+    setSelected(null);
+    setFilters(EMPTY_FILTERS);
+    const load =
+      dataset === 'real'
+        ? fetchRealLand()
+        : // Listings and comps are independent fetches; load them together.
+          Promise.all([fetchListings(), fetchComps()]).then(([l, c]) => ({
+            ...l,
+            comps: c.comps,
+            compsError: c.error,
+          }));
+    load.then((f) => alive && setFeed(f));
     return () => {
       alive = false;
     };
-  }, []);
+  }, [dataset]);
 
   // Index the comps once per dataset, not once per underwriting pass — comp
-  // lookup is otherwise O(listings x comps) and dominates every re-run.
-  const compIndex = useMemo(
-    () => (feed?.comps?.length ? buildCompIndex(feed.comps) : null),
-    [feed]
-  );
+  // lookup is otherwise O(listings x comps) and dominates every re-run. Real
+  // listings are benchmark-based and carry no comps, so the index is empty.
+  const compIndex = useMemo(() => (feed ? buildCompIndex(feed.comps || []) : null), [feed]);
+  const isReal = feed?.source === 'real';
 
   // Underwrite everything once per (feed, assumptions); filter afterwards so
   // filter changes are instant.
@@ -74,6 +101,9 @@ export default function App() {
         if (f.minBeds && d.beds < f.minBeds) return false;
         if (f.minCapRate !== null && d.capRate * 100 < f.minCapRate) return false;
         if (f.positiveOnly && d.cashFlow < 0) return false;
+        const real = d.listing.real;
+        if (real && f.strStatus && !STR_FILTERS[f.strStatus].has(real.strStatus)) return false;
+        if (real && f.hideStale && real.freshness === 'stale-risk') return false;
         return true;
       }),
     [allDeals, filters]
@@ -108,6 +138,12 @@ export default function App() {
     );
   };
 
+  const lotsByMarket = useMemo(() => {
+    const out = {};
+    for (const d of allDeals) out[d.listing.market] = (out[d.listing.market] || 0) + 1;
+    return out;
+  }, [allDeals]);
+
   const positive = deals.filter((d) => d.cashFlow > 0).length;
   const bestCoC = deals.length ? Math.max(...deals.map((d) => d.cashOnCash)) : null;
 
@@ -120,10 +156,35 @@ export default function App() {
             STR Deal Finder
           </h1>
           <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-            MLS listings and vacant land{markets.length ? ` across ${markets.length} markets` : ''},
-            underwritten as short-term rentals against nearby Airbnb comps and
-            ranked by projected return.
+            {dataset === 'real'
+              ? 'Real vacant lots for sale, underwritten as a 4-bedroom build-to-rent against published Airbnb market performance, and ranked by projected return.'
+              : `MLS listings and vacant land${markets.length ? ` across ${markets.length} markets` : ''}, underwritten as short-term rentals against nearby Airbnb comps and ranked by projected return.`}
           </p>
+          <div
+            className="inline-flex mt-3 rounded-lg p-0.5 text-xs"
+            role="group"
+            aria-label="Dataset"
+            style={{ border: '1px solid var(--baseline)' }}
+          >
+            {[
+              ['real', 'Real land listings'],
+              ['sample', 'Sample market model'],
+            ].map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => setDataset(key)}
+                aria-pressed={dataset === key}
+                className="px-3 py-1 rounded-md"
+                style={
+                  dataset === key
+                    ? { background: 'var(--accent-wash)', color: 'var(--text-primary)', fontWeight: 600 }
+                    : { color: 'var(--text-secondary)' }
+                }
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
         {feed && (
           <div
@@ -131,7 +192,12 @@ export default function App() {
             style={{ color: 'var(--text-secondary)' }}
           >
             <Database size={13} />
-            {feed.source === 'live' ? (
+            {feed.source === 'real' ? (
+              <span>
+                Real listings · {num(feed.listings.length)} lots · {num(markets.length)} markets ·
+                researched {feed.listings[0]?.real?.observed}
+              </span>
+            ) : feed.source === 'live' ? (
               <span>
                 Live MLS feed · {num(feed.listings.length)} listings ·{' '}
                 {num(feed.comps.length)} Airbnb comps
@@ -150,7 +216,7 @@ export default function App() {
         <div className="card p-10 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
           Loading listings and comps…
         </div>
-      ) : !feed.listings.length || !feed.comps.length ? (
+      ) : !feed.listings.length || (!isReal && !feed.comps.length) ? (
         <div className="card p-10 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
           <p className="font-medium mb-1" style={{ color: 'var(--text-primary)' }}>
             Couldn't load the dataset.
@@ -159,7 +225,35 @@ export default function App() {
         </div>
       ) : (
         <>
-          <Filters filters={filters} onChange={setFilters} markets={markets} />
+          <Filters filters={filters} onChange={setFilters} markets={markets} real={isReal} />
+
+          {isReal && (
+            <div className="card px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 justify-between">
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  Management decides these deals.
+                </span>{' '}
+                With a full-service manager (typically 20–30% in these markets) none of these lots
+                reaches 8% cash-on-cash. Self-managed, the best clear 15%. Pick the plan you'd run.
+              </p>
+              <select
+                aria-label="Management plan"
+                className="md:max-w-[15rem]"
+                value={assumptions.managementPct}
+                onChange={(e) => setAssumptions({ ...assumptions, managementPct: +e.target.value })}
+              >
+                {MANAGEMENT_PRESETS.map(([v, label]) => (
+                  <option key={v} value={v}>{label}</option>
+                ))}
+                {!MANAGEMENT_PRESETS.some(([v]) => v === assumptions.managementPct) && (
+                  <option value={assumptions.managementPct}>
+                    Custom ({(assumptions.managementPct * 100).toFixed(0)}%)
+                  </option>
+                )}
+              </select>
+            </div>
+          )}
+
           <AssumptionsPanel assumptions={assumptions} onChange={setAssumptions} />
 
           <div className="flex gap-3 flex-wrap">
@@ -196,6 +290,8 @@ export default function App() {
             onSelect={(m) => setFilters((f) => ({ ...f, market: m }))}
           />
 
+          {isReal && <BenchmarkTable benchmarks={feed.benchmarks} lotsByMarket={lotsByMarket} />}
+
           <OpportunityScatter
             deals={deals}
             selectedId={selectedDeal?.listing.id}
@@ -223,18 +319,27 @@ export default function App() {
             style={{ color: 'var(--text-muted)' }}
           >
             <AlertTriangle size={13} className="shrink-0 mt-0.5" />
-            <span>
-              Projections are estimates from comparable-listing data and the
-              assumptions above — not financial advice. Listings and Airbnb comps
-              shown here are{' '}
-              {feed.source === 'sample'
-                ? `synthetic samples across ${markets.length} markets, calibrated to realistic price, nightly-rate, occupancy and property-tax relationships`
-                : 'a live MLS feed against a static comp snapshot'}
-              . Build deals apply one flat construction cost to every market,
-              which flatters low-cost-to-build markets. Verify local
-              short-term-rental regulations, permitting, taxes, and actual market
-              performance before investing.
-            </span>
+            {isReal ? (
+              <span>
+                Projections are estimates, not financial advice. Lots are real listings found by web
+                search on {feed.listings[0]?.real?.observed}; several pages were months old and may
+                have sold, so confirm each is still active. Revenue comes from published market
+                benchmarks for a typical 4-bedroom, not a property-specific forecast, and sources
+                disagree widely. Short-term-rental status is what the listing or area reporting
+                said — verify zoning, HOA covenants, septic capacity and permits with the county
+                before making an offer.
+              </span>
+            ) : (
+              <span>
+                Projections are estimates from comparable-listing data and the assumptions above —
+                not financial advice. Listings and Airbnb comps shown here are{' '}
+                {feed.source === 'sample'
+                  ? `synthetic samples across ${markets.length} markets, calibrated to realistic price, nightly-rate, occupancy and property-tax relationships`
+                  : 'a live MLS feed against a static comp snapshot'}
+                . Build costs are scaled by a coarse regional index. Verify local short-term-rental
+                regulations, permitting, taxes, and actual market performance before investing.
+              </span>
+            )}
           </footer>
         </>
       )}

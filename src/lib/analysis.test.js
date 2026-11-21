@@ -1,5 +1,7 @@
 import {
   DEFAULT_ASSUMPTIONS,
+  occupancySensitivity,
+  revenueFromBenchmark,
   buildCompIndex,
   buildCostFor,
   dealBasis,
@@ -220,4 +222,76 @@ test('high-tax urban markets underperform low-tax vacation markets', () => {
   for (let i = 1; i < rows.length; i++) {
     expect(rows[i - 1].medianCashOnCash).toBeGreaterThanOrEqual(rows[i].medianCashOnCash);
   }
+});
+
+// ---- benchmark-based underwriting (real listings) -------------------------
+const BENCH = {
+  market: 'Test, TN', revenue: 75000, adr: 395, occupancy: 0.52,
+  includesCleaningFees: true, confidence: 'Medium', sources: [],
+};
+const realLot = {
+  id: 'T1', price: 60000, address: 'Lot 1', market: 'Test, TN', propertyType: 'Land',
+  beds: null, lat: 35.7, lng: -83.5, taxRate: 0.0056, hoaMonthly: 0,
+  buildCostIndex: null, benchmark: BENCH,
+};
+
+test('a benchmark lot is underwritten from published revenue, not comps', () => {
+  const a = DEFAULT_ASSUMPTIONS;
+  const d = underwrite(realLot, buildCompIndex([]), a);
+  expect(d).not.toBeNull();
+  expect(d.revenueSource).toBe('benchmark');
+  expect(d.comps).toEqual([]);
+  expect(d.grossRevenue).toBe(75000);
+  // No availability haircut: published revenue already reflects real occupancy.
+  expect(d.occupancy).toBe(0.52);
+  expect(d.confidence).toBe('Medium');
+  // Flat $350K build when the lot carries no regional index.
+  expect(d.basis).toBe(60000 + a.buildCost);
+});
+
+test('benchmark revenue is not double-charged the platform fee or management on cleaning', () => {
+  const a = DEFAULT_ASSUMPTIONS;
+  const d = underwrite(realLot, buildCompIndex([]), a);
+  const nights = Math.round(0.52 * 365);
+  const cleaning = (a.cleaningCostPerStay / a.avgStayNights) * nights;
+  // Published revenue is already net of the platform's host fee.
+  expect(d.effectiveRevenue).toBe(75000);
+  expect(d.expenses.Cleaning).toBeCloseTo(cleaning, 6);
+  // Managers take a cut of rental revenue, not of the cleaning fees inside it.
+  expect(d.expenses.Management).toBeCloseTo((75000 - cleaning) * a.managementPct, 6);
+  expect(d.expenses.Maintenance).toBeCloseTo((75000 - cleaning) * a.maintenancePct, 6);
+  expect(d.noi).toBeCloseTo(d.effectiveRevenue - d.operatingExpenses, 6);
+});
+
+test('comp-based deals are unaffected: platform fee applies and cleaning nets to zero', () => {
+  const d = underwrite(homes[0], airbnb, DEFAULT_ASSUMPTIONS);
+  expect(d.revenueSource).toBe('comps');
+  expect(d.expenses.Cleaning).toBe(0);
+  expect(d.effectiveRevenue).toBeCloseTo(d.grossRevenue * (1 - DEFAULT_ASSUMPTIONS.platformFeePct), 6);
+  expect(d.expenses.Management).toBeCloseTo(d.grossRevenue * DEFAULT_ASSUMPTIONS.managementPct, 6);
+});
+
+test('breakeven occupancy agrees with the sensitivity sweep', () => {
+  for (const deal of [underwrite(realLot, buildCompIndex([]), DEFAULT_ASSUMPTIONS),
+                      underwrite(homes[0], airbnb, DEFAULT_ASSUMPTIONS)]) {
+    const pts = occupancySensitivity(deal, DEFAULT_ASSUMPTIONS);
+    const be = deal.breakevenOccupancy * 100;
+    for (const pt of pts) {
+      // Cash flow is negative below breakeven and positive above it.
+      if (pt.occupancy < be - 0.5) expect(pt.cashFlow).toBeLessThan(0);
+      if (pt.occupancy > be + 0.5) expect(pt.cashFlow).toBeGreaterThan(0);
+    }
+  }
+});
+
+test('self-managing improves a benchmark deal by the management fee it saves', () => {
+  const full = underwrite(realLot, buildCompIndex([]), { ...DEFAULT_ASSUMPTIONS, managementPct: 0.25 });
+  const self = underwrite(realLot, buildCompIndex([]), { ...DEFAULT_ASSUMPTIONS, managementPct: 0.05 });
+  expect(self.cashFlow - full.cashFlow).toBeCloseTo(full.rentalRevenue * 0.2, 6);
+});
+
+test('revenueFromBenchmark derives the missing ADR or rejects an empty benchmark', () => {
+  expect(revenueFromBenchmark({ revenue: 36500, occupancy: 0.5 }).adr).toBe(200);
+  expect(revenueFromBenchmark(null)).toBeNull();
+  expect(revenueFromBenchmark({ revenue: 0, occupancy: 0.5 })).toBeNull();
 });

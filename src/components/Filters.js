@@ -10,7 +10,7 @@ function Field({ label, children }) {
 }
 
 /** One filter row; everything below it (charts + table) renders the same slice. */
-export default function Filters({ filters, onChange, markets }) {
+export default function Filters({ filters, onChange, markets, real = false }) {
   const set = (k, v) => onChange({ ...filters, [k]: v });
   return (
     <div className="card px-4 py-3 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 items-end">
@@ -24,6 +24,27 @@ export default function Filters({ filters, onChange, markets }) {
           ))}
         </select>
       </Field>
+      {real ? (
+        <>
+          <Field label="Short-term rentals">
+            <select value={filters.strStatus} onChange={(e) => set('strStatus', e.target.value)}>
+              <option value="">Any status</option>
+              <option value="friendly">Not unconfirmed</option>
+              <option value="explicit">Allowed or unrestricted</option>
+            </select>
+          </Field>
+          <Field label="Listing age">
+            <select
+              value={filters.hideStale ? 'fresh' : 'all'}
+              onChange={(e) => set('hideStale', e.target.value === 'fresh')}
+            >
+              <option value="all">All listings</option>
+              <option value="fresh">Hide possibly-sold</option>
+            </select>
+          </Field>
+        </>
+      ) : (
+        <>
       <Field label="Deal type">
         <select value={filters.dealType} onChange={(e) => set('dealType', e.target.value)}>
           <option value="">Buy or build</option>
@@ -31,6 +52,8 @@ export default function Filters({ filters, onChange, markets }) {
           <option value="build">Land + build</option>
         </select>
       </Field>
+        </>
+      )}
       <Field label="Max all-in cost">
         <input
           type="number"
@@ -41,15 +64,17 @@ export default function Filters({ filters, onChange, markets }) {
           onChange={(e) => set('maxPrice', e.target.value ? +e.target.value : null)}
         />
       </Field>
-      <Field label="Min bedrooms">
-        <select value={filters.minBeds} onChange={(e) => set('minBeds', +e.target.value)}>
-          {[0, 1, 2, 3, 4, 5].map((n) => (
-            <option key={n} value={n}>
-              {n === 0 ? 'Any' : `${n}+`}
-            </option>
-          ))}
-        </select>
-      </Field>
+      {!real && (
+        <Field label="Min bedrooms">
+          <select value={filters.minBeds} onChange={(e) => set('minBeds', +e.target.value)}>
+            {[0, 1, 2, 3, 4, 5].map((n) => (
+              <option key={n} value={n}>
+                {n === 0 ? 'Any' : `${n}+`}
+              </option>
+            ))}
+          </select>
+        </Field>
+      )}
       <Field label="Min cap rate %">
         <input
           type="number"

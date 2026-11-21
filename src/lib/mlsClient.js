@@ -43,6 +43,8 @@ export const LIVE_CONFIGURED =
 export const MIN_LIVE_LISTINGS = 10;
 
 export const SAMPLE_LISTINGS_URL = `${process.env.PUBLIC_URL || ''}/data/listings.json`;
+export const REAL_LAND_URL = `${process.env.PUBLIC_URL || ''}/data/real-land.json`;
+export const REAL_BENCHMARKS_URL = `${process.env.PUBLIC_URL || ''}/data/real-benchmarks.json`;
 
 const TYPE_LABELS = { CND: 'Condo', LND: 'Land', RES: 'Single family' };
 
@@ -83,6 +85,9 @@ export function normalize(raw) {
     taxRate: raw.taxRate ?? null,
     // Regional construction cost multiplier for build-to-rent underwriting.
     buildCostIndex: raw.buildCostIndex ?? null,
+    // Provenance for real (researched) listings: source link, observation
+    // date, short-term-rental status and freshness. Null for sample/MLS data.
+    real: raw.real ?? null,
     daysOnMarket: raw.mls?.daysOnMarket ?? null,
     lat: geo.lat ?? null,
     lng: geo.lng ?? null,
@@ -133,5 +138,29 @@ export async function fetchListings({ limit = 500 } = {}) {
     return { listings: raw.map(normalize).filter(usable), source: 'sample', error: liveError };
   } catch (err) {
     return { listings: [], source: 'none', error: `${liveError}; ${err.message}` };
+  }
+}
+
+/**
+ * Real, researched vacant-land listings, each paired with its market's
+ * published 4-bedroom STR benchmark. These are underwritten against the
+ * benchmark rather than individual comps (no comp feed is needed), so the
+ * result carries no comps.
+ */
+export async function fetchRealLand() {
+  try {
+    const [lr, br] = await Promise.all([fetch(REAL_LAND_URL), fetch(REAL_BENCHMARKS_URL)]);
+    if (!lr.ok) throw new Error(`Real listings responded ${lr.status}`);
+    if (!br.ok) throw new Error(`Market benchmarks responded ${br.status}`);
+    const [raw, benchmarks] = await Promise.all([lr.json(), br.json()]);
+    const byMarket = Object.fromEntries(benchmarks.map((b) => [b.market, b]));
+    const listings = raw
+      .map(normalize)
+      .filter(usable)
+      .map((l) => ({ ...l, benchmark: byMarket[l.market] || null }))
+      .filter((l) => l.benchmark);
+    return { listings, benchmarks, comps: [], source: 'real' };
+  } catch (err) {
+    return { listings: [], benchmarks: [], comps: [], source: 'none', error: err.message };
   }
 }

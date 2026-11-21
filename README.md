@@ -80,6 +80,38 @@ as environment variables in the Vercel project settings (they are inlined at
 build time). Without them the site uses the bundled dataset and makes no MLS
 request at all.
 
+## Real land listings (default view)
+
+The site opens on **34 real vacant lots for sale** across six markets
+(Gatlinburg, Pigeon Forge/Wears Valley, Sevierville, Broken Bow/Hochatown,
+Bryson City, Hocking Hills), gathered by web search on 2026-11-21. Each is
+underwritten as a 4 bd / 2 ba build-to-rent at a flat $350K build cost.
+
+**Revenue comes from published market benchmarks**, not individual comps —
+the typical 4-bedroom's annual revenue in that market (AirDNA, BnBCalc,
+AirROI, The Short Term Shop, the STR Investing market breakdowns). Each market
+uses the most conservative credible 4-bedroom figure available; every figure
+and its sources are in `scripts/real-land-data.js` and shown in the app.
+Three markets (Blue Ridge, Helen, Hot Springs) were screened out before
+gathering lots because their revenue can't reach break-even at a $350K build.
+
+Published revenue (AirDNA's documented definition) **includes guest-paid
+cleaning fees and is already net of the platform's host fee**. So for
+benchmark-based deals the engine deducts no platform fee, charges management
+and maintenance on rental revenue only, and pays turnover cleaning back out.
+Comp-based deals are unaffected.
+
+**The finding:** with a full-service manager (typically 20–30% in these
+markets), none of the 34 lots reaches 8% cash-on-cash. Self-managed, 12 do,
+and the best Gatlinburg lots clear ~15% with breakeven near 35% occupancy
+against a ~52% market. Use the management switch in the app to see both.
+
+Caveats: listings are snapshots and several pages were months old (flagged
+"may be sold"); short-term-rental status is what the listing or area
+reporting said, not a verified zoning determination; locations are
+approximate; and benchmark sources disagree widely. Regenerate with
+`npm run real-land-data`.
+
 ## Data sources
 
 ### MLS listings

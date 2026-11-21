@@ -6,6 +6,7 @@ import ChartTooltip from './ChartTooltip';
 import HBarChart from './charts/HBarChart';
 import LineChart from './charts/LineChart';
 import ScatterPlot from './charts/ScatterPlot';
+import { BenchmarkPanel, ListingProvenance } from './RealData';
 
 function Section({ title, children }) {
   return (
@@ -102,6 +103,8 @@ export default function DealDetail({ deal, assumptions, onClose }) {
         </button>
       </div>
 
+      <ListingProvenance real={listing.real} />
+
       <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4">
         <Section title="The deal, in numbers">
           {isBuild ? (
@@ -140,7 +143,14 @@ export default function DealDetail({ deal, assumptions, onClose }) {
           <Row label="Cash-on-cash return" value={pct(deal.cashOnCash)} strong />
           <Row label="Breakeven occupancy" value={pct(deal.breakevenOccupancy, 0)} />
           <Row label="Property tax rate" value={pct(deal.taxRate, 2)} />
-          <Row label="Comp confidence" value={`${deal.confidence} (${deal.comps.length} comps)`} />
+          <Row
+            label={deal.revenueSource === 'benchmark' ? 'Revenue confidence' : 'Comp confidence'}
+            value={
+              deal.revenueSource === 'benchmark'
+                ? `${deal.confidence} (market benchmark)`
+                : `${deal.confidence} (${deal.comps.length} comps)`
+            }
+          />
         </Section>
 
         <Section title="Where the money goes (annual)">
@@ -168,6 +178,11 @@ export default function DealDetail({ deal, assumptions, onClose }) {
           </p>
         </Section>
 
+        {deal.revenueSource === 'benchmark' ? (
+          <Section title="Revenue benchmark (typical 4BR in this market)">
+            <BenchmarkPanel deal={deal} />
+          </Section>
+        ) : (
         <Section title={`Airbnb comps (${deal.comps.length})`}>
           <ScatterPlot
             height={220}
@@ -200,6 +215,7 @@ export default function DealDetail({ deal, assumptions, onClose }) {
             </span>
           </div>
         </Section>
+        )}
       </div>
     </div>
   );

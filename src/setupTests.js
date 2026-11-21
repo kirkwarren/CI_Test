@@ -31,5 +31,7 @@ global.fetch = (url) => {
   const respond = (body) => Promise.resolve({ ok: true, json: () => Promise.resolve(body) });
   if (u.includes('/data/listings.json')) return respond(slice('listings.json', 400));
   if (u.includes('/data/airbnb-comps.json')) return respond(slice('airbnb-comps.json', 3000));
+  if (u.includes('/data/real-land.json')) return respond(slice('real-land.json', 1000));
+  if (u.includes('/data/real-benchmarks.json')) return respond(slice('real-benchmarks.json', 1000));
   return Promise.reject(new Error('network disabled in tests'));
 };

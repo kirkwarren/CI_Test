@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowUpDown, Hammer } from 'lucide-react';
 import { money, pct } from '../lib/format';
+import { SourceLink, StatusPills } from './RealData';
 
 const COLUMNS = [
   { key: 'rank', label: '#', sortable: false },
@@ -97,6 +98,12 @@ export default function OpportunityTable({ deals, selectedId, onSelect }) {
                         }`
                       : d.listing.propertyType}
                   </div>
+                  {d.listing.real && (
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1">
+                      <StatusPills real={d.listing.real} />
+                      <SourceLink href={d.listing.real.sourceUrl}>{d.listing.real.source}</SourceLink>
+                    </div>
+                  )}
                 </td>
                 {COLUMNS.slice(2).map((c) => (
                   <td

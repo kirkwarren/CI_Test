@@ -31,6 +31,13 @@ export const DEFAULT_ASSUMPTIONS = {
   useMarketTaxRate: true,    // prefer the listing's own market tax rate
   useMarketBuildCost: true,  // scale build cost by the market's cost index
   occupancyHaircut: 0.05,    // shave comp-implied occupancy for conservatism
+  // Turnover cleaning. Only charged when revenue comes from a market benchmark:
+  // published market revenue (AirDNA, BnBCalc, ...) includes guest-paid
+  // cleaning fees, so the matching cleaning cost has to come out. Comp-based
+  // revenue uses nightly rates that already exclude those fees, so the fee and
+  // the cost net to zero there and nothing is charged.
+  cleaningCostPerStay: 200,
+  avgStayNights: 3,
   // Build-to-rent spec, used for vacant-land deals.
   buildCost: 350000,         // all-in construction cost
   buildBeds: 4,
@@ -212,6 +219,37 @@ export function monthlyMortgagePayment(principal, annualRate, years) {
   return (principal * r) / (1 - Math.pow(1 + r, -n));
 }
 
+/**
+ * Revenue from a published market benchmark rather than individual comps.
+ * Used for real listings, where individual comp data isn't available but
+ * market-level performance for the planned bedroom count is. The benchmark's
+ * revenue is used as published (it already reflects real occupancy, so no
+ * availability haircut applies); ADR and occupancy are kept for the breakeven
+ * and sensitivity views.
+ */
+export function revenueFromBenchmark(benchmark) {
+  if (!benchmark || !(benchmark.revenue > 0)) return null;
+  const occupancy = benchmark.occupancy;
+  const adr = benchmark.adr ?? benchmark.revenue / (365 * occupancy);
+  return {
+    adr: Math.round(adr),
+    occupancy,
+    nightsBooked: Math.round(occupancy * 365),
+    grossRevenue: benchmark.revenue,
+  };
+}
+
+/**
+ * Cash left per occupied night before fixed costs and debt: the ADR, less the
+ * platform fee, less percentage costs on the rental (non-cleaning) portion,
+ * less the cleaning paid out. With no cleaning charge this reduces to
+ * ADR x (1 - all percentage costs), the comp-based case.
+ */
+function netPerOccupiedNight(adr, cleaningPerNight, platformFeePct, a) {
+  const pctOps = a.managementPct + a.maintenancePct + a.suppliesPct;
+  return adr * (1 - platformFeePct) - pctOps * (adr - cleaningPerNight) - cleaningPerNight;
+}
+
 /** Full underwriting for one listing. Returns null when no comps exist. */
 export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
   const a = assumptions;
@@ -219,19 +257,36 @@ export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
   const { beds, basis } = basisInfo;
   if (!beds || !basis) return null;
 
-  const comps = findComps({ lat: listing.lat, lng: listing.lng, beds }, airbnb);
-  const rev = estimateRevenue(beds, comps, a);
+  const benchmark = listing.benchmark || null;
+  const comps = benchmark ? [] : findComps({ lat: listing.lat, lng: listing.lng, beds }, airbnb);
+  const rev = benchmark ? revenueFromBenchmark(benchmark) : estimateRevenue(beds, comps, a);
   if (!rev) return null;
 
+  // Benchmark revenue includes guest-paid cleaning fees; charge the matching
+  // turnover cost so those fees aren't counted as profit.
+  const chargesCleaning = !!(benchmark && benchmark.includesCleaningFees !== false);
+  const cleaningPerNight = chargesCleaning ? a.cleaningCostPerStay / a.avgStayNights : 0;
+
   const taxRate = taxRateFor(listing, a);
-  const effectiveRevenue = rev.grossRevenue * (1 - a.platformFeePct);
+  // Published market revenue (AirDNA's documented definition) is nightly rate
+  // plus guest-paid cleaning fees, already net of the booking platform's host
+  // fee. So for a benchmark: no platform fee is deducted again, percentage
+  // costs (management, maintenance, supplies) apply to rental revenue only —
+  // managers don't take a cut of cleaning fees — and the cleaning fees inside
+  // revenue are paid straight out to the cleaners. Comp-based revenue is
+  // nightly rate only, so the platform fee applies and cleaning nets to zero.
+  const platformFeePct = benchmark ? 0 : a.platformFeePct;
+  const cleaningFees = cleaningPerNight * rev.nightsBooked;
+  const rentalRevenue = rev.grossRevenue - cleaningFees;
+  const effectiveRevenue = rev.grossRevenue * (1 - platformFeePct);
   const expenses = {
     'Property tax': basis * taxRate,
     Insurance: basis * a.insurancePctOfPrice,
-    Management: rev.grossRevenue * a.managementPct,
+    Management: rentalRevenue * a.managementPct,
     Utilities: (a.utilitiesMonthlyBase + a.utilitiesPerBedroom * beds) * 12,
-    Maintenance: rev.grossRevenue * a.maintenancePct,
-    Supplies: rev.grossRevenue * a.suppliesPct,
+    Maintenance: rentalRevenue * a.maintenancePct,
+    Supplies: rentalRevenue * a.suppliesPct,
+    Cleaning: cleaningFees,
     HOA: (listing.hoaMonthly || 0) * 12,
   };
   const operatingExpenses = Object.values(expenses).reduce((s, v) => s + v, 0);
@@ -253,15 +308,15 @@ export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
   const fixedCosts =
     expenses['Property tax'] + expenses.Insurance + expenses.Utilities +
     expenses.HOA + annualDebtService;
-  const variablePctOfGross =
-    a.platformFeePct + a.managementPct + a.maintenancePct + a.suppliesPct;
-  const breakevenOccupancy = Math.min(
-    1.5,
-    fixedCosts / (rev.adr * 365 * (1 - variablePctOfGross))
-  );
+  const netPerOccupiedYear = netPerOccupiedNight(rev.adr, cleaningPerNight, platformFeePct, a) * 365;
+  const breakevenOccupancy =
+    netPerOccupiedYear > 0 ? Math.min(1.5, fixedCosts / netPerOccupiedYear) : 1.5;
 
-  const confidence =
-    comps.length >= 12 ? 'High' : comps.length >= 6 ? 'Medium' : 'Low';
+  // Comp-based confidence follows comp count; a benchmark carries its own
+  // rating, set from how specific and recent its sources are.
+  const confidence = benchmark
+    ? benchmark.confidence || 'Medium'
+    : comps.length >= 12 ? 'High' : comps.length >= 6 ? 'Medium' : 'Low';
 
   // Composite 0-100 score: cash-on-cash return does most of the work, cap
   // rate and comp confidence temper it. Scaled so the strongest deals in the
@@ -277,6 +332,11 @@ export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
   return {
     listing,
     comps,
+    benchmark,
+    revenueSource: benchmark ? 'benchmark' : 'comps',
+    cleaningPerNight,
+    platformFeePct,
+    rentalRevenue,
     ...basisInfo,
     ...rev,
     taxRate,
@@ -312,16 +372,15 @@ export function rankOpportunities(listings, airbnb, assumptions = DEFAULT_ASSUMP
 export function occupancySensitivity(deal, assumptions = DEFAULT_ASSUMPTIONS) {
   const a = assumptions;
   const points = [];
+  const platformFeePct = deal.platformFeePct ?? a.platformFeePct;
+  const perNight = netPerOccupiedNight(deal.adr, deal.cleaningPerNight || 0, platformFeePct, a);
   for (let occ = 0.3; occ <= 0.901; occ += 0.05) {
-    const gross = deal.adr * 365 * occ;
-    const variable =
-      gross * (a.platformFeePct + a.managementPct + a.maintenancePct + a.suppliesPct);
     const fixed =
       deal.expenses['Property tax'] + deal.expenses.Insurance +
       deal.expenses.Utilities + deal.expenses.HOA;
     points.push({
       occupancy: Math.round(occ * 100),
-      cashFlow: Math.round(gross - variable - fixed - deal.annualDebtService),
+      cashFlow: Math.round(perNight * 365 * occ - fixed - deal.annualDebtService),
     });
   }
   return points;

@@ -1,4 +1,4 @@
-import { LIVE_CONFIGURED, MIN_LIVE_LISTINGS, fetchListings, normalize, usable } from './mlsClient';
+import { LIVE_CONFIGURED, MIN_LIVE_LISTINGS, fetchListings, fetchRealLand, normalize, usable } from './mlsClient';
 
 const demoRecord = (id) => ({
   mlsId: id,
@@ -57,4 +57,25 @@ test('normalize/usable keep land but drop records without coordinates', () => {
 
   const noGeo = normalize({ mlsId: 10, listPrice: 100000, property: { type: 'RES', bedrooms: 3 }, address: {}, geo: {} });
   expect(usable(noGeo)).toBe(false);
+});
+
+test('real land listings load with a benchmark and full provenance on every lot', async () => {
+  const { listings, benchmarks, source, comps } = await fetchRealLand();
+  expect(source).toBe('real');
+  expect(comps).toEqual([]);
+  expect(listings.length).toBeGreaterThan(20);
+  for (const l of listings) {
+    expect(l.propertyType).toBe('Land');
+    expect(l.price).toBeGreaterThan(0);
+    expect(l.benchmark).toBeTruthy();
+    expect(l.benchmark.revenue).toBeGreaterThan(0);
+    expect(l.real.sourceUrl).toMatch(/^https:\/\//);
+    expect(['allowed', 'unrestricted', 'area', 'permit', 'unconfirmed']).toContain(l.real.strStatus);
+    expect(['recent', 'unknown', 'stale-risk']).toContain(l.real.freshness);
+  }
+  // Every benchmark cites its sources, and screened-out markets have no lots.
+  for (const b of benchmarks) {
+    expect(b.sources.length).toBeGreaterThan(0);
+    if (b.screenedOut) expect(listings.some((l) => l.market === b.market)).toBe(false);
+  }
 });
