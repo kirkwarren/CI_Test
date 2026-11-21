@@ -12,6 +12,7 @@
   "assumed": "Occupancy (52%) assumed within the 48–58% band reported for 4BR Smokies cabins; ADR derived.",
   "asOf": "2026-11",
   "taxRate": 0.0056,
+  "insuranceAnnual": null,
   "sources": [
    {
     "label": "The Short Term Shop — Smoky Mountain STR income",
@@ -40,6 +41,7 @@
   "assumed": "Occupancy (53%) assumed at the midpoint of the 48–58% 4BR band; ADR derived.",
   "asOf": "2026-11",
   "taxRate": 0.0056,
+  "insuranceAnnual": null,
   "sources": [
    {
     "label": "BnBCalc — Pigeon Forge",
@@ -68,6 +70,7 @@
   "assumed": "Occupancy (56%) assumed at the midpoint of the published 52–60% 4BR band; ADR derived.",
   "asOf": "2026-11",
   "taxRate": 0.0056,
+  "insuranceAnnual": null,
   "sources": [
    {
     "label": "The Short Term Shop — Smoky Mountain STR income",
@@ -96,6 +99,7 @@
   "assumed": "Occupancy derived from revenue ÷ ADR; the breakdown is undated and may predate 2026.",
   "asOf": "2026-11",
   "taxRate": 0.009,
+  "insuranceAnnual": null,
   "sources": [
    {
     "label": "STR Investing — Broken Bow market breakdown",
@@ -120,6 +124,7 @@
   "assumed": "Occupancy (45%) assumed; no published 4BR occupancy found. ADR derived.",
   "asOf": "2026-11",
   "taxRate": 0.0072,
+  "insuranceAnnual": null,
   "sources": [
    {
     "label": "BnBCalc — Bryson City",
@@ -140,6 +145,7 @@
   "assumed": "Uses the all-sizes figure as a conservative stand-in for a 4BR.",
   "asOf": "2026-11",
   "taxRate": 0.0148,
+  "insuranceAnnual": null,
   "sources": [
    {
     "label": "AirROI — Logan",
@@ -148,6 +154,64 @@
    {
     "label": "AirDNA — Logan revenue",
     "url": "https://www.airdna.co/vacation-rental-data/app/us/ohio/logan/revenue"
+   }
+  ]
+ },
+ {
+  "market": "Fort Morgan, AL",
+  "bedrooms": 4,
+  "revenue": 80000,
+  "adr": 438,
+  "occupancy": 0.5,
+  "includesCleaningFees": true,
+  "confidence": "Low",
+  "screenedOut": false,
+  "basis": "Low end of the $80K–$130K range published for 4-bedroom homes with a pool in Gulf Shores / Fort Morgan; The Short Term Shop's 4BR average is $96,190 at 65% occupancy (undated). AirDNA's Gulf Shores all-sizes figures: 58% occupancy, $380 ADR.",
+  "assumed": "Occupancy (50%) assumed between the 4BR and market figures; ADR derived. Insurance set to a fixed $11,000/yr: Gulf Shores homeowners + wind runs $6K–$8K+ before flood, and one Fort Morgan STR example paid ~$4.8K for flood alone. Get address-specific quotes.",
+  "asOf": "2026-11",
+  "taxRate": 0.0066,
+  "insuranceAnnual": 11000,
+  "sources": [
+   {
+    "label": "The Short Term Shop — Gulf Shores income by bedroom",
+    "url": "https://theshorttermshop.com/gulf-shores-short-term-rental-income-by-bedroom/"
+   },
+   {
+    "label": "AirDNA — Gulf Shores revenue",
+    "url": "https://www.airdna.co/vacation-rental-data/app/us/alabama/gulf-shores/revenue"
+   },
+   {
+    "label": "Gulf Shores home insurance guide",
+    "url": "https://www.1800insurance.com/guides/gulf-shores-home-insurance"
+   }
+  ]
+ },
+ {
+  "market": "Joshua Tree, CA",
+  "bedrooms": 4,
+  "revenue": 63000,
+  "adr": 338,
+  "occupancy": 0.511,
+  "includesCleaningFees": true,
+  "confidence": "Low",
+  "screenedOut": false,
+  "basis": "Rabbu average for 4-bedroom homes (~$5,238/month, April 2026 data) — an average, which overstates a typical listing. The market is softening: AirDNA reports revenue down 8.1% and ADR down 12.5% year over year. AirROI's all-sizes average is $50,859 at 45.6% occupancy.",
+  "assumed": "ADR uses Rabbu's 4BR nightly rate for adjacent Yucca Valley ($338); occupancy derived (~51%, near AirDNA's 53%).",
+  "asOf": "2026-11",
+  "taxRate": 0.0115,
+  "insuranceAnnual": null,
+  "sources": [
+   {
+    "label": "Rabbu — Joshua Tree",
+    "url": "https://rabbu.com/airbnb-data/joshua-tree-ca"
+   },
+   {
+    "label": "AirDNA — Joshua Tree revenue",
+    "url": "https://www.airdna.co/vacation-rental-data/app/us/california/joshua-tree/revenue"
+   },
+   {
+    "label": "AirROI — Joshua Tree",
+    "url": "https://airroi.com/airbnb-data/united-states/california/joshua-tree"
    }
   ]
  },
@@ -164,6 +228,7 @@
   "assumed": "Occupancy assumed; ADR derived.",
   "asOf": "2026-11",
   "taxRate": 0.0092,
+  "insuranceAnnual": null,
   "sources": [
    {
     "label": "STR Investing — Blue Ridge market breakdown",
@@ -184,10 +249,57 @@
   "assumed": "Occupancy assumed; ADR derived.",
   "asOf": "2026-11",
   "taxRate": 0.0092,
+  "insuranceAnnual": null,
   "sources": [
    {
     "label": "STR Investing — Helen market breakdown",
     "url": "https://www.buzzsprout.com/2327631/episodes/18001994-monday-market-data-breakdown-of-helen-ga-market"
+   }
+  ]
+ },
+ {
+  "market": "Cosby, TN",
+  "bedrooms": 4,
+  "revenue": 27600,
+  "adr": 161,
+  "occupancy": 0.47,
+  "includesCleaningFees": true,
+  "confidence": "Low",
+  "screenedOut": true,
+  "basis": "AirDNA all-sizes average ~$27.6K at 47% occupancy; Rabbu puts 4-bedroom occupancy at only 28%. No 4BR revenue figure found; 5-bedroom cabins average ~$69K.",
+  "assumed": "All-sizes figure used; ADR derived.",
+  "asOf": "2026-11",
+  "taxRate": 0.0056,
+  "insuranceAnnual": null,
+  "sources": [
+   {
+    "label": "AirDNA — Cosby overview",
+    "url": "https://www.airdna.co/vacation-rental-data/app/us/tennessee/cosby/overview"
+   },
+   {
+    "label": "Rabbu — Cosby",
+    "url": "https://rabbu.com/airbnb-data/cosby-tn"
+   }
+  ]
+ },
+ {
+  "market": "Townsend, TN",
+  "bedrooms": 4,
+  "revenue": 34776,
+  "adr": 199,
+  "occupancy": 0.479,
+  "includesCleaningFees": true,
+  "confidence": "Low",
+  "screenedOut": true,
+  "basis": "Rabbu all-sizes average $34,776 at a $199 ADR and ~24% current occupancy. No 4BR figure found.",
+  "assumed": "All-sizes figure used; occupancy derived.",
+  "asOf": "2026-11",
+  "taxRate": 0.006,
+  "insuranceAnnual": null,
+  "sources": [
+   {
+    "label": "Rabbu — Townsend",
+    "url": "https://rabbu.com/airbnb-data/townsend-tn"
    }
   ]
  },
@@ -204,6 +316,7 @@
   "assumed": "Occupancy derived from revenue ÷ ADR.",
   "asOf": "2026-11",
   "taxRate": 0.0065,
+  "insuranceAnnual": null,
   "sources": [
    {
     "label": "STR Investing — Hot Springs market breakdown",

@@ -295,3 +295,11 @@ test('revenueFromBenchmark derives the missing ADR or rejects an empty benchmark
   expect(revenueFromBenchmark(null)).toBeNull();
   expect(revenueFromBenchmark({ revenue: 0, occupancy: 0.5 })).toBeNull();
 });
+
+test('a market-level fixed insurance figure overrides the percentage of cost', () => {
+  const coastal = { ...realLot, benchmark: { ...BENCH, insuranceAnnual: 11000 } };
+  const d = underwrite(coastal, buildCompIndex([]), DEFAULT_ASSUMPTIONS);
+  expect(d.expenses.Insurance).toBe(11000);
+  const inland = underwrite(realLot, buildCompIndex([]), DEFAULT_ASSUMPTIONS);
+  expect(inland.expenses.Insurance).toBeCloseTo(inland.basis * DEFAULT_ASSUMPTIONS.insurancePctOfPrice, 6);
+});

@@ -281,7 +281,12 @@ export function underwrite(listing, airbnb, assumptions = DEFAULT_ASSUMPTIONS) {
   const effectiveRevenue = rev.grossRevenue * (1 - platformFeePct);
   const expenses = {
     'Property tax': basis * taxRate,
-    Insurance: basis * a.insurancePctOfPrice,
+    // A market can carry a fixed annual insurance figure where a percentage of
+    // cost badly understates it (coastal wind and flood).
+    Insurance:
+      benchmark && benchmark.insuranceAnnual != null
+        ? benchmark.insuranceAnnual
+        : basis * a.insurancePctOfPrice,
     Management: rentalRevenue * a.managementPct,
     Utilities: (a.utilitiesMonthlyBase + a.utilitiesPerBedroom * beds) * 12,
     Maintenance: rentalRevenue * a.maintenancePct,
