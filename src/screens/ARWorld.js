@@ -17,6 +17,16 @@ import {
 
 const LOCK_FRAMES = 4; // detector frames a target must persist to lock (~0.9s)
 
+// Portrait phone pitch model. beta is 90 when the phone is upright and falls
+// toward 0 as the camera tips down at the ground. VFOV is an assumed vertical
+// field of view; real cameras vary, so treat the horizon as an estimate.
+const VFOV = 60;
+const NEUTRAL_PITCH = 83; // pitch assumed when there is no motion sensor
+// Where the real horizon sits in the frame: 0 = top edge, 1 = bottom edge.
+// Tipping the camera down lifts the horizon out of the top of the frame
+// (negative values), leaving the whole frame as ground.
+const horizonRawOf = (beta) => 0.5 - (90 - beta) / VFOV;
+
 const DETECT_MS = 220;
 const MIN_SCORE = 0.5;
 const COLLECT_RADIUS = 0.12;
@@ -79,7 +89,7 @@ const ARWorld = ({ onSheet }) => {
   const [soundOn, setSound] = useState(isSoundOn());
   const [report, setReport] = useState(null); // null | {step:'pick'|'sending'|'done', type}
   const [bloom, setBloom] = useState(false); // the world-heals moment
-  const [ori, setOri] = useState({ a: 0, b: 60 }); // device orientation (deg)
+  const [ori, setOri] = useState({ a: 0, b: NEUTRAL_PITCH }); // device orientation (deg)
   const prevLitterRef = useRef([]);
   const hasGyroRef = useRef(false);
   // optical-flow world coupling: virtual layer follows real camera motion
@@ -90,7 +100,8 @@ const ARWorld = ({ onSheet }) => {
   const calmSecondsRef = useRef(0);
 
   // --- world anchoring: device orientation, low-passed (jitter = nausea) ---
-  const smoothRef = useRef({ a: 0, b: 60 });
+  const smoothRef = useRef({ a: 0, b: NEUTRAL_PITCH });
+  const oriRef = useRef({ a: 0, b: NEUTRAL_PITCH }); // latest orientation for the detector loop
   useEffect(() => {
     let last = 0;
     const onOri = (e) => {
@@ -101,8 +112,9 @@ const ARWorld = ({ onSheet }) => {
       let da = ((e.alpha - s.a + 540) % 360) - 180;
       if (Math.abs(da) < 0.6) da = 0; // deadband
       s.a = (s.a + da * 0.14 + 360) % 360;
-      const db = (e.beta ?? 60) - s.b;
+      const db = (e.beta ?? NEUTRAL_PITCH) - s.b;
       s.b += Math.abs(db) < 0.6 ? 0 : db * 0.14;
+      oriRef.current = { a: s.a, b: s.b };
       const now = performance.now();
       if (now - last < 66) return; // ~15fps is plenty for parallax
       last = now;
@@ -114,9 +126,21 @@ const ARWorld = ({ onSheet }) => {
     const drift = setInterval(() => {
       if (hasGyroRef.current) return;
       t += 0.05;
-      setOri({ a: Math.sin(t / 3) * 24, b: 60 + Math.sin(t / 5) * 6 });
+      const next = { a: Math.sin(t / 3) * 24, b: NEUTRAL_PITCH + Math.sin(t / 5) * 5 };
+      oriRef.current = next;
+      setOri(next);
     }, 90);
     return () => { window.removeEventListener('deviceorientation', onOri); clearInterval(drift); };
+  }, []);
+
+  // iOS only delivers orientation events after a permission prompt, and the
+  // prompt has to come from a user gesture: ask on the first tap.
+  useEffect(() => {
+    const D = window.DeviceOrientationEvent;
+    if (!D || typeof D.requestPermission !== 'function') return undefined;
+    const ask = () => { D.requestPermission().catch(() => {}); };
+    window.addEventListener('pointerdown', ask, { once: true });
+    return () => window.removeEventListener('pointerdown', ask);
   }, []);
 
   const rushActive = Date.now() < rushEndsAt;
@@ -279,6 +303,9 @@ const ARWorld = ({ onSheet }) => {
         const ox = (cw - vw * scale) / 2;
         const oy = (ch - vh * scale) / 2;
         const zones = grabbedZonesRef.current;
+        // The ground starts at the horizon. Without a motion sensor the pitch
+        // is unknown, so nothing is ruled out on that basis.
+        const horizonY = hasGyroRef.current ? horizonRawOf(oriRef.current.b) * ch : -Infinity;
         const litter = [];
         const others = [];
         preds.filter((p) => p.score >= MIN_SCORE).forEach((p, i) => {
@@ -298,14 +325,18 @@ const ARWorld = ({ onSheet }) => {
             const meta = classMap[p.class];
             // aim-and-lock: a target must persist across frames to lock
             const prev = prevLitterRef.current.find((q) => q.type === meta.type && Math.hypot(q.ncx - ncx, q.ncy - ncy) < 0.09);
-            const frames = prev ? prev.frames + 1 : 1;
+            // only litter resting on the ground scores: its lowest edge has to
+            // be below the horizon. Off-ground pieces never start locking.
+            const footY = (y + h) * scale + oy;
+            const onGround = footY >= horizonY + ch * 0.02;
+            const frames = onGround ? (prev ? prev.frames + 1 : 1) : 0;
             if (frames === LOCK_FRAMES) play('lock');
             litter.push({
               // stable identity → React keeps the DOM node → CSS transitions
               // interpolate tracking at 60fps between 4.5fps detector ticks
               id: prev ? prev.id : `t-${Date.now()}-${i}`,
               ncx, ncy, score: p.score, ...meta,
-              size, tooClose, pts: Math.round(meta.points * size.mult), box,
+              size, tooClose, onGround, pts: Math.round(meta.points * size.mult), box,
               frames, lock: Math.min(1, frames / LOCK_FRAMES),
             });
           } else if (NON_LITTER_CLASSES.includes(p.class) && others.length < 4) {
@@ -331,6 +362,11 @@ const ARWorld = ({ onSheet }) => {
     if (det.tooClose) {
       play('reject'); buzz([40, 60, 40]);
       flash('Too close — step back so we can see it', true);
+      return;
+    }
+    if (!det.onGround) {
+      play('reject'); buzz([40, 60, 40]);
+      flash('Only litter on the ground scores', true);
       return;
     }
     if (det.lock < 1) {
@@ -442,6 +478,8 @@ const ARWorld = ({ onSheet }) => {
   const busy = camState === 'starting' || (camState === 'live' && modelState === 'loading');
   const dead = camState === 'denied' || camState === 'error' || modelState === 'error';
   const hunting = camState === 'live' && modelState === 'ready' && mode === 'hunt';
+  const scoreable = detections.filter((d) => d.onGround && !d.tooClose);
+  const offGround = detections.filter((d) => !d.onGround).length;
 
   // HUD focus mode: when you're just walking the world, the chrome recedes
   const calm = hunting && detections.length === 0 && !grabFx && !mapOpen && !report && bag.length === 0;
@@ -468,10 +506,12 @@ const ARWorld = ({ onSheet }) => {
 
       {/* ---- GROUND PLANE: pitch-driven horizon + perspective floor ---- */}
       {hunting && (() => {
-        // device pitch → horizon height; tilting down reveals more floor
-        const horizon = Math.min(0.58, Math.max(0.22, 0.30 + (72 - ori.b) * 0.008));
+        // device pitch → horizon height. Tipping the camera down raises the
+        // horizon toward the top edge, so more of the frame becomes floor.
+        const horizon = Math.min(0.62, Math.max(0, horizonRawOf(ori.b)));
         const wpx = wrapRef.current ? wrapRef.current.clientWidth : 440;
         const groundTop = horizon * 100;
+        const groundSpan = 100 - groundTop; // % of the frame that is ground
         // world-Sprout guide: stands on the floor at the golden target's bearing
         const rel = goldenSpawn ? ((goldenBearing - 90 - ori.a + 540) % 360) - 180 : 0;
         const sx = wpx / 2 + (Math.max(-1, Math.min(1, rel / 40))) * (wpx / 2 - 70);
@@ -493,9 +533,9 @@ const ARWorld = ({ onSheet }) => {
 
             {/* zone-arrival portal: a living ring on the ground at your feet */}
             {currentZone && (
-              <div className="absolute inset-x-0 z-[6] pointer-events-none" style={{ top: `${Math.min(86, groundTop + 34)}%` }}>
+              <div className="absolute inset-x-0 z-[6] pointer-events-none" style={{ top: `${Math.min(86, groundTop + groundSpan * 0.58)}%` }}>
                 <svg className="mx-auto block" width={wpx * 0.86} height={110} viewBox="0 0 380 110">
-                  <ellipse cx="190" cy="55" rx="172" ry={30 + Math.max(0, 66 - ori.b) * 0.5} fill={goldenHere ? 'rgba(251,191,36,0.10)' : 'rgba(52,211,153,0.10)'}
+                  <ellipse cx="190" cy="55" rx="172" ry={Math.min(50, 30 + Math.max(0, 88 - ori.b) * 0.5)} fill={goldenHere ? 'rgba(251,191,36,0.10)' : 'rgba(52,211,153,0.10)'}
                     stroke={goldenHere ? '#fbbf24' : '#34d399'} strokeWidth="3" strokeDasharray="26 14"
                     style={{ animation: 'cq-ring-spin 3.5s linear infinite', filter: `drop-shadow(0 0 10px ${goldenHere ? 'rgba(251,191,36,0.8)' : 'rgba(52,211,153,0.7)'})` }} />
                 </svg>
@@ -510,8 +550,8 @@ const ARWorld = ({ onSheet }) => {
                 guiding toward the gold at its bearing */}
             {(() => {
               const hpx2 = wrapRef.current ? wrapRef.current.clientHeight : 860;
-              const det0 = detections[0];
-              let show = false; let x = sx; let topPct = Math.min(80, groundTop + 26); let bubble = '';
+              const det0 = detections.find((d) => d.onGround && !d.tooClose); // Sprout only points at litter that can score
+              let show = false; let x = sx; let topPct = Math.min(80, groundTop + groundSpan * 0.42); let bubble = '';
               if (det0 && !grabFx) {
                 show = true;
                 const footX = det0.box.l + det0.box.w / 2;
@@ -556,7 +596,7 @@ const ARWorld = ({ onSheet }) => {
       {/* ---- world layer: gyro parallax sparkles (3 depth planes) ---- */}
       {[0.5, 0.9, 1.5].map((depth, li) => (
         <div key={li} className="absolute inset-0 z-[5] pointer-events-none"
-          style={{ transform: `translate3d(${-ori.a * depth * 2.2 + flowOffset.x * depth * 0.6}px, ${(ori.b - 60) * depth * 1.2 + flowOffset.y * depth * 0.6}px, 0)`, transition: hasGyroRef.current ? 'transform 0.12s linear' : 'transform 0.6s ease-out' }}>
+          style={{ transform: `translate3d(${-ori.a * depth * 2.2 + flowOffset.x * depth * 0.6}px, ${(ori.b - NEUTRAL_PITCH) * depth * 1.2 + flowOffset.y * depth * 0.6}px, 0)`, transition: hasGyroRef.current ? 'transform 0.12s linear' : 'transform 0.6s ease-out' }}>
           {Array.from({ length: 3 }).map((_, k) => (
             <span key={k} className="absolute rounded-full bg-quest-200/50 animate-pulseGlow"
               style={{ left: `${18 + ((li * 3 + k) * 29) % 70}%`, top: `${16 + ((li * 5 + k) * 23) % 55}%`, width: 3 + depth * 2.5, height: 3 + depth * 2.5, filter: 'blur(0.5px)', animationDelay: `${(li + k) * 0.7}s` }} />
@@ -611,9 +651,9 @@ const ARWorld = ({ onSheet }) => {
         return (
           <button key={d.id} onClick={() => grab(d)} className="absolute z-10 animate-pop"
             style={{ left: d.box.l + flowOffset.x, top: d.box.t + flowOffset.y, width: d.box.w, height: d.box.h, transition: 'left 0.22s linear, top 0.22s linear, width 0.22s linear, height 0.22s linear' }}>
-            <DetectFrame tooClose={d.tooClose} golden={goldenHere} />
+            <DetectFrame tooClose={d.tooClose || !d.onGround} golden={goldenHere} />
             {/* lock-on ring fills while the target is held steady */}
-            {!d.tooClose && (
+            {!d.tooClose && d.onGround && (
               <svg className="absolute overflow-visible pointer-events-none" style={{ left: '50%', top: '50%', width: 0, height: 0 }}>
                 <circle cx="0" cy="0" r={R} fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="3" />
                 <circle cx="0" cy="0" r={R} fill="none" stroke={locked ? '#fbbf24' : '#6ee7b7'} strokeWidth="3.5" strokeLinecap="round"
@@ -621,11 +661,13 @@ const ARWorld = ({ onSheet }) => {
                   style={{ transition: 'stroke-dashoffset 0.24s linear', filter: locked ? 'drop-shadow(0 0 6px rgba(251,191,36,0.9))' : 'drop-shadow(0 0 4px rgba(110,231,183,0.7))' }} />
               </svg>
             )}
-            <span className={cx('absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-black shadow-card', d.tooClose ? 'bg-rose-400 text-white' : 'bg-gradient-to-r from-quest-300 to-ocean-400 text-grime-900')}>
+            <span className={cx('absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-black shadow-card', d.tooClose || !d.onGround ? 'bg-rose-400 text-white' : 'bg-gradient-to-r from-quest-300 to-ocean-400 text-grime-900')}>
               {d.emoji} {d.type} · {Math.round(d.score * 100)}%
             </span>
             {d.tooClose ? (
               <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-rose-500 text-white px-3 py-1 text-[11px] font-black shadow-card">⚠ Too close — step back</span>
+            ) : !d.onGround ? (
+              <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-rose-500 text-white px-3 py-1 text-[11px] font-black shadow-card">⚠ Not on the ground — no score</span>
             ) : locked ? (
               <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white text-grime-900 px-3 py-1 text-[11px] font-black shadow-card animate-pulseGlow">
                 GRAB +{d.pts}{goldenHere && ' 🌟'}
@@ -785,7 +827,8 @@ const ARWorld = ({ onSheet }) => {
       {hunting && (detections.length > 0 || nonLitter.length > 0) && (
         <div className="absolute top-[5.4rem] inset-x-0 flex justify-center z-20 pointer-events-none">
           <span className="rounded-full bg-black/60 backdrop-blur text-[11px] font-black px-3 py-1">
-            <span className="text-quest-300">🤖 {detections.length} litter</span>
+            <span className="text-quest-300">🤖 {scoreable.length} litter</span>
+            {offGround > 0 && <span className="text-rose-300"> · {offGround} off the ground</span>}
             {nonLitter.length > 0 && <span className="text-white/55"> · {nonLitter.length} not litter</span>}
           </span>
         </div>
@@ -879,7 +922,7 @@ const ARWorld = ({ onSheet }) => {
           </div>
           <div className="flex-1 flex gap-1 overflow-x-auto no-scrollbar">
             {bag.length === 0
-              ? <span className={cx('text-[12px] font-bold', hunting && !detections.length ? 'cq-pixel cq-blink text-quest-200' : 'text-white/45')}>{hunting ? (detections.length ? `${detections.length} litter in view — tap GRAB` : 'INSERT LITTER · AIM CAMERA') : 'Bag is empty'}</span>
+              ? <span className={cx('text-[12px] font-bold', hunting && !detections.length ? 'cq-pixel cq-blink text-quest-200' : 'text-white/45')}>{hunting ? (scoreable.length ? `${scoreable.length} litter in view — tap GRAB` : detections.length ? 'Litter has to be on the ground to score' : 'INSERT LITTER · AIM CAMERA') : 'Bag is empty'}</span>
               : bag.map((b, i) => (
                 <span key={i} className={cx('relative grid place-items-center h-8 w-8 rounded-lg bg-white/12 text-base shrink-0 animate-pop', (b.golden || (b.size && b.size.mult >= 2)) && 'ring-2 ring-sun-400')}>
                   {b.emoji}

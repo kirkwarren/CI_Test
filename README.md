@@ -47,6 +47,12 @@ Designed so cleaning is the addictive part and the city is the winner:
    **COCO-SSD** detector boxes litter-relevant objects (bottles, cups, glass,
    containers, paper…) in real time. Tap **GRAB** and the item is tracked
    ground → hand → bag. Chain grabs for a **combo** multiplier.
+   Each box shows its score on sight (type × size). **Only litter on the
+   ground scores**: the phone's tilt sensor estimates where the floor ends in
+   the frame, and anything above that line is boxed as "Not on the ground" and
+   can't be grabbed. *(An estimate from pitch + an assumed 60° field of view;
+   skipped when the device has no motion sensor. iOS asks for motion access on
+   the first tap.)*
 3. **Bank at the bin** — everything stays *pending* until you scan an approved
    bin's QR. Then points bank, XP flows, and you see your **leaderboard rank
    change** on the spot.
