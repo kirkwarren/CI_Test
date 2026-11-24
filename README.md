@@ -57,8 +57,9 @@ Designed so cleaning is the addictive part and the city is the winner:
 3. **Bank at the bin** — everything stays *pending* until the camera reads the
    QR sticker on an approved bin (`CQBIN:<id>`, decoded on-device). Other QR
    codes are refused and the same bin can't be reused for 90 s. Printable
-   stickers live under **Dispose → Bin stickers**. *(A sticker shown on a
-   second screen still scans — binding stickers to GPS is the next step.)* Then points bank, XP flows, and you see your **leaderboard rank
+   stickers live under **Dispose → Bin stickers**. With GPS live you must also be within ~55 m of
+   that bin's mapped position, so a photographed sticker doesn't bank from
+   elsewhere. *(Without location the range check is skipped.)* Then points bank, XP flows, and you see your **leaderboard rank
    change** on the spot.
 4. **Weekly Cleanup Cup** — podium + ranked list; rivals earn while you play.
 

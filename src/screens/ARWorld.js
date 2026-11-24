@@ -3,7 +3,7 @@ import { useGame } from '../game/GameState';
 import {
   LITTER_CLASS_MAP, NON_LITTER_CLASSES, SIZE_TIERS, TOO_CLOSE_FRAC,
   GOLDEN_MULT, RUSH_MULT, REACH, REPORT_TYPES, ADOPT_BONUS,
-  buddyStage, BUDDY_STAGES, parseBin, BIN_COOLDOWN_MS, METERS_PER_UNIT,
+  buddyStage, BUDDY_STAGES, parseBin, BIN_COOLDOWN_MS, BIN_RANGE, METERS_PER_UNIT,
 } from '../game/data';
 import { play, buzz, isSoundOn, setSoundOn } from '../game/sound';
 import ParkMap from '../ui/ParkMap';
@@ -94,6 +94,8 @@ const ARWorld = ({ onSheet }) => {
   const [binCodesOpen, setBinCodesOpen] = useState(false);
   const lastBinRef = useRef({});
   const scanBinRef = useRef(null);
+  const whereRef = useRef({ pos, gps });
+  whereRef.current = { pos, gps };
   const [ori, setOri] = useState({ a: 0, b: NEUTRAL_PITCH }); // device orientation (deg)
   const prevLitterRef = useRef([]);
   const hasGyroRef = useRef(false);
@@ -522,6 +524,18 @@ const ARWorld = ({ onSheet }) => {
       if (text) {
         const bin = parseBin(text);
         const now = Date.now();
+        const { pos: at, gps: fix } = whereRef.current;
+        const away = bin ? Math.hypot(bin.x - at.x, bin.y - at.y) : 0;
+        if (bin && fix !== 'off' && away > BIN_RANGE) {
+          // the sticker is real but you are not standing at that bin
+          if (now - lastWarn > 2200) {
+            lastWarn = now;
+            play('reject'); buzz(60);
+            flash(`Bin ${bin.id} is ${metersOf(away)} m away — scan it at the bin`, true);
+          }
+          setTimeout(loop, 280);
+          return;
+        }
         if (bin && now - (lastBinRef.current[bin.id] || 0) > BIN_COOLDOWN_MS) {
           lastBinRef.current[bin.id] = now;
           scanBinRef.current(bin);
@@ -1028,7 +1042,7 @@ const ARWorld = ({ onSheet }) => {
       {/* dispose / banking overlays */}
       {mode === 'dispose' && (
         <div className="absolute inset-0 z-[15] grid place-items-center pointer-events-none">
-          <div className="text-center">
+          <div className="text-center -translate-y-24 px-6">
             <div className="relative mx-auto h-44 w-44 rounded-3xl ring-[3px] ring-quest-300 bg-black/10 overflow-hidden">
               <QrCode className="absolute inset-0 m-auto h-24 w-24 text-white/20" />
               <div className="absolute inset-x-0 h-0.5 bg-quest-300 shadow-glow animate-floaty" style={{ top: '50%' }} />

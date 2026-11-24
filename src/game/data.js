@@ -149,10 +149,11 @@ export const FAIR_PLAY = [
 // The QR payload is `CQBIN:<id>`; only ids listed here bank points.
 export const BIN_PREFIX = 'CQBIN:';
 export const APPROVED_BINS = [
-  { id: 'RC-014', name: 'Picnic Lawn bin', kind: 'Trash + recycling' },
-  { id: 'RC-027', name: 'Riverbank Path bin', kind: 'Trash' },
-  { id: 'RC-031', name: 'Playground gate bin', kind: 'Trash + recycling' },
+  { id: 'RC-014', name: 'Picnic Lawn bin', kind: 'Trash + recycling', x: 52, y: 54 },
+  { id: 'RC-027', name: 'Riverbank Path bin', kind: 'Trash', x: 70, y: 26 },
+  { id: 'RC-031', name: 'Dog Park Gate bin', kind: 'Trash + recycling', x: 22, y: 60 },
 ];
+export const BIN_RANGE = 8; // map units you must be within to scan a bin (when GPS is live)
 export const BIN_COOLDOWN_MS = 90 * 1000; // same bin can't be re-scanned back to back
 export const parseBin = (text) => {
   if (typeof text !== 'string' || !text.startsWith(BIN_PREFIX)) return null;

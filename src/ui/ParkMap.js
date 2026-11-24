@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGame } from '../game/GameState';
-import { REACH, buddyStage, BUDDY_STAGES } from '../game/data';
+import { REACH, buddyStage, BUDDY_STAGES, APPROVED_BINS } from '../game/data';
 import { Pin, PlayerOrb, BuddySprite } from './art';
 import { cx } from './bits';
 
@@ -74,6 +74,13 @@ const ParkMap = ({ compact = false, onSelectSpawn, selectedId }) => {
       />
 
       {/* spawns */}
+      {/* approved bins — where pending points get banked */}
+      {APPROVED_BINS.map((b) => (
+        <span key={b.id} title={b.name}
+          className={cx('absolute -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-md bg-grime-900/85 ring-1 ring-white/70 shadow-card', compact ? 'h-3 w-3 text-[7px]' : 'h-6 w-6 text-[13px]')}
+          style={{ left: `${b.x}%`, top: `${b.y}%` }}>🗑️</span>
+      ))}
+
       {spawns.map((s) => {
         const cleaned = s.status === 'cleaned';
         const golden = s.id === goldenId;
