@@ -3,10 +3,11 @@ import { useGame } from '../game/GameState';
 import {
   LITTER_CLASS_MAP, NON_LITTER_CLASSES, SIZE_TIERS, TOO_CLOSE_FRAC,
   GOLDEN_MULT, RUSH_MULT, REACH, REPORT_TYPES, ADOPT_BONUS,
-  buddyStage, BUDDY_STAGES,
+  buddyStage, BUDDY_STAGES, parseBin, BIN_COOLDOWN_MS, METERS_PER_UNIT,
 } from '../game/data';
 import { play, buzz, isSoundOn, setSoundOn } from '../game/sound';
 import ParkMap from '../ui/ParkMap';
+import BinCodes from '../ui/BinCodes';
 import { DetectFrame, BuddySprite } from '../ui/art';
 import { cx, Pill, BigBtn } from '../ui/bits';
 import {
@@ -33,14 +34,14 @@ const COLLECT_RADIUS = 0.12;
 const COMBO_WINDOW_MS = 9000;
 
 const fmtClock = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
-const metersOf = (d) => Math.round(d * 7);
+const metersOf = (d) => Math.round(d * METERS_PER_UNIT);
 
 // CleanQuest AR-first: the live camera IS the game world. A picture-in-picture
 // minimap guides you to litter zones and golden rewards; detection, grabbing,
 // and bin disposal all happen over the live feed without ever leaving it.
 const ARWorld = ({ onSheet }) => {
   const {
-    bankRun, player, goldenId, rushEndsAt, spawns, pos, walkTo, showToast, myRank, claimable, toast,
+    bankRun, player, goldenId, rushEndsAt, spawns, pos, walkTo, showToast, myRank, claimable, toast, gps,
     adoptedId, adoptBlock, fileReport, buddyXp, leaderboard,
   } = useGame();
   const buddyIdx = BUDDY_STAGES.indexOf(buddyStage(buddyXp));
@@ -89,6 +90,10 @@ const ARWorld = ({ onSheet }) => {
   const [soundOn, setSound] = useState(isSoundOn());
   const [report, setReport] = useState(null); // null | {step:'pick'|'sending'|'done', type}
   const [bloom, setBloom] = useState(false); // the world-heals moment
+  const [binHit, setBinHit] = useState(null); // approved bin the camera just read
+  const [binCodesOpen, setBinCodesOpen] = useState(false);
+  const lastBinRef = useRef({});
+  const scanBinRef = useRef(null);
   const [ori, setOri] = useState({ a: 0, b: NEUTRAL_PITCH }); // device orientation (deg)
   const prevLitterRef = useRef([]);
   const hasGyroRef = useRef(false);
@@ -449,7 +454,9 @@ const ARWorld = ({ onSheet }) => {
     return { breakdown, total: base + goldenPts + rushPts + adoptedPts + comboPts + zonePts + streakPts };
   }, [bag, comboBonusPct, combo, player.streak, rushActive, adoptedId]);
 
-  const scanBin = () => {
+  const scanBin = (bin) => {
+    setBinHit(bin);
+    setBinCodesOpen(false);
     play('bank'); buzz([30, 40, 30, 40, 60]);
     setMode('banking');
     let p = 0;
@@ -474,6 +481,63 @@ const ARWorld = ({ onSheet }) => {
       }
     }, 45);
   };
+
+  scanBinRef.current = scanBin;
+
+  // ---- disposal check: the camera has to read an approved bin's QR sticker ----
+  useEffect(() => {
+    if (mode !== 'dispose' || camState !== 'live') return undefined;
+    let stopped = false;
+    let lastWarn = 0;
+    let jsqr = null;
+    const canvas = document.createElement('canvas');
+    let native = null;
+    try { if ('BarcodeDetector' in window) native = new window.BarcodeDetector({ formats: ['qr_code'] }); } catch { native = null; }
+    const read = async () => {
+      const video = videoRef.current;
+      if (!video || video.readyState < 2) return null;
+      if (native) {
+        try {
+          const hits = await native.detect(video);
+          if (hits.length) return hits[0].rawValue;
+        } catch { native = null; }
+      }
+      if (!jsqr) jsqr = (await import('jsqr')).default;
+      const vw = video.videoWidth || 1280;
+      const vh = video.videoHeight || 720;
+      const k = Math.min(1, 800 / Math.max(vw, vh));
+      canvas.width = Math.round(vw * k);
+      canvas.height = Math.round(vh * k);
+      const g = canvas.getContext('2d', { willReadFrequently: true });
+      g.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const img = g.getImageData(0, 0, canvas.width, canvas.height);
+      const hit = jsqr(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
+      return hit ? hit.data : null;
+    };
+    const loop = async () => {
+      if (stopped) return;
+      let text = null;
+      try { text = await read(); } catch { text = null; }
+      if (stopped) return;
+      if (text) {
+        const bin = parseBin(text);
+        const now = Date.now();
+        if (bin && now - (lastBinRef.current[bin.id] || 0) > BIN_COOLDOWN_MS) {
+          lastBinRef.current[bin.id] = now;
+          scanBinRef.current(bin);
+          return;
+        }
+        if (now - lastWarn > 2200) {
+          lastWarn = now;
+          play('reject'); buzz(60);
+          flash(bin ? `Bin ${bin.id} was just used — find another or wait` : 'That QR is not an approved CleanQuest bin', true);
+        }
+      }
+      setTimeout(loop, 280);
+    };
+    loop();
+    return () => { stopped = true; };
+  }, [mode, camState, flash]);
 
   const busy = camState === 'starting' || (camState === 'live' && modelState === 'loading');
   const dead = camState === 'denied' || camState === 'error' || modelState === 'error';
@@ -804,13 +868,15 @@ const ARWorld = ({ onSheet }) => {
 
       {/* status / navigation line */}
       <div className="absolute top-[3.4rem] inset-x-0 flex justify-center gap-1.5 z-20 pointer-events-none flex-wrap px-3">
+        {gps === 'live' && <span className="rounded-full bg-black/55 text-quest-300 text-[11px] font-black px-2.5 py-1 shadow-card">🛰 GPS</span>}
+        {gps === 'vehicle' && <span className="rounded-full bg-rose-500/90 text-white text-[11px] font-black px-2.5 py-1 shadow-card">🚗 Too fast — walking only</span>}
         {currentZone ? (
           <span className={cx('rounded-full text-[11px] font-black px-3 py-1 shadow-card', goldenHere ? 'bg-gradient-to-r from-yellow-200 to-sun-400 text-grime-900' : 'bg-quest-400/90 text-quest-900')}>
             📍 {currentZone.name} · {'⭐'.repeat(currentZone.density)}{goldenHere ? ` · 🌟×${GOLDEN_MULT}` : ''}{currentZone.id === adoptedId ? ' · 🏡 yours' : ''}
           </span>
         ) : guiding ? (
           <span className="rounded-full bg-ocean-500/85 text-white text-[11px] font-black px-3 py-1 shadow-card flex items-center gap-1">
-            <Footprints className="h-3 w-3" /> Walking to {guiding.name}…
+            <Footprints className="h-3 w-3" /> {gps === 'off' ? `Walking to ${guiding.name}…` : `Walk to ${guiding.name} · ${metersOf(Math.hypot(guiding.x - pos.x, guiding.y - pos.y))} m`}
           </span>
         ) : goldenSpawn ? (
           <span className="rounded-full bg-black/60 backdrop-blur text-white text-[11px] font-black px-3 py-1 flex items-center gap-1.5">
@@ -953,7 +1019,7 @@ const ARWorld = ({ onSheet }) => {
         {mode === 'dispose' && (
           <div className="flex gap-2">
             <BigBtn tone="plain" className="flex-1" onClick={() => setMode('hunt')}>Keep hunting</BigBtn>
-            <BigBtn className="flex-[1.6]" onClick={scanBin}>📷 Scan bin QR</BigBtn>
+            <BigBtn tone="plain" className="flex-1" onClick={() => { play('tick'); setBinCodesOpen(true); }}>🏷️ Bin stickers</BigBtn>
           </div>
         )}
         </div>
@@ -963,12 +1029,12 @@ const ARWorld = ({ onSheet }) => {
       {mode === 'dispose' && (
         <div className="absolute inset-0 z-[15] grid place-items-center pointer-events-none">
           <div className="text-center">
-            <div className="relative mx-auto h-44 w-44 rounded-3xl ring-[3px] ring-quest-300 bg-black/45 overflow-hidden">
-              <QrCode className="absolute inset-0 m-auto h-24 w-24 text-white/90" />
+            <div className="relative mx-auto h-44 w-44 rounded-3xl ring-[3px] ring-quest-300 bg-black/10 overflow-hidden">
+              <QrCode className="absolute inset-0 m-auto h-24 w-24 text-white/20" />
               <div className="absolute inset-x-0 h-0.5 bg-quest-300 shadow-glow animate-floaty" style={{ top: '50%' }} />
             </div>
-            <p className="text-white font-black text-base mt-4 drop-shadow">Find an approved bin & scan its QR</p>
-            <p className="text-white/60 text-[11px] mt-1">Your {bag.length} items stay pending until the bag is binned</p>
+            <p className="text-white font-black text-base mt-4 drop-shadow">Point the camera at the bin's QR sticker</p>
+            <p className="text-white/60 text-[11px] mt-1"><span className="cq-blink">●</span> Scanning… your {bag.length} item{bag.length === 1 ? '' : 's'} stay pending until an approved bin is read</p>
           </div>
         </div>
       )}
@@ -982,7 +1048,7 @@ const ARWorld = ({ onSheet }) => {
               </div>
             </div>
             <p className="text-white font-black text-2xl mt-4 drop-shadow">+{Math.round(totals.total * (creditPct / 100))}</p>
-            <p className="text-quest-300 text-xs font-bold">{creditPct >= 100 ? 'Verified & banked ✓' : 'Banking your points…'}</p>
+            <p className="text-quest-300 text-xs font-bold">{creditPct >= 100 ? 'Verified & banked ✓' : binHit ? `Bin ${binHit.id} read · ${binHit.name}` : 'Banking your points…'}</p>
           </div>
         </div>
       )}
@@ -1107,6 +1173,7 @@ const ARWorld = ({ onSheet }) => {
           </div>
         </div>
       )}
+      {binCodesOpen && <BinCodes onClose={() => setBinCodesOpen(false)} />}
     </div>
   );
 };

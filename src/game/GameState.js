@@ -3,6 +3,7 @@ import {
   INITIAL_SPAWNS, RIVALS, PLAYER_START, xpForLevel,
   DAILY_QUESTS, buddyStage, GOLDEN_CHANCE, RUSH_MINUTES,
   REPORT_TYPES, COMMUNITY_START,
+  METERS_PER_UNIT, GPS_MAX_ACCURACY_M, GPS_MAX_SPEED_MPS,
 } from './data';
 
 const Ctx = createContext(null);
@@ -36,6 +37,13 @@ export const GameProvider = ({ children }) => {
   const [banked, setBanked] = useState(null);
   const [toast, setToast] = useState(null);
   const walkRef = useRef(null);
+  const posRef = useRef(pos);
+  posRef.current = pos;
+  // real-world walking: 'off' until the phone delivers usable GPS fixes
+  const [gps, setGps] = useState('off'); // off | live | vehicle
+  const gpsLiveRef = useRef(false);
+  const gpsPrevRef = useRef(null);
+  const targetRef = useRef(null);
 
   // ---- the daily / civic loop ----
   const [quests, setQuests] = useState(save && save.questsDay === dayKey() && save.quests ? save.quests : freshQuests());
@@ -78,6 +86,10 @@ export const GameProvider = ({ children }) => {
   // Animate the avatar toward a target (prototype stand-in for real GPS walking).
   const walkTo = useCallback((x, y, onArrive) => {
     clearInterval(walkRef.current);
+    if (gpsLiveRef.current) { // real GPS: the player has to actually walk there
+      targetRef.current = { x, y, onArrive };
+      return;
+    }
     walkRef.current = setInterval(() => {
       setPos((p) => {
         const dx = x - p.x;
@@ -92,6 +104,47 @@ export const GameProvider = ({ children }) => {
         return { x: p.x + (dx / d) * step, y: p.y + (dy / d) * step };
       });
     }, 60);
+  }, []);
+
+  // GPS drives the avatar: each fix moves you by the real distance covered.
+  // The park map is anchored where you start, so it works on any street.
+  useEffect(() => {
+    if (!navigator.geolocation) return undefined;
+    const onFix = (g) => {
+      const { latitude, longitude, accuracy } = g.coords;
+      if (accuracy > GPS_MAX_ACCURACY_M) return;
+      const prev = gpsPrevRef.current;
+      const fix = { lat: latitude, lon: longitude, t: g.timestamp || Date.now() };
+      if (!prev) {
+        gpsPrevRef.current = fix;
+        gpsLiveRef.current = true;
+        clearInterval(walkRef.current); // hand over from the simulated walk
+        setGps('live');
+        return;
+      }
+      const north = (fix.lat - prev.lat) * 111320;
+      const east = (fix.lon - prev.lon) * 111320 * Math.cos((fix.lat * Math.PI) / 180);
+      const metres = Math.hypot(north, east);
+      const dt = Math.max(0.5, (fix.t - prev.t) / 1000);
+      gpsPrevRef.current = fix;
+      if (metres / dt > GPS_MAX_SPEED_MPS) { setGps('vehicle'); return; } // riding doesn't count
+      setGps('live');
+      if (metres < 0.8) return; // jitter while standing still
+      const p = posRef.current;
+      const next = {
+        x: Math.min(98, Math.max(2, p.x + east / METERS_PER_UNIT)),
+        y: Math.min(98, Math.max(2, p.y - north / METERS_PER_UNIT)),
+      };
+      posRef.current = next;
+      setPos(next);
+      const tg = targetRef.current;
+      if (tg && Math.hypot(tg.x - next.x, tg.y - next.y) < 6) {
+        targetRef.current = null;
+        if (tg.onArrive) tg.onArrive();
+      }
+    };
+    const id = navigator.geolocation.watchPosition(onFix, () => {}, { enableHighAccuracy: true, maximumAge: 1000, timeout: 20000 });
+    return () => navigator.geolocation.clearWatch(id);
   }, []);
 
   const leaderboard = useMemo(() => {
@@ -237,9 +290,9 @@ export const GameProvider = ({ children }) => {
     quests, claimQuest, claimable, dex, buddyXp, goldenId, cleanliness,
     adoptedId, adoptBlock, fileReport, community,
     rushEndsAt: rushEndsAtRef.current,
-    walkTo, bankRun, showToast,
+    walkTo, bankRun, showToast, gps,
     dismissBanked: () => setBanked(null),
-  }), [player, spawns, pos, leaderboard, myRank, banked, toast, quests, claimQuest, claimable, dex, buddyXp, goldenId, cleanliness, adoptedId, adoptBlock, fileReport, community, walkTo, bankRun, showToast]);
+  }), [player, spawns, pos, leaderboard, myRank, banked, toast, quests, claimQuest, claimable, dex, buddyXp, goldenId, cleanliness, adoptedId, adoptBlock, fileReport, community, walkTo, bankRun, showToast, gps]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 };

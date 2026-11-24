@@ -144,3 +144,22 @@ export const FAIR_PLAY = [
   { emoji: '📏', title: 'Size-aware, size-checked', body: 'Bigger litter scores more (S→XL), but box size is sanity-checked: items shoved against the lens are rejected and sessions with implausible size mixes get re-scored.' },
   { emoji: '🛡️', title: 'Trust gates the leaderboard', body: 'Low-trust accounts earn provisional points that are re-scored server-side and can be revoked before they ever touch the public board.' },
 ];
+
+// ---- approved disposal points: each bin carries a QR sticker ----
+// The QR payload is `CQBIN:<id>`; only ids listed here bank points.
+export const BIN_PREFIX = 'CQBIN:';
+export const APPROVED_BINS = [
+  { id: 'RC-014', name: 'Picnic Lawn bin', kind: 'Trash + recycling' },
+  { id: 'RC-027', name: 'Riverbank Path bin', kind: 'Trash' },
+  { id: 'RC-031', name: 'Playground gate bin', kind: 'Trash + recycling' },
+];
+export const BIN_COOLDOWN_MS = 90 * 1000; // same bin can't be re-scanned back to back
+export const parseBin = (text) => {
+  if (typeof text !== 'string' || !text.startsWith(BIN_PREFIX)) return null;
+  return APPROVED_BINS.find((b) => b.id === text.slice(BIN_PREFIX.length).trim()) || null;
+};
+
+// ---- real-world walking: metres of GPS movement per map unit ----
+export const METERS_PER_UNIT = 7;
+export const GPS_MAX_ACCURACY_M = 40; // ignore fixes vaguer than this
+export const GPS_MAX_SPEED_MPS = 6; // faster than a run = vehicle, doesn't count

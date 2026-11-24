@@ -41,8 +41,9 @@ Designed so cleaning is the addictive part and the city is the winner:
 ## The session loop
 
 1. **Map (home screen)** — a bright overworld with bobbing litter spawns. A reach
-   ring surrounds your avatar; walk to a spawn to activate it *(prototype
-   simulates GPS walking)*.
+   ring surrounds your avatar; walk to a spawn to activate it. With location
+   allowed, real GPS moves you (the park is anchored where you start, 7 m per
+   map unit; vehicle speeds don't count). Without it the walk is simulated.
 2. **AR encounter** — the live camera fills the screen. An on-device
    **COCO-SSD** detector boxes litter-relevant objects (bottles, cups, glass,
    containers, paper…) in real time. Tap **GRAB** and the item is tracked
@@ -53,8 +54,11 @@ Designed so cleaning is the addictive part and the city is the winner:
    can't be grabbed. *(An estimate from pitch + an assumed 60° field of view;
    skipped when the device has no motion sensor. iOS asks for motion access on
    the first tap.)*
-3. **Bank at the bin** — everything stays *pending* until you scan an approved
-   bin's QR. Then points bank, XP flows, and you see your **leaderboard rank
+3. **Bank at the bin** — everything stays *pending* until the camera reads the
+   QR sticker on an approved bin (`CQBIN:<id>`, decoded on-device). Other QR
+   codes are refused and the same bin can't be reused for 90 s. Printable
+   stickers live under **Dispose → Bin stickers**. *(A sticker shown on a
+   second screen still scans — binding stickers to GPS is the next step.)* Then points bank, XP flows, and you see your **leaderboard rank
    change** on the spot.
 4. **Weekly Cleanup Cup** — podium + ranked list; rivals earn while you play.
 
