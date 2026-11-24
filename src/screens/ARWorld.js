@@ -16,6 +16,8 @@ import {
   Volume2, VolumeX, Navigation2, Maximize2, X, Footprints, Flag, Camera,
 } from 'lucide-react';
 
+// QA only: lets a desktop without GPS finish the loop (?debugNoGps=1)
+const QA_NO_GPS = typeof window !== 'undefined' && /[?&]debugNoGps=1/.test(window.location.search);
 const LOCK_FRAMES = 4; // detector frames a target must persist to lock (~0.9s)
 
 // Portrait phone pitch model. beta is 90 when the phone is upright and falls
@@ -526,6 +528,16 @@ const ARWorld = ({ onSheet }) => {
         const now = Date.now();
         const { pos: at, gps: fix } = whereRef.current;
         const away = bin ? Math.hypot(bin.x - at.x, bin.y - at.y) : 0;
+        if (bin && fix === 'off' && !QA_NO_GPS) {
+          // no location = no proof you are at the bin, so nothing banks
+          if (now - lastWarn > 2200) {
+            lastWarn = now;
+            play('reject'); buzz(60);
+            flash('Turn on location to bank — it proves you are at the bin', true);
+          }
+          setTimeout(loop, 280);
+          return;
+        }
         if (bin && fix !== 'off' && away > BIN_RANGE) {
           // the sticker is real but you are not standing at that bin
           if (now - lastWarn > 2200) {

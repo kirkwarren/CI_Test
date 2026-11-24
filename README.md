@@ -59,7 +59,7 @@ Designed so cleaning is the addictive part and the city is the winner:
    codes are refused and the same bin can't be reused for 90 s. Printable
    stickers live under **Dispose → Bin stickers**. With GPS live you must also be within ~55 m of
    that bin's mapped position, so a photographed sticker doesn't bank from
-   elsewhere. *(Without location the range check is skipped.)* Then points bank, XP flows, and you see your **leaderboard rank
+   elsewhere. Without location nothing banks. Then points bank, XP flows, and you see your **leaderboard rank
    change** on the spot.
 4. **Weekly Cleanup Cup** — podium + ranked list; rivals earn while you play.
 
