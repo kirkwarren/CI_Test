@@ -1,3 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background:
+      radial-gradient(900px 600px at 0% -10%, #0b3b2e 0%, transparent 55%),
+      radial-gradient(900px 700px at 100% 0%, #0a3a4a 0%, transparent 55%),
+      #050b14;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .shimmer-bg {
+    background-image: linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.03) 30%,
+      rgba(255, 255, 255, 0.12) 50%,
+      rgba(255, 255, 255, 0.03) 70%
+    );
+    background-size: 800px 100%;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Map ambience: drifting cloud shadows + flowing river highlight */
+@keyframes cq-drift {
+  from { transform: translateX(-40%); }
+  to { transform: translateX(140%); }
+}
+.cq-cloud {
+  animation: cq-drift 80s linear infinite;
+}
+@keyframes cq-flow {
+  to { stroke-dashoffset: -48; }
+}
+.cq-flow {
+  stroke-dasharray: 7 9;
+  animation: cq-flow 2.6s linear infinite;
+}
+@keyframes cq-sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2.5deg); }
+}
+.cq-sway {
+  animation: cq-sway 5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Holographic AR frame: marching gradient dashes on detection boxes */
+@keyframes cq-dash {
+  to { stroke-dashoffset: -44; }
+}
+.cq-dash {
+  animation: cq-dash 1.1s linear infinite;
+}
+
+/* Sonar scan pulse in the AR view */
+@keyframes cq-sonar {
+  0% { transform: scale(0.25); opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.cq-sonar {
+  animation: cq-sonar 2.6s ease-out infinite;
+}
+
+/* ============ 90s retro kit ============ */
+
+/* CRT scanlines — overlay on the AR view */
+.cq-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.16) 0px,
+    rgba(0, 0, 0, 0.16) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+/* CRT vignette + faint phosphor tint */
+.cq-crt {
+  background:
+    radial-gradient(115% 100% at 50% 50%, transparent 62%, rgba(0, 10, 6, 0.55) 100%),
+    linear-gradient(rgba(38, 255, 170, 0.02), rgba(38, 255, 170, 0.02));
+}
+
+/* Arcade blink — hard steps, no fade (INSERT COIN energy) */
+@keyframes cq-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.cq-blink {
+  animation: cq-blink 1.06s steps(1) infinite;
+}
+
+/* Chunky arcade type: monospace + hard shadow + RGB fringe */
+.cq-pixel {
+  font-family: 'Courier New', ui-monospace, monospace;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.85), -1px 0 0 rgba(255, 60, 90, 0.5), 1px 0 0 rgba(60, 220, 255, 0.5);
+}
+
+/* Game Boy DMG green LCD treatment for the mini-map */
+.cq-dmg {
+  filter: grayscale(1) sepia(1) hue-rotate(52deg) saturate(2.2) brightness(0.92) contrast(1.2);
+}
+.cq-dmg-dots {
+  background-image: repeating-linear-gradient(0deg, rgba(12, 34, 10, 0.22) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(12, 34, 10, 0.22) 0 1px, transparent 1px 3px);
+}
+
+/* Holo-foil sheen for rare cards (trading-card energy) */
+@keyframes cq-holo {
+  0% { background-position: -160% 0; }
+  100% { background-position: 260% 0; }
+}
+.cq-holo {
+  background-image: linear-gradient(105deg, transparent 38%, rgba(255, 130, 255, 0.28) 45%, rgba(120, 255, 220, 0.34) 50%, rgba(140, 180, 255, 0.28) 55%, transparent 62%);
+  background-size: 240% 100%;
+  animation: cq-holo 2.8s linear infinite;
+}
+
+/* falling gold particles inside golden zones */
+@keyframes cq-fall {
+  0% { transform: translateY(-8vh) rotate(0deg); opacity: 0; }
+  12% { opacity: 0.9; }
+  100% { transform: translateY(96vh) rotate(220deg); opacity: 0; }
+}
+.cq-fall {
+  animation: cq-fall linear infinite;
+}
+
+/* Sprout world-walk hop */
+@keyframes cq-hop {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  30% { transform: translateY(-14px) scaleY(1.04); }
+  45% { transform: translateY(-15px) scaleY(1.02); }
+  70% { transform: translateY(0) scaleY(0.94); }
+  82% { transform: translateY(0) scaleY(1.02); }
+}
+.cq-hop {
+  animation: cq-hop 1.15s ease-in-out infinite;
+}
+
+/* ground portal ring slow spin (dash rotation) */
+@keyframes cq-ring-spin {
+  to { stroke-dashoffset: -120; }
+}
+
+/* vine growth for the restoration bloom */
+@keyframes cq-grow {
+  to { stroke-dashoffset: 0; }
+}
+
+/* the world heals: warm restored color grade on the camera */
+.cq-bloomed {
+  filter: saturate(1.5) brightness(1.12) hue-rotate(-8deg) !important;
+}
+video.cq-video-grade {
+  transition: filter 0.9s ease;
+}
+
+/* arcade impact frame — 120ms white flash on combo hits */
+@keyframes cq-impact {
+  0% { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+.cq-impact {
+  animation: cq-impact 0.14s steps(2) forwards;
+}
+
+/* VHS jitter for the REC OSD */
+@keyframes cq-vhs {
+  0%, 92%, 100% { transform: translateY(0); }
+  93% { transform: translateY(-1px); }
+  96% { transform: translateY(1px); }
+}
+.cq-vhs {
+  animation: cq-vhs 4s steps(1) infinite;
+}
+
+/* Custom range slider for the cleanup timer / sorting controls */
+input[type='range'].cq-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+input[type='range'].cq-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  width: 22px;
+  border-radius: 999px;
+  background: #34d399;
+  border: 3px solid #ecfdf5;
+  cursor: pointer;
+  box-shadow: 0 0 16px -2px rgba(16, 185, 129, 0.8);
+}
